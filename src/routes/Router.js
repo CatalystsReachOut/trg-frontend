@@ -1,14 +1,25 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+
+
+//Components
+import Navbar from './../components/Navbar/Navbar'
+
+
+//Other Data
+import { ROUTES } from './RouterConfig';
+
+
+//Pages
 import About from '../pages/About/About';
 import Home from '../pages/Home/Home';
-import { ROUTES } from './RouterConfig';
 
 const Router = () => {
 
     const RouteWithRole = ({ Element }) => {
         return (
           <>
+            <Navbar/>
             <Element/>
           </>
         );

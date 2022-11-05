@@ -14,13 +14,19 @@ import { ROUTES } from './RouterConfig';
 import About from '../pages/About/About';
 import Home from '../pages/Home/Home';
 
+////////////Recruitment////////////////////
+////Master
+import RecMasterRole from './../pages/Recruitment/Master/Roles'
+
 const Router = () => {
 
     const RouteWithRole = ({ Element }) => {
         return (
           <>
             <Navbar/>
-            <Element/>
+            <div className='container mx-auto'>
+              <Element/>
+            </div>
           </>
         );
       }
@@ -30,6 +36,7 @@ const Router = () => {
         <Routes>
             <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
             <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
+            <Route exact path={ROUTES.Recruitment.Master.Roles} element={<RouteWithRole Element={RecMasterRole} />}></Route>
         </Routes>
     </div>
   )

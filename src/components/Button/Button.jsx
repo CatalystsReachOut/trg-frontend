@@ -1,8 +1,16 @@
 import React from 'react'
 
-const Button = () => {
+const Button = (props) => {
+  //props
+  const {
+    title,
+    onClick,
+    className
+    } = props;
+
+
   return (
-    <div>Button</div>
+    <button className={`p-2 bg-[#F1C40F] text-[white] rounded-lg ${className}`} onClick={onClick}>{title}</button>
   )
 }
 

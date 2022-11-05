@@ -24,7 +24,7 @@ const Router = () => {
         return (
           <>
             <Navbar/>
-            <div className='container mx-auto'>
+            <div className='container mx-auto p-[20px] bg-[#F5F5F5] min-h-screen'>
               <Element/>
             </div>
           </>

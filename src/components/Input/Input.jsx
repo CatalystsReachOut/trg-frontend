@@ -20,7 +20,7 @@ const Input = (props) => {
         value={value}
         placeholder={placeHolder}
         onChange={onChange}
-        className={`text-base p-1 px-2 border-2 focus:outline-[#F1C40F] ${inputClassName}`}
+        className={`text-base p-1 px-2 border-2 rounded-lg focus:outline-[#F1C40F] ${inputClassName}`}
         />
     </div>
   )
@@ -28,8 +28,8 @@ const Input = (props) => {
 
 Input.defaultProps = {
     type:'text',
-    label:'default label',
-    placeHolder:'default placeholder'
+    label:'Default Label',
+    placeHolder:'Default Placeholder'
 }
 
 export default Input

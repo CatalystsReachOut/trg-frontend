@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState } from 'react'
 import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
 import Card from '../../../components/Card/Card'
@@ -6,10 +7,16 @@ import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 
-const Roles = () => {
+const Department = () => {
+  const [name, setName] = useState()
+
+  const handleSubmit = () => {
+    console.log('console')
+  }
+
   const columns = [
     {
-      title: "Name",
+      title: "Round",
       dataIndex: "name"
     },
     {
@@ -76,25 +83,38 @@ const Roles = () => {
       action:<Action/>
     }
   ];
+
   return (
     <div>
         <Card>
-          <div> Role </div>
+          <div className='font-bold'> Add Round </div>
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
-              <Input/>
+              <Input
+              label={'Interview Round'}
+              placeHolder = {'Enter Round Name'}
+              value = {name}
+              onChange = {e => setName(e.target.value)}
+              />
             </div>
           </div>
           <div className="flex justify-end mt-3">
-            <Button title="+  Add" className={'min-w-[100px]'}/>
+            <Button 
+            title="Add Round" 
+            className={'min-w-[100px]'}
+            onClick={handleSubmit}
+            />
           </div>
         </Card>
 
         <Card className={'mt-3'}>
+          <div className="font-bold my-3">
+            Rounds
+          </div>
           <Table columns={columns} dataSource={data}/>
         </Card>
     </div>
   )
 }
 
-export default Roles
+export default Department

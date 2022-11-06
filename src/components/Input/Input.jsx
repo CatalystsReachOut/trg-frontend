@@ -14,14 +14,16 @@ const Input = (props) => {
     } = props;
   return (
     <div className={`flex flex-col gap-2.5 ${className}`}>
-        <label htmlFor="" className={`${labelClassName}`}>{label}</label>
-        <input 
-        type={type} 
-        value={value}
-        placeholder={placeHolder}
-        onChange={onChange}
-        className={`text-base p-1 px-2 border-2 rounded-lg focus:outline-[#F1C40F] ${inputClassName}`}
-        />
+        <label htmlFor="" className={`text-base  ${labelClassName}`}>{label}</label>
+        <div className='p-2 w-full min-h-[50px] h-full'>
+          <input 
+          type={type} 
+          value={value}
+          placeholder={placeHolder}
+          onChange={onChange}
+          className={`text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]  ${inputClassName}`}
+          />
+        </div>
     </div>
   )
 }

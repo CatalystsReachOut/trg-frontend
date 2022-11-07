@@ -10,34 +10,35 @@ import { Sorter } from '../../../helpers/Sorter'
 const Country = () => {
   const [name, setName] = useState()
 
+  const [user, setUser] = useState({
+    name:'',
+    code:''
+  })
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setUser(prev=>({
+      ...prev,
+      [name]:value
+    }))
+  }
+
   const handleSubmit = () => {
     console.log('console')
   }
 
   const columns = [
     {
-      title: "Round",
-      dataIndex: "name"
-    },
-    {
-      title: "Chinese Score",
-      dataIndex: "chinese",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 3
-      }
-    },
-    {
-      title: "Math Score",
-      dataIndex: "math",
+      title: "Country Name",
+      dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 2
       }
     },
     {
-      title: "English Score",
-      dataIndex: "english",
+      title: "Country Code",
+      dataIndex: "chinese",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
@@ -87,20 +88,30 @@ const Country = () => {
   return (
     <div>
         <Card>
-          <div className='font-bold'> Add Round </div>
+          <div className='font-bold'> Add Country </div>
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
               <Input
-              label={'Interview Round'}
-              placeHolder = {'Enter Round Name'}
-              value = {name}
-              onChange = {e => setName(e.target.value)}
+              label={'Country'}
+              placeHolder = {'Enter Country Name'}
+              value = {user.name}
+              name ={'name'}
+              onChange = {handleChange}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'Country Code'}
+              placeHolder = {'Enter Country Code'}
+              value = {user.code}
+              name ={'code'}
+              onChange = {handleChange}
               />
             </div>
           </div>
           <div className="flex justify-end mt-3">
             <Button 
-            title="Add Round" 
+            title="Add Country" 
             className={'min-w-[100px]'}
             onClick={handleSubmit}
             />
@@ -109,7 +120,7 @@ const Country = () => {
 
         <Card className={'mt-3'}>
           <div className="font-bold my-3">
-            Rounds
+            Country
           </div>
           <Table columns={columns} dataSource={data}/>
         </Card>

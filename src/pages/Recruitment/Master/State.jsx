@@ -5,42 +5,57 @@ import Button from '../../../components/Button/Button'
 import Card from '../../../components/Card/Card'
 import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
+import Select from '../../../components/Select/Select'
 import { Sorter } from '../../../helpers/Sorter'
 
 const State = () => {
-  const [name, setName] = useState()
+  const [user, setUser] = useState({
+    country:'',
+    state:''
+  })
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setUser(prev=>({
+      ...prev,
+      [name]:value
+    }))
+  }
+
+  const handelChangeSelect = (e) => {
+    console.log(e);
+    const {name, value} = e;
+    setUser(prev=>({
+      ...prev,
+      [name]:value
+    }))
+  }
 
   const handleSubmit = () => {
     console.log('console')
   }
 
+  const coutry = [
+    { value: 'India', label: 'India' },
+    { value: 'USA', label: 'USA' },
+    { value: 'UK', label: 'UK' }
+  ]
+
   const columns = [
     {
-      title: "Round",
-      dataIndex: "name"
-    },
-    {
-      title: "Chinese Score",
-      dataIndex: "chinese",
+      title: "State",
+      dataIndex: "state",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 3
       }
     },
     {
-      title: "Math Score",
-      dataIndex: "math",
+      title: "Country",
+      dataIndex: "country",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 2
-      }
-    },
-    {
-      title: "English Score",
-      dataIndex: "english",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
       }
     },
     {
@@ -52,64 +67,67 @@ const State = () => {
   const data = [
     {
       key: "1",
-      name: "John Brown",
-      chinese: 98,
-      math: 60,
+      name: "Hubli",
+      state: "Karnataka",
+      country: "India",
       english: 70,
       action:<Action/>
     },
     {
       key: "2",
-      name: "Jim Green",
-      chinese: 98,
-      math: 66,
-      english: 89,
-      action:<Action/>
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      chinese: 98,
-      math: 90,
+      name: "Mumbai",
+      state: "Maharashtra",
+      country: "India",
       english: 70,
       action:<Action/>
     },
     {
-      key: "4",
-      name: "Jim Red",
-      chinese: 88,
-      math: 99,
-      english: 89,
+      key: "3",
+      name: "Pune",
+      state: "Maharashtra",
+      country: "India",
+      english: 70,
       action:<Action/>
-    }
+    },
   ];
 
   return (
     <div>
         <Card>
-          <div className='font-bold'> Add Round </div>
+          <div className='font-bold'> Add State </div>
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
+              <Select 
+                label="Country"
+                options={coutry}
+                name="country"
+                value={user.country}
+                onChange={handelChangeSelect}
+              >
+              </Select>
+            </div>
+            <div className="col-span-1">
               <Input
-              label={'Interview Round'}
-              placeHolder = {'Enter Round Name'}
-              value = {name}
-              onChange = {e => setName(e.target.value)}
+              label={'Sate'}
+              placeHolder = {'Enter State Name'}
+              name="state"
+              value = {user.state}
+              onChange = {handleChange}
               />
             </div>
           </div>
           <div className="flex justify-end mt-3">
             <Button 
-            title="Add Round" 
+            title="Add Sate" 
             className={'min-w-[100px]'}
             onClick={handleSubmit}
             />
           </div>
         </Card>
 
-        <Card className={'mt-3'}>
+        <Card className={'mt-4'}>
           <div className="font-bold my-3">
-            Rounds
+            State
           </div>
           <Table columns={columns} dataSource={data}/>
         </Card>

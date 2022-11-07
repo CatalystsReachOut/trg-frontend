@@ -9,7 +9,10 @@ const Select = (props) => {
         options,
         labelClassName,
         selectClassName,
-        label
+        label,
+        onChange,
+        name,
+        value
     } = props;  
 
     const customStyles = {
@@ -23,6 +26,10 @@ const Select = (props) => {
         <Sel
             className={`text-sm p-2 outline-0 ${selectClassName}`}
             options={options}
+            onChange={(p,e)=>{
+                onChange({...p,name:e.name})
+            }}
+            name={name}
         />
     </div>
   )

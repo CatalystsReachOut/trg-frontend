@@ -9,7 +9,29 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 
 const City = () => {
-  const [name, setName] = useState()
+
+  const [user, setUser] = useState({
+    country:'',
+    state:'',
+    city:''
+  })
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setUser(prev=>({
+      ...prev,
+      [name]:value
+    }))
+  }
+
+  const handelChangeSelect = (e) => {
+    console.log(e);
+    const {name, value} = e;
+    setUser(prev=>({
+      ...prev,
+      [name]:value
+    }))
+  }
 
   const handleSubmit = () => {
     console.log('console')
@@ -90,6 +112,9 @@ const City = () => {
               <Select 
                 label="Country"
                 options={coutry}
+                name="country"
+                value={user.country}
+                onChange={handelChangeSelect}
               >
               </Select>
             </div>
@@ -97,6 +122,9 @@ const City = () => {
               <Select 
                 label="State"
                 options={states}
+                name="state"
+                value={user.state}
+                onChange={handelChangeSelect}
               >
               </Select>
             </div>
@@ -104,8 +132,9 @@ const City = () => {
               <Input
               label={'City'}
               placeHolder = {'Enter City Name'}
-              value = {name}
-              onChange = {e => setName(e.target.value)}
+              name="city"
+              value = {user.city}
+              onChange = {handleChange}
               />
             </div>
           </div>

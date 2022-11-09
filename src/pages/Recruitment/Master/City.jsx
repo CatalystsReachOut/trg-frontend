@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
@@ -7,6 +7,7 @@ import Input from '../../../components/Input/Input'
 import Select from '../../../components/Select/Select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
+import * as apiProvider from '../../../services/api/recruitment'
 
 const City = () => {
 
@@ -32,9 +33,6 @@ const City = () => {
     }))
   }
 
-  const handleSubmit = () => {
-    console.log('console')
-  }
 
   const coutry = [
     { value: 'India', label: 'India' },
@@ -101,6 +99,31 @@ const City = () => {
       action:<Action/>
     },
   ];
+
+  const getData =()=>{
+    apiProvider.getCity()
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
+  const handleSubmit =()=>{
+    apiProvider.createBusiness(user)
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+  
+  useEffect(()=>{
+    getData();
+  },[])
+
 
   return (
     <div>

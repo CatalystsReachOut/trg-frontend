@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
@@ -6,13 +6,12 @@ import Card from '../../../components/Card/Card'
 import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
+import * as apiProvider from '../../../services/api/recruitment'
 
 const QuestionBank = () => {
   const [name, setName] = useState()
 
-  const handleSubmit = () => {
-    console.log('console')
-  }
+
 
   const columns = [
     {
@@ -83,6 +82,30 @@ const QuestionBank = () => {
       action:<Action/>
     }
   ];
+
+  const getData =()=>{
+    apiProvider.getQuestionBank()
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
+  const handleSubmit =()=>{
+    apiProvider.createQuestionBank({name:name})
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+  
+  useEffect(()=>{
+    getData();
+  },[])
 
   return (
     <div>

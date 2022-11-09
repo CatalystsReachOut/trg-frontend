@@ -5,6 +5,7 @@ import * as apiConstant from './../utils/apiConstants'
 
 // Define your api url from any source.
 // Pulling from your .env file when on the server or from localhost when locally
+const BASE_URL = apiConstant.BASE_URL;
 const auth = JSON.parse(sessionStorage.getItem(storageConstants.AUTH));
 
 const headers = {
@@ -16,7 +17,7 @@ const headers = {
 /** @param {string} resource */ 
 export const getAll = (resource, model = '') => { 
   return axios 
-    .get(`${resource}${model}`, { headers: headers }) 
+    .get(`${BASE_URL}${resource}${model}`, { headers: headers }) 
     .then(handleResponse) 
     .catch(handleError); 
 };
@@ -24,7 +25,7 @@ export const getAll = (resource, model = '') => {
 
 export const post = (resource, model) => { 
     return axios 
-        .post(`${resource}`, model, { headers: headers }) 
+        .post(`${BASE_URL}${resource}`, model, { headers: headers }) 
         .then(handleResponse) 
         .catch(handleError); 
 };
@@ -32,7 +33,7 @@ export const post = (resource, model) => {
 
 export const get = (resource, id) => { 
     return axios 
-      .get(`${resource}${id}`, { headers: headers }) 
+      .get(`${BASE_URL}${resource}${id}`, { headers: headers }) 
       .then(handleResponse) 
       .catch(handleError); 
 };

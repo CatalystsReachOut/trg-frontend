@@ -45,3 +45,56 @@ export const createCity = (data) =>{
 export const getCityById = (id) =>{
     return apiProvider.get(apiConstant.City,id)
 }
+
+// Country
+export const getCountry = () =>{
+    return apiProvider.getAll(apiConstant.Country)
+}
+
+export const createCountry = (data) =>{
+    return apiProvider.post(apiConstant.Country,data)
+}
+
+export const getCountryById = (id) =>{
+    return apiProvider.get(apiConstant.Country,id)
+}
+
+// Department
+export const getDepartment = () =>{
+    return apiProvider.getAll(apiConstant.Department)
+}
+
+export const createDepartment = (data) =>{
+    return apiProvider.post(apiConstant.Department,data)
+}
+
+export const getDepartmentById = (id) =>{
+    return apiProvider.get(apiConstant.Department,id)
+}
+
+
+// InterviewRounds
+export const getInterviewRounds = () =>{
+    return apiProvider.getAll(apiConstant.InterviewRounds)
+}
+
+export const createInterviewRounds = (data) =>{
+    return apiProvider.post(apiConstant.InterviewRounds,data)
+}
+
+export const getInterviewRoundsById = (id) =>{
+    return apiProvider.get(apiConstant.InterviewRounds,id)
+}
+
+// QuestionBank
+export const getQuestionBank = () =>{
+    return apiProvider.getAll(apiConstant.QuestionBank)
+}
+
+export const createQuestionBank = (data) =>{
+    return apiProvider.post(apiConstant.QuestionBank,data)
+}
+
+export const getQuestionBankById = (id) =>{
+    return apiProvider.get(apiConstant.QuestionBank,id)
+}

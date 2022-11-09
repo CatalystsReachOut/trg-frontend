@@ -6,6 +6,7 @@ import Card from '../../../components/Card/Card'
 import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
+import TextArea from './../../../components/Input/TextArea'
 import * as apiProvider from '../../../services/api/recruitment'
 
 const Bussiness = () => {
@@ -113,8 +114,57 @@ const Bussiness = () => {
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
               <Input
-              label={'Interview Round'}
-              placeHolder = {'Enter Round Name'}
+              label={'Title'}
+              placeHolder = {'Enter Title'}
+              value = {name}
+              onChange = {e => setName(e.target.value)}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'Address'}
+              placeHolder = {'Enter Address'}
+              value = {name}
+              onChange = {e => setName(e.target.value)}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'Bussiness Logo'}
+              placeHolder = {'Bussiness Logo'}
+              type="file"
+              value = {name}
+              onChange = {e => setName(e.target.value)}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'Bussiness URL'}
+              placeHolder = {'Bussiness URL'}
+              value = {name}
+              onChange = {e => setName(e.target.value)}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'Bussiness Code'}
+              placeHolder = {'Bussiness Code'}
+              value = {name}
+              onChange = {e => setName(e.target.value)}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'Summary'}
+              placeHolder = {'Summary'}
+              value = {name}
+              onChange = {e => setName(e.target.value)}
+              />
+            </div>
+            <div className="col-span-1">
+              <TextArea
+              label={'Description'}
+              placeHolder = {'Description'}
               value = {name}
               onChange = {e => setName(e.target.value)}
               />
@@ -128,7 +178,6 @@ const Bussiness = () => {
             />
           </div>
         </Card>
-
         <Card className={'mt-3'}>
           <div className="font-bold my-3">
             Rounds

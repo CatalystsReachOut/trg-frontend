@@ -1,49 +1,69 @@
 import { Menu } from 'antd';
 import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
 import logo from './../../assets/images/logo/logo.png'
+import { ROUTES } from '../../routes/RouterConfig';
+import { Link } from 'react-router-dom';
+
 
 export default function Navbar() {
   return (
-    <div className='h-16 bg-[#0E223D] py-2 w-full'>   
+    <div className='h-16 bg-[#0E223D] py-2 w-full'>
       <div className='flex justify-between items-center container px-6'>
         <div>
           <img src={logo} className="w-[50px]" alt="" />
         </div>
-        <Menu mode="horizontal" className='bg-transparent flex border-0' defaultSelectedKeys={['mail']}>
-        <Menu.Item key="mail" icon={<MailOutlined />} className='border-0 active:border-0 text-[white]'>
-          Home
-        </Menu.Item>
-        <Menu.SubMenu key="SubMenu" className='hover:text-[white] text-[white]' title="Recruitment" icon={<SettingOutlined />}>
-          
-            <Menu mode='vertical'>
+        <Menu mode="horizontal" className='bg-transparent flex items-center w-[100%] justify-center border-0' defaultSelectedKeys={['mail']}>
+          <Menu.Item key="mail" icon={<MailOutlined />} className='flex items-center border-0 active:border-0 text-[white]'>
+            Home
+          </Menu.Item>
+          <Menu.SubMenu key="SubMenu" className='hover:text-[white] flex items-center text-[white]' title="Recruitment" icon={<SettingOutlined />}>
+            <Menu.Item>
+              Dashboard
+            </Menu.Item>
+            <Menu.SubMenu title='Master' className='text-[red] focus:text-[red] hover:text-[red] active:text-[red]'>
               <Menu.Item>
-                Dashboard
-              </Menu.Item>
-              <Menu.SubMenu title='Master' className='text-[red] focus:text-[red] hover:text-[red] active:text-[red]'>
-                <Menu.Item>
+                <Link to={ROUTES.Recruitment.Master.Bussiness}>
                   Bussiness
-                </Menu.Item>
-                <Menu.Item>
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={ROUTES.Recruitment.Master.City}>
                   City
-                </Menu.Item>
-                <Menu.Item>
+                </ Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={ROUTES.Recruitment.Master.State}>
+
                   State
-                </Menu.Item>
-                <Menu.Item>
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={ROUTES.Recruitment.Master.Country}>
+
                   Country
-                </Menu.Item>
-                <Menu.Item>
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={ROUTES.Recruitment.Master.Rounds}>
+
                   Round
-                </Menu.Item>
-                <Menu.Item>
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={ROUTES.Recruitment.Master.InterviewRounds}>
+
                   Interview Round
-                </Menu.Item>
-                <Menu.Item>
+                </Link>
+              </Menu.Item>
+              <Menu.Item>
+                <Link to={ROUTES.Recruitment.Master.Department}>
+
                   Department
-                </Menu.Item>
-              </Menu.SubMenu>
-            </Menu>
-        </Menu.SubMenu>
+                </Link>
+              </Menu.Item>
+            </Menu.SubMenu>
+
+          </Menu.SubMenu>
         </Menu>
         <div>
 

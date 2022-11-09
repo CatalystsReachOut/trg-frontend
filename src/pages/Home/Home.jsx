@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <div className='Home'>
         <div className="text-xl text-[red]">
-            Hello Buddies
+            Home Page
         </div>
         <button className={`bg-[#3498db] p-[10px] text-[white] rounded-md hover:bg-[red] hover:text-[#3498db]`} onClick={()=>{changeDir(ROUTES.About)}}>Go To About</button>
     </div>

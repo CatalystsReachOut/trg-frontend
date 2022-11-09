@@ -16,31 +16,11 @@ const Department = () => {
 
   const columns = [
     {
-      title: "Round",
-      dataIndex: "name"
-    },
-    {
-      title: "Chinese Score",
-      dataIndex: "chinese",
+      title: "Department",
+      dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
-        multiple: 3
-      }
-    },
-    {
-      title: "Math Score",
-      dataIndex: "math",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 2
-      }
-    },
-    {
-      title: "English Score",
-      dataIndex: "english",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
+        multiple: 4
       }
     },
     {
@@ -52,7 +32,7 @@ const Department = () => {
   const data = [
     {
       key: "1",
-      name: "John Brown",
+      name: "Department 1",
       chinese: 98,
       math: 60,
       english: 70,
@@ -60,7 +40,7 @@ const Department = () => {
     },
     {
       key: "2",
-      name: "Jim Green",
+      name: "Department 2",
       chinese: 98,
       math: 66,
       english: 89,
@@ -68,7 +48,7 @@ const Department = () => {
     },
     {
       key: "3",
-      name: "Joe Black",
+      name: "Department 3",
       chinese: 98,
       math: 90,
       english: 70,
@@ -76,7 +56,7 @@ const Department = () => {
     },
     {
       key: "4",
-      name: "Jim Red",
+      name: "Department 4",
       chinese: 88,
       math: 99,
       english: 89,
@@ -87,7 +67,7 @@ const Department = () => {
   return (
     <div>
         <Card>
-          <div className='font-bold'> Add Round </div>
+          <div className='font-bold'> Add Department </div>
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
               <Input
@@ -109,7 +89,7 @@ const Department = () => {
 
         <Card className={'mt-3'}>
           <div className="font-bold my-3">
-            Rounds
+            Department
           </div>
           <Table columns={columns} dataSource={data}/>
         </Card>

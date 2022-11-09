@@ -8,8 +8,11 @@ import Card from '../../../components/Card/Card'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 import TextArea from '../../../components/Input/TextArea'
+import { useNavigate } from 'react-router-dom'
 
 const Apprver4 = () => {
+
+  const navigate = useNavigate()
   
   const [user, setUser] = useState({
     profile:'',
@@ -59,7 +62,7 @@ const Apprver4 = () => {
   return (
     <div className=' h-auto w-full flex'>
       <Card className='min-h-full h-full w-full relative px-6 flex flex-col'>
-        <BackButton />
+        <BackButton onClick={()=>{navigate(-1)}}/>
         <div className=''>
           <h3 className='text-Medium+/Title/Small mt-2'> Create New Job</h3>
           <hr className='my-3 h-3' />

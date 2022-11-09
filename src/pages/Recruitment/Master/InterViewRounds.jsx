@@ -16,31 +16,11 @@ const InterviewRounds = () => {
 
   const columns = [
     {
-      title: "Round",
-      dataIndex: "name"
-    },
-    {
-      title: "Chinese Score",
-      dataIndex: "chinese",
+      title: "Interview Round",
+      dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
-        multiple: 3
-      }
-    },
-    {
-      title: "Math Score",
-      dataIndex: "math",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 2
-      }
-    },
-    {
-      title: "English Score",
-      dataIndex: "english",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
+        multiple: 4
       }
     },
     {
@@ -52,7 +32,7 @@ const InterviewRounds = () => {
   const data = [
     {
       key: "1",
-      name: "John Brown",
+      name: "Round 1",
       chinese: 98,
       math: 60,
       english: 70,
@@ -60,7 +40,7 @@ const InterviewRounds = () => {
     },
     {
       key: "2",
-      name: "Jim Green",
+      name: "Round 2",
       chinese: 98,
       math: 66,
       english: 89,
@@ -68,7 +48,7 @@ const InterviewRounds = () => {
     },
     {
       key: "3",
-      name: "Joe Black",
+      name: "Round 3",
       chinese: 98,
       math: 90,
       english: 70,
@@ -76,7 +56,7 @@ const InterviewRounds = () => {
     },
     {
       key: "4",
-      name: "Jim Red",
+      name: "Round 4",
       chinese: 88,
       math: 99,
       english: 89,
@@ -87,7 +67,7 @@ const InterviewRounds = () => {
   return (
     <div>
         <Card>
-          <div className='font-bold'> Add Round </div>
+          <div className='font-bold'> Add Interview Round </div>
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
               <Input
@@ -109,7 +89,7 @@ const InterviewRounds = () => {
 
         <Card className={'mt-3'}>
           <div className="font-bold my-3">
-            Rounds
+            Interview Rounds
           </div>
           <Table columns={columns} dataSource={data}/>
         </Card>

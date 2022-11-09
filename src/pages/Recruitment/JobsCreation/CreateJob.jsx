@@ -6,8 +6,11 @@ import Input from '../../../components/Input/Input'
 import Button from '../../../components/Button/Button'
 import Card from './../../../components/Card/Card'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Create = () => {
+
+  const navigate = useNavigate()
   
   const [user, setUser] = useState({
     profile:'',
@@ -38,7 +41,7 @@ const Create = () => {
     <div className='flex w-full relative min-h-[80vh]'>
     <div className=' h-auto w-full flex'>
       <Card className='min-h-full h-full w-full relative px-6 flex flex-col'>
-        <BackButton />
+        <BackButton onClick={()=>navigate(-1)}/>
         <div className=''>
           <h3 className='text-Medium+/Title/Small mt-2'> Create New Job</h3>
           <hr className='my-3 h-3' />
@@ -89,7 +92,7 @@ const Create = () => {
           </div>
         </div>
         <div className='mt-auto flex gap-3 py-3'>
-          <Button title="Submit" className=' ' />
+          <Button title="Submit" onClick={()=>navigate('/s1')} className=' ' />
           <Button type='2' title="Cancel" className='' />
         </div>
         

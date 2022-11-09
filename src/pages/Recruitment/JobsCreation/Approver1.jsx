@@ -7,8 +7,11 @@ import Button from '../../../components/Button/Button'
 import Card from './../../../components/Card/Card'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 const Apprver1 = () => {
+
+  const navigate = useNavigate()
   
   const [user, setUser] = useState({
     profile:'',
@@ -19,8 +22,8 @@ const Apprver1 = () => {
     city:''
   })
 
-  const handleConfirmation = () => {
-    Swal.fire({
+  const handleConfirmation = async() => {
+    await Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
         icon: 'warning',
@@ -28,13 +31,14 @@ const Apprver1 = () => {
         confirmButtonColor: '#2ecc71',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Approve'
-      }).then((result) => {
+      }).then(async(result) => {
         if (result.isConfirmed) {
           Swal.fire(
             'Approved',
             'Job has been Approved.',
             'success'
           )
+          navigate('/s2')
         }
       })
   }
@@ -59,7 +63,7 @@ const Apprver1 = () => {
     <div className='flex w-full relative min-h-[80vh]'>
     <div className=' h-auto w-full flex'>
       <Card className='min-h-full h-full w-full relative px-6 flex flex-col'>
-        <BackButton />
+        <BackButton onClick={()=>{navigate(-1)}}/>
         <div className=''>
           <h3 className='text-Medium+/Title/Small mt-2'> Create New Job</h3>
           <hr className='my-3 h-3' />
@@ -110,7 +114,10 @@ const Apprver1 = () => {
           </div>
         </div>
         <div className='mt-auto flex gap-3 py-3'>
-          <Button title="Approve" className=' ' onClick={handleConfirmation}/>
+          <Button 
+          title="Approve" 
+          className=' ' 
+          onClick={()=>{handleConfirmation();}}/>
           <Button type='2' title="Reject" className='' />
         </div>
         

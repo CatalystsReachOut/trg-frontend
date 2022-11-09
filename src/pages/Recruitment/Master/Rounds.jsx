@@ -32,7 +32,7 @@ const Rounds = () => {
   const data = [
     {
       key: "1",
-      name: "John Brown",
+      name: "Round 1",
       chinese: 98,
       math: 60,
       english: 70,
@@ -40,7 +40,7 @@ const Rounds = () => {
     },
     {
       key: "2",
-      name: "Jim Green",
+      name: "Round 2",
       chinese: 98,
       math: 66,
       english: 89,
@@ -48,7 +48,7 @@ const Rounds = () => {
     },
     {
       key: "3",
-      name: "Joe Black",
+      name: "Round 3",
       chinese: 98,
       math: 90,
       english: 70,
@@ -56,7 +56,7 @@ const Rounds = () => {
     },
     {
       key: "4",
-      name: "Jim Red",
+      name: "Round 4",
       chinese: 88,
       math: 99,
       english: 89,

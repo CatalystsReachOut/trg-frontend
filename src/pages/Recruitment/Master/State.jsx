@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
@@ -7,6 +7,7 @@ import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import Select from '../../../components/Select/Select'
 import { Sorter } from '../../../helpers/Sorter'
+import * as apiProvider from '../../../services/api/recruitment'
 
 const State = () => {
   const [user, setUser] = useState({
@@ -31,9 +32,7 @@ const State = () => {
     }))
   }
 
-  const handleSubmit = () => {
-    console.log('console')
-  }
+
 
   const coutry = [
     { value: 'India', label: 'India' },
@@ -90,6 +89,33 @@ const State = () => {
       action:<Action/>
     },
   ];
+
+  const getData =()=>{
+    apiProvider.getState()
+    .then(res=>{
+      console.log(res.data)
+   
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
+  const handleSubmit =()=>{
+    apiProvider.createState({user})
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
+
+  useEffect(()=>{
+    getData();
+  },[])
+
 
   return (
     <div>

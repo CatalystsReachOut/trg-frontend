@@ -34,17 +34,16 @@ const City = () => {
   }
 
 
-  const coutry = [
+  const [country,setCountry] = useState([
     { value: 'India', label: 'India' },
-    { value: 'USA', label: 'USA' },
-    { value: 'UK', label: 'UK' }
-  ]
 
-  const states = [
+  ])
+
+  const [state,setState] = useState([
     { value: 'Karnataka', label: 'Karnataka' },
     { value: 'Maharastra', label: 'Maharastra' },
     { value: 'Goa', label: 'Goa' }
-  ]
+  ])
 
   const columns = [
     {
@@ -73,7 +72,7 @@ const City = () => {
     },
   ];
 
-  const data = [
+  const [data,setData] = useState([
     {
       key: "1",
       name: "Hubli",
@@ -98,12 +97,35 @@ const City = () => {
       english: 70,
       action:<Action/>
     },
-  ];
+  ]);
+
+  const getAllData = () =>{
+    const [data1,data2] = Promise.all([
+      apiProvider.getCountry()
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+      }),
+      apiProvider.getState()
+      .then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+      }),
+    ])
+  }
 
   const getData =()=>{
     apiProvider.getCity()
     .then(res=>{
       console.log(res)
+      for (const i of res.data) {
+      
+
+      }
     })
     .catch(err=>{
       console.log(err)
@@ -111,7 +133,7 @@ const City = () => {
   }
 
   const handleSubmit =()=>{
-    apiProvider.createBusiness(user)
+    apiProvider.createCity(user)
     .then(res=>{
       console.log(res)
     })
@@ -133,7 +155,7 @@ const City = () => {
             <div className="col-span-1">
               <Select 
                 label="Country"
-                options={coutry}
+                options={country}
                 name="country"
                 value={user.country}
                 onChange={handelChangeSelect}
@@ -143,7 +165,7 @@ const City = () => {
             <div className="col-span-1">
               <Select 
                 label="State"
-                options={states}
+                options={state}
                 name="state"
                 value={user.state}
                 onChange={handelChangeSelect}

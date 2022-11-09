@@ -27,44 +27,23 @@ const Rounds = () => {
   ];
 
   const [data, setData] = useState([
-    {
-      key: "1",
-      name: "Round 1",
-      chinese: 98,
-      math: 60,
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "2",
-      name: "Round 2",
-      chinese: 98,
-      math: 66,
-      english: 89,
-      action:<Action/>
-    },
-    {
-      key: "3",
-      name: "Round 3",
-      chinese: 98,
-      math: 90,
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "4",
-      name: "Round 4",
-      chinese: 88,
-      math: 99,
-      english: 89,
-      action:<Action/>
-    }
+
   ]);
 
   const getData =()=>{
     apiProvider.getRound()
     .then(res=>{
-      console.log(res)
+      console.log(res.data)
+      const arr = []
+      for (const i of res.data) {
+        const obj = {
+          key:i._id,
+          name:i.roundName,
+          action:<Action/>
+        }
+        arr.push(obj)
+      }
+      setData(arr)
     })
     .catch(err=>{
       console.log(err)

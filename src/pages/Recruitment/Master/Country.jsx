@@ -12,7 +12,7 @@ const Country = () => {
   const [name, setName] = useState()
 
   const [user, setUser] = useState({
-    name:'',
+    countryName:'',
     code:''
   })
 
@@ -37,7 +37,7 @@ const Country = () => {
     },
     {
       title: "Country Code",
-      dataIndex: "chinese",
+      dataIndex: "code",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
@@ -49,45 +49,30 @@ const Country = () => {
     },
   ];
 
-  const data = [
+  const [data,setData] = useState([
     {
       key: "1",
       name: "John Brown",
-      chinese: 98,
-      math: 60,
-      english: 70,
+      code:"IN",
       action:<Action/>
     },
-    {
-      key: "2",
-      name: "Jim Green",
-      chinese: 98,
-      math: 66,
-      english: 89,
-      action:<Action/>
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      chinese: 98,
-      math: 90,
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "4",
-      name: "Jim Red",
-      chinese: 88,
-      math: 99,
-      english: 89,
-      action:<Action/>
-    }
-  ];
+  ]);
 
   const getData =()=>{
     apiProvider.getCountry()
     .then(res=>{
       console.log(res)
+      const arr=[]
+      for (const i of res.data) {
+        const obj = {
+          key:i._id,
+          name:i.countryName,
+          code:i.code,
+          action:<Action/>
+        }
+        arr.push(obj)
+      }
+      setData(arr)
     })
     .catch(err=>{
       console.log(err)
@@ -98,6 +83,7 @@ const Country = () => {
     apiProvider.createCountry(user)
     .then(res=>{
       console.log(res)
+      getData();
     })
     .catch(err=>{
       console.log(err)
@@ -117,8 +103,8 @@ const Country = () => {
               <Input
               label={'Country'}
               placeHolder = {'Enter Country Name'}
-              value = {user.name}
-              name ={'name'}
+              value = {user.countryName}
+              name ={'countryName'}
               onChange = {handleChange}
               />
             </div>

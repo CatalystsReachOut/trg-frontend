@@ -5,19 +5,6 @@ import * as apiConstant from '../../utils/apiConstants'
 //     return apiProvider.getAll('')
 // }
 
-// Round
-export const getRound = () =>{
-    return apiProvider.getAll(apiConstant.Round)
-}
-
-export const createRound = (data) =>{
-    return apiProvider.post(apiConstant.Round,data)
-}
-
-export const getRoundById = (id) =>{
-    return apiProvider.get(apiConstant.Round,id)
-}
-
 
 // Business
 export const getBusiness = () =>{
@@ -97,4 +84,32 @@ export const createQuestionBank = (data) =>{
 
 export const getQuestionBankById = (id) =>{
     return apiProvider.get(apiConstant.QuestionBank,id)
+}
+
+
+// Round
+export const getRound = () =>{
+    return apiProvider.getAll(apiConstant.Round)
+}
+
+export const createRound = (data) =>{
+    return apiProvider.post(apiConstant.Round,data)
+}
+
+export const getRoundById = (id) =>{
+    return apiProvider.get(apiConstant.Round,id)
+}
+
+
+// State
+export const getState = () =>{
+    return apiProvider.getAll(apiConstant.State)
+}
+
+export const createState = (data) =>{
+    return apiProvider.post(apiConstant.State,data)
+}
+
+export const getStateById = (id) =>{
+    return apiProvider.get(apiConstant.State,id)
 }

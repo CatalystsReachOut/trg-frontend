@@ -25,7 +25,6 @@ const City = () => {
   }
 
   const handelChangeSelect = (e) => {
-    console.log(e);
     const {name, value} = e;
     setUser(prev=>({
       ...prev,

@@ -24,7 +24,7 @@ const Table = (props) => {
     return { ...otherColumnProps, dataIndex };
   });
 
-  return <AntTable columns={sortableColumns} {...otherTableProps} />;
+  return <AntTable className="overflow-x-auto" columns={sortableColumns} {...otherTableProps} />;
 };
 
 export default Table;

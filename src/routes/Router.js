@@ -25,6 +25,16 @@ import RecMasterCountry from './../pages/Recruitment/Master/Country'
 import RecMasterCity from './../pages/Recruitment/Master/City'
 import RecMasterBussiness from './../pages/Recruitment/Master/Bussiness'
 
+
+////Create Job
+import RecCreateJob from './../pages/Recruitment/JobsCreation/CreateJob'
+import RecCreateJobApp1 from './../pages/Recruitment/JobsCreation/Approver1'
+import RecCreateJobApp2 from './../pages/Recruitment/JobsCreation/Approver2'
+import RecCreateJobApp3 from './../pages/Recruitment/JobsCreation/Approver3'
+import RecCreateJobApp4 from './../pages/Recruitment/JobsCreation/Approver4'
+import RecCreateJobProgrss from './../pages/Recruitment/JobsCreation/Progress'
+import Footer from '../components/Footer/Footer';
+
 const Router = () => {
 
     const RouteWithRole = ({ Element }) => {
@@ -34,6 +44,7 @@ const Router = () => {
             <div className='container mx-auto p-[20px] bg-[#F5F5F5] min-h-screen'>
               <Element/>
             </div>
+            <Footer/>
           </>
         );
       }
@@ -43,6 +54,9 @@ const Router = () => {
         <Routes>
             <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
             <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
+
+            ///////////////////Recruitment//////////////////////
+            /////Master
             <Route exact path={ROUTES.Recruitment.Master.Rounds} element={<RouteWithRole Element={RecMasterRound} />}></Route>
             <Route exact path={ROUTES.Recruitment.Master.Bussiness} element={<RouteWithRole Element={RecMasterBussiness} />}></Route>
             <Route exact path={ROUTES.Recruitment.Master.City} element={<RouteWithRole Element={RecMasterCity} />}></Route>
@@ -51,6 +65,16 @@ const Router = () => {
             <Route exact path={ROUTES.Recruitment.Master.InterviewRounds} element={<RouteWithRole Element={RecMasterInterviewRounds} />}></Route>
             <Route exact path={ROUTES.Recruitment.Master.QuestionBank} element={<RouteWithRole Element={RecMasterQuestionBank} />}></Route>
             <Route exact path={ROUTES.Recruitment.Master.State} element={<RouteWithRole Element={RecMasterState} />}></Route>
+
+
+            ///////Create Job
+            <Route exact path='/ss' element={<RouteWithRole Element={RecCreateJob} />}></Route>
+            <Route exact path='/s1' element={<RouteWithRole Element={RecCreateJobApp1} />}></Route>
+            <Route exact path='/s2' element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
+            <Route exact path='/s3' element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
+            <Route exact path='/s4' element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
+            <Route exact path='/pp' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
+
         </Routes>
     </div>
   )

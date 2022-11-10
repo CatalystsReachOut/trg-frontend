@@ -20,6 +20,16 @@ export default function Navbar() {
             <Menu.Item>
               Dashboard
             </Menu.Item>
+            <Menu.Item>
+              <Link to={ROUTES.Recruitment.CreateJob}>
+                Create Job
+              </Link>
+            </Menu.Item>
+            <Menu.Item>
+              <Link to={ROUTES.Recruitment.ViewJobs}>
+                View Job
+              </Link>
+            </Menu.Item>
             <Menu.SubMenu title='Master' className='text-[red] focus:text-[red] hover:text-[red] active:text-[red]'>
               <Menu.Item>
                 <Link to={ROUTES.Recruitment.Master.Bussiness}>

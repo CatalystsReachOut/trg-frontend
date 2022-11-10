@@ -98,20 +98,8 @@ const Progress = () => {
             <div>2nd Nov 2022 | 4:06 pm</div>
             <div className="grid grid-cols-3 my-6 text-lg">
                 <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>Bussiness Name :</div>
-                    <div>This is bussiness name</div>
-                </div>
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>Country :</div>
-                    <div>India</div>
-                </div>
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>State :</div>
-                    <div>Karnataka</div>
-                </div>
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>City :</div>
-                    <div>Bengaluru</div>
+                    <div className='font-bold '>Remarks :</div>
+                    <div>This is Remarks</div>
                 </div>
             </div>
         </Card>

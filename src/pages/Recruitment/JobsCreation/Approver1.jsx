@@ -65,7 +65,7 @@ const Apprver1 = () => {
       <Card className='min-h-full h-full w-full relative px-6 flex flex-col'>
         <BackButton onClick={()=>{navigate(-1)}}/>
         <div className=''>
-          <h3 className='text-Medium+/Title/Small mt-2'> Create New Job</h3>
+          <h3 className='text-Medium+/Title/Small mt-2'>Approve Job</h3>
           <hr className='my-3 h-3' />
           <div className='grid grid-cols-12 gap-4'>
             <div className="lg:col-span-4 sm:col-span-6 col-span-12">

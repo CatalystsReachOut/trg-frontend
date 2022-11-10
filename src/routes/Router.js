@@ -34,24 +34,26 @@ import RecCreateJobApp3 from './../pages/Recruitment/JobsCreation/Approver3'
 import RecCreateJobApp4 from './../pages/Recruitment/JobsCreation/Approver4'
 import RecCreateJobProgrss from './../pages/Recruitment/JobsCreation/Progress'
 import Footer from '../components/Footer/Footer';
+import Login from '../pages/Register/Login';
 
 const Router = () => {
 
     const RouteWithRole = ({ Element }) => {
         return (
-          <>
+          <div className='bg-[#F5F5F5]'>
             <Navbar/>
-            <div className='container mx-auto p-[20px] bg-[#F5F5F5] min-h-screen'>
+            <div className='container mx-auto p-[20px]  min-h-screen'>
               <Element/>
             </div>
             <Footer/>
-          </>
+          </div>
         );
       }
 
   return (
     <div>
         <Routes>
+            <Route exact path={ROUTES.Login} element={<Login/>}></Route>
             <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
             <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
 
@@ -68,7 +70,7 @@ const Router = () => {
 
 
             ///////Create Job
-            <Route exact path='/ss' element={<RouteWithRole Element={RecCreateJob} />}></Route>
+            <Route exact path={ROUTES.Recruitment.CreateJob} element={<RouteWithRole Element={RecCreateJob} />}></Route>
             <Route exact path='/s1' element={<RouteWithRole Element={RecCreateJobApp1} />}></Route>
             <Route exact path='/s2' element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
             <Route exact path='/s3' element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>

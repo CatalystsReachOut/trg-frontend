@@ -1,4 +1,5 @@
 export const ROUTES = {
+    Login:'/login',
     Recruitment:{
         Master:{
             Rounds:'/rec/master/rounds',
@@ -10,6 +11,9 @@ export const ROUTES = {
             City:'/rec/master/city',
             Bussiness:'/rec/master/bussiness'
         },
+        CreateJob:'/rec/create-job',
+        ViewJobs:'/rec/view-job',
+        trackJobProgree:'/rec/track-job'
     },
     Home:'/',
     About:'/about'

@@ -14,8 +14,24 @@ const InterviewRounds = () => {
 
   const columns = [
     {
-      title: "Interview Round",
-      dataIndex: "name",
+      title: "Profile",
+      dataIndex: "profile",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 4
+      }
+    },
+    {
+      title: "No Of Round",
+      dataIndex: "noOfRound",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 4
+      }
+    },
+    {
+      title: "No Of Question",
+      dataIndex: "noOfQuestion",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 4
@@ -27,45 +43,24 @@ const InterviewRounds = () => {
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "Round 1",
-      chinese: 98,
-      math: 60,
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "2",
-      name: "Round 2",
-      chinese: 98,
-      math: 66,
-      english: 89,
-      action:<Action/>
-    },
-    {
-      key: "3",
-      name: "Round 3",
-      chinese: 98,
-      math: 90,
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "4",
-      name: "Round 4",
-      chinese: 88,
-      math: 99,
-      english: 89,
-      action:<Action/>
-    }
-  ];
+  const [data, setData] = useState([
+  ]);
 
   const getData =()=>{
     apiProvider.getInterviewRounds()
     .then(res=>{
       console.log(res)
+      const arr =[]
+      for (const i of res.data) {
+        const obj = {
+          key:i._id,
+          profile:i.profile,
+          noOfRound:i.noOfRound,
+          noOfQuestion:i.noOfQuestion,
+        }
+        arr.push(obj)
+      }
+      setData(arr)
     })
     .catch(err=>{
       console.log(err)
@@ -76,6 +71,7 @@ const InterviewRounds = () => {
     apiProvider.createInterviewRounds({name:name})
     .then(res=>{
       console.log(res)
+      getData()
     })
     .catch(err=>{
       console.log(err)

@@ -51,9 +51,10 @@ const Rounds = () => {
   }
 
   const handleSubmit =()=>{
-    apiProvider.createRound({name:name})
+    apiProvider.createRound({roundName:name})
     .then(res=>{
       console.log(res)
+      getData()
     })
     .catch(err=>{
       console.log(err)

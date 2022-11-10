@@ -14,7 +14,7 @@ const City = () => {
   const [user, setUser] = useState({
     country:'',
     state:'',
-    city:''
+    cityName:''
   })
 
   const handleChange = (e) => {
@@ -48,14 +48,14 @@ const City = () => {
   const columns = [
     {
       title: "City",
-      dataIndex: "name"
+      dataIndex: "cityName"
     },
     {
       title: "State",
       dataIndex: "state",
       sorter: {
         compare: Sorter.DEFAULT,
-        multiple: 3
+        multiple:1
       }
     },
     {
@@ -63,7 +63,7 @@ const City = () => {
       dataIndex: "country",
       sorter: {
         compare: Sorter.DEFAULT,
-        multiple: 2
+        multiple: 1
       }
     },
     {
@@ -73,30 +73,7 @@ const City = () => {
   ];
 
   const [data,setData] = useState([
-    {
-      key: "1",
-      name: "Hubli",
-      state: "Karnataka",
-      country: "India",
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "2",
-      name: "Mumbai",
-      state: "Maharashtra",
-      country: "India",
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "3",
-      name: "Pune",
-      state: "Maharashtra",
-      country: "India",
-      english: 70,
-      action:<Action/>
-    },
+    
   ]);
 
   const getAllData = () =>{
@@ -104,6 +81,15 @@ const City = () => {
       apiProvider.getCountry()
       .then(res=>{
         console.log(res)
+        const arr = []
+        for (const i of res.data) {
+          const obj= {
+            value:i._id,
+            label:i.countryName
+          }
+          arr.push(obj)
+        }
+        setCountry(arr)
       })
       .catch(err=>{
         console.log(err)
@@ -111,6 +97,16 @@ const City = () => {
       apiProvider.getState()
       .then(res=>{
         console.log(res)
+        const arr = []
+        for (const i of res.data) {
+          const obj= {
+            value:i._id,
+            label:i.stateName,
+            actio:<Action/>
+          }
+          arr.push(obj)
+        }
+        setState(arr)
       })
       .catch(err=>{
         console.log(err)
@@ -122,10 +118,17 @@ const City = () => {
     apiProvider.getCity()
     .then(res=>{
       console.log(res)
+      const arr = []
       for (const i of res.data) {
-      
-
+        const obj = {
+          key:i._id,
+          cityName:i.cityName,
+          state:i.state,
+          country:i.country
+        }
+        arr.push(obj)
       }
+      setData(arr)
     })
     .catch(err=>{
       console.log(err)
@@ -144,6 +147,7 @@ const City = () => {
   
   useEffect(()=>{
     getData();
+    getAllData();
   },[])
 
 
@@ -176,8 +180,8 @@ const City = () => {
               <Input
               label={'City'}
               placeHolder = {'Enter City Name'}
-              name="city"
-              value = {user.city}
+              name="cityName"
+              value = {user.cityName}
               onChange = {handleChange}
               />
             </div>

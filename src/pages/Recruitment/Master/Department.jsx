@@ -11,14 +11,34 @@ import * as apiProvider from '../../../services/api/recruitment'
 const Department = () => {
   const [name, setName] = useState()
 
+  const [user, setUser] = useState({
+    title:'',
+    description:''
+  })
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setUser(prev=>({
+      ...prev,
+      [name]:value
+    }))
+  }
 
   const columns = [
     {
       title: "Department",
-      dataIndex: "name",
+      dataIndex: "title",
       sorter: {
         compare: Sorter.DEFAULT,
-        multiple: 4
+        multiple: 3
+      }
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 3
       }
     },
     {
@@ -27,45 +47,29 @@ const Department = () => {
     },
   ];
 
-  const data = [
+  const [data,setData] = useState([
     {
       key: "1",
       name: "Department 1",
-      chinese: 98,
-      math: 60,
-      english: 70,
       action:<Action/>
     },
-    {
-      key: "2",
-      name: "Department 2",
-      chinese: 98,
-      math: 66,
-      english: 89,
-      action:<Action/>
-    },
-    {
-      key: "3",
-      name: "Department 3",
-      chinese: 98,
-      math: 90,
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "4",
-      name: "Department 4",
-      chinese: 88,
-      math: 99,
-      english: 89,
-      action:<Action/>
-    }
-  ];
+
+  ]);
 
   const getData =()=>{
     apiProvider.getDepartment()
     .then(res=>{
       console.log(res)
+      const arr=[]
+      for (const i of res.data) {
+        const obj = {
+          key:i._id,
+          title:i.title,
+          description : i.description
+        }
+        arr.push(obj)
+      }
+      setData(arr)
     })
     .catch(err=>{
       console.log(err)
@@ -73,9 +77,10 @@ const Department = () => {
   }
 
   const handleSubmit =()=>{
-    apiProvider.createDepartment(name)
+    apiProvider.createDepartment(user)
     .then(res=>{
       console.log(res)
+      getData()
     })
     .catch(err=>{
       console.log(err)
@@ -93,10 +98,20 @@ const Department = () => {
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
               <Input
-              label={'Interview Round'}
-              placeHolder = {'Enter Round Name'}
-              value = {name}
-              onChange = {e => setName(e.target.value)}
+              label={'Department'}
+              placeHolder = {'Enter Department Name'}
+              value = {user.title}
+              name='title'
+              onChange = {handleChange}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'Description'}
+              placeHolder = {'Enter Description'}
+              value = {user.description}
+              name='description'
+              onChange = {handleChange}
               />
             </div>
           </div>

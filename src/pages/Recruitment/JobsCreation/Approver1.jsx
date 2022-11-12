@@ -8,6 +8,7 @@ import Card from './../../../components/Card/Card'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import * as apiProvider from '../../../services/api/recruitment'
 
 const Apprver1 = () => {
 
@@ -39,6 +40,7 @@ const Apprver1 = () => {
             'success'
           )
           navigate('/s2')
+          apiProvider.updateJobById({user})
         }
       })
   }
@@ -58,6 +60,19 @@ const Apprver1 = () => {
       [name]:value
     }))
   }
+
+  
+
+  const handleSubmit =()=>{
+    apiProvider.updateJobById({user})
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+
 
   return (
     <div className='flex w-full relative min-h-[80vh]'>

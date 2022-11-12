@@ -114,7 +114,7 @@ export const getStateById = (id) =>{
     return apiProvider.get(apiConstant.State,id)
 }
 
-// State
+// User
 export const loginUser = (data) =>{
     return apiProvider.post(apiConstant.UserLogin,data)
 }
@@ -126,4 +126,21 @@ export const createUser = (data) =>{
 
 export const getUserById = (id) =>{
     return apiProvider.get(apiConstant.State,id)
+}
+
+// Job
+export const getJob = () =>{
+    return apiProvider.getAll(apiConstant.Job)
+}
+
+export const createJob = (data) =>{
+    return apiProvider.post(apiConstant.Job,data)
+}
+
+export const getJobById = (id) =>{
+    return apiProvider.get(apiConstant.Job,id)
+}
+
+export const updateJobById = (id,data) =>{
+    return apiProvider.put(apiConstant.Job,id,data)
 }

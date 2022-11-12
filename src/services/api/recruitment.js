@@ -113,3 +113,16 @@ export const createState = (data) =>{
 export const getStateById = (id) =>{
     return apiProvider.get(apiConstant.State,id)
 }
+
+// State
+export const getUser = () =>{
+    return apiProvider.getAll(apiConstant.State)
+}
+
+export const createUser = (data) =>{
+    return apiProvider.post(apiConstant.UserSignUp,data)
+}
+
+export const getUserById = (id) =>{
+    return apiProvider.get(apiConstant.State,id)
+}

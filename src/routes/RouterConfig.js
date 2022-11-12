@@ -15,6 +15,7 @@ export const ROUTES = {
         ViewJobs:'/rec/view-job',
         trackJobProgree:'/rec/track-job'
     },
+    Jobs:'/rec/jobs',
     Home:'/',
     About:'/about'
 }

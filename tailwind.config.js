@@ -12,6 +12,7 @@ module.exports = {
         primary: '#EFE8E3',
         secondary: '#F1C40F',
         third: '#E3EBF1',
+        fourth:'var(--grey-black)'
       },
       fontSize: {
         'Medium+/Display/Large': ['64px', {
@@ -135,7 +136,28 @@ module.exports = {
           lineHeight: '16px',
           letterSpacing: '-0.015em',
         }],
-  
+        'Medium+/SubTitle/Small' : ['16px',{
+          fontFamily: 'Manrope',
+          fontStyle: 'normal',
+          fontWeight: '400',
+          lineHeight: '18px',
+          letterSpacing: '-0.01em',
+        }],
+        'Medium+/SubTitle/Small-Strong' : ['20px',{
+          fontFamily: 'Manrope',
+          fontStyle:'normal',
+          fontWeight:'600',
+          lineHeight:'24px',
+          letterSpacing:'-0.01em',
+        }],
+
+        'Medium+/SubLabel/Small':['20px',{
+          fontFamily:'Manrope',
+          fontStyle:'normal',
+          fontWeight:'400',
+          lineHeight:'24px',
+          letterSpacing:'-0.01em'
+        }],
         'Medium+/Label/Large': ['18px', {
           fontFamily: 'Manrope',
           fontStyle: 'normal',

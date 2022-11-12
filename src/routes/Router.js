@@ -35,6 +35,7 @@ import RecCreateJobApp4 from './../pages/Recruitment/JobsCreation/Approver4'
 import RecCreateJobProgrss from './../pages/Recruitment/JobsCreation/Progress'
 import Footer from '../components/Footer/Footer';
 import Login from '../pages/Register/Login';
+import Jobs from '../pages/Recruitment/Jobs/Jobs';
 
 const Router = () => {
 
@@ -76,6 +77,9 @@ const Router = () => {
             <Route exact path='/s3' element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
             <Route exact path='/s4' element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
             <Route exact path='/pp' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
+
+            //////jobs
+            <Route exact path={ROUTES.Jobs} element={<RouteWithRole Element={Jobs}/>}></Route>
 
         </Routes>
     </div>

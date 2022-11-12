@@ -91,7 +91,7 @@ const Home = () => {
         stroke: {
           lineCap: 'round'
         },
-        labels: ['Percent'],
+        labels: ['Valuation'],
       },
     
     
@@ -103,6 +103,11 @@ const Home = () => {
         Dashboard
       </div>
       <div className="grid grid-cols-4 gap-5 my-4">
+        <div className="col-span-1">
+          <Card>
+            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          </Card>
+        </div>
         <div className="col-span-1">
           <Card>
             <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />

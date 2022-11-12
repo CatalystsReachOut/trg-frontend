@@ -115,9 +115,10 @@ export const getStateById = (id) =>{
 }
 
 // State
-export const getUser = () =>{
-    return apiProvider.getAll(apiConstant.State)
+export const loginUser = (data) =>{
+    return apiProvider.post(apiConstant.UserLogin,data)
 }
+
 
 export const createUser = (data) =>{
     return apiProvider.post(apiConstant.UserSignUp,data)

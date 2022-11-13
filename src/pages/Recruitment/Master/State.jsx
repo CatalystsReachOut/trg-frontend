@@ -9,32 +9,14 @@ import Select from '../../../components/Select/Select'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
-const State = () => {
-  const [user, setUser] = useState({
+const State = ({notify, enterLoading, exitLoading, loadings}) => {
+
+  const [state, setState] = useState({
     country:'',
-    state:''
+    stateName:''
   })
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setUser(prev=>({
-      ...prev,
-      [name]:value
-    }))
-  }
-
-  const handelChangeSelect = (e) => {
-    console.log(e);
-    const {name, value} = e;
-    setUser(prev=>({
-      ...prev,
-      [name]:value
-    }))
-  }
-
-
-
-  const coutry = [
+  const country = [
     { value: 'India', label: 'India' },
     { value: 'USA', label: 'USA' },
     { value: 'UK', label: 'UK' }
@@ -43,7 +25,7 @@ const State = () => {
   const columns = [
     {
       title: "State",
-      dataIndex: "state",
+      dataIndex: "stateName",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 3
@@ -59,57 +41,78 @@ const State = () => {
     },
     {
       title: "Action",
-      dataIndex: "action"
+      dataIndex: "status"
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "Hubli",
-      state: "Karnataka",
-      country: "India",
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "2",
-      name: "Mumbai",
-      state: "Maharashtra",
-      country: "India",
-      english: 70,
-      action:<Action/>
-    },
-    {
-      key: "3",
-      name: "Pune",
-      state: "Maharashtra",
-      country: "India",
-      english: 70,
-      action:<Action/>
-    },
-  ];
+  const [data,setData]=useState([])
 
-  const getData =()=>{
-    apiProvider.getState()
-    .then(res=>{
-      console.log(res.data)
-   
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setState(prev => ({
+        ...prev,
+        [name]: value
+    }))
+}
 
-  const handleSubmit =()=>{
-    apiProvider.createState({user})
-    .then(res=>{
-      console.log(res)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  }
+const handelChangeSelect = (e) => {
+    const { name, value } = e;
+    console.log(e)
+    setState(prev => ({
+        ...prev,
+        [name]: value
+    }))
+}
+
+const getData = () => {
+  enterLoading(2)
+  apiProvider.getState()
+      .then(res => {
+
+          if (res.isSuccess) {
+              setData(res.data)
+              const arr = res.data.map(data => ({
+                  value: data._id,
+                  label: data.roundName
+              }))
+              setState(arr)
+          }
+          return exitLoading(2)
+      })
+      .catch(err => {
+          console.log(err)
+          return exitLoading(2)
+
+      })
+}
+
+  const handleSubmit = () => {
+
+    enterLoading(1)
+    return apiProvider.createState(state)
+        .then(res => {
+            exitLoading(1)
+            if (res.isSuccess) {
+                clearData()
+                getData()
+                return notify('success', 'added success');
+            } else {
+                return notify('error', res.message);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            exitLoading(1)
+            return notify('error', err.message);
+        })
+}
+
+const clearData = () => {
+  setState({
+      country:'',
+      stateName:''
+  })
+}
 
 
   useEffect(()=>{
@@ -125,9 +128,9 @@ const State = () => {
             <div className="col-span-1">
               <Select 
                 label="Country"
-                options={coutry}
+                options={country}
                 name="country"
-                value={user.country}
+                value={state?.country}
                 onChange={handelChangeSelect}
               >
               </Select>
@@ -136,8 +139,8 @@ const State = () => {
               <Input
               label={'Sate'}
               placeHolder = {'Enter State Name'}
-              name="state"
-              value = {user.state}
+              name="stateName"
+              value = {state?.stateName}
               onChange = {handleChange}
               />
             </div>

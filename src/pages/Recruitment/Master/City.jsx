@@ -9,9 +9,9 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
-const City = () => {
+const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
-  const [user, setUser] = useState({
+  const [city, setCity] = useState({
     country:'',
     state:'',
     cityName:''
@@ -19,7 +19,7 @@ const City = () => {
 
   const handleChange = (e) => {
     const {name, value} = e.target;
-    setUser(prev=>({
+    setCity(prev=>({
       ...prev,
       [name]:value
     }))
@@ -27,7 +27,7 @@ const City = () => {
 
   const handelChangeSelect = (e) => {
     const {name, value} = e;
-    setUser(prev=>({
+    setCity(prev=>({
       ...prev,
       [name]:value
     }))
@@ -36,7 +36,6 @@ const City = () => {
 
   const [country,setCountry] = useState([
     { value: 'India', label: 'India' },
-
   ])
 
   const [state,setState] = useState([
@@ -68,7 +67,7 @@ const City = () => {
     },
     {
       title: "Action",
-      dataIndex: "action"
+      dataIndex: "status"
     },
   ];
 
@@ -76,45 +75,10 @@ const City = () => {
     
   ]);
 
-  const getAllData = () =>{
-    const [data1,data2] = Promise.all([
-      apiProvider.getCountry()
-      .then(res=>{
-        console.log(res)
-        const arr = []
-        for (const i of res.data) {
-          const obj= {
-            value:i._id,
-            label:i.countryName
-          }
-          arr.push(obj)
-        }
-        setCountry(arr)
-      })
-      .catch(err=>{
-        console.log(err)
-      }),
-      apiProvider.getState()
-      .then(res=>{
-        console.log(res)
-        const arr = []
-        for (const i of res.data) {
-          const obj= {
-            value:i._id,
-            label:i.stateName,
-            actio:<Action/>
-          }
-          arr.push(obj)
-        }
-        setState(arr)
-      })
-      .catch(err=>{
-        console.log(err)
-      }),
-    ])
-  }
+  
 
   const getData =()=>{
+    enterLoading(2)
     apiProvider.getCity()
     .then(res=>{
       console.log(res)
@@ -129,25 +93,45 @@ const City = () => {
         arr.push(obj)
       }
       setData(arr)
+      return exitLoading(2)
     })
     .catch(err=>{
       console.log(err)
+      exitLoading(2)
     })
   }
 
   const handleSubmit =()=>{
-    apiProvider.createCity(user)
+    enterLoading(1)
+   apiProvider.createCity(city)
     .then(res=>{
-      console.log(res)
+      exitLoading(1)
+      if (res.isSuccess) {
+        clearData()
+        getData()
+        return notify('success', 'added success');
+    } else {
+        return notify('error', res.message);
+    }
+
     })
     .catch(err=>{
       console.log(err)
+      exitLoading(1)
+      return notify('error', err.message);
     })
   }
+
+  const clearData = () => {
+    setCity({
+      country:'',
+      state:'',
+      cityName:''
+    })
+}
   
   useEffect(()=>{
     getData();
-    getAllData();
   },[])
 
 
@@ -161,7 +145,7 @@ const City = () => {
                 label="Country"
                 options={country}
                 name="country"
-                value={user.country}
+                value={city?.country}
                 onChange={handelChangeSelect}
               >
               </Select>
@@ -171,7 +155,7 @@ const City = () => {
                 label="State"
                 options={state}
                 name="state"
-                value={user.state}
+                value={city?.state}
                 onChange={handelChangeSelect}
               >
               </Select>
@@ -181,7 +165,7 @@ const City = () => {
               label={'City'}
               placeHolder = {'Enter City Name'}
               name="cityName"
-              value = {user.cityName}
+              value = {city.cityName}
               onChange = {handleChange}
               />
             </div>

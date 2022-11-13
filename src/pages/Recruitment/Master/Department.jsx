@@ -8,17 +8,16 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
-const Department = () => {
-  const [name, setName] = useState()
-
-  const [user, setUser] = useState({
-    title:'',
-    description:''
+const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
+  const [department, setDepartment] = useState({
+    title:"",
+    description:""
   })
 
+ 
   const handleChange = (e) => {
     const {name, value} = e.target;
-    setUser(prev=>({
+    setDepartment(prev=>({
       ...prev,
       [name]:value
     }))
@@ -43,54 +42,67 @@ const Department = () => {
     },
     {
       title: "Action",
-      dataIndex: "action"
+      dataIndex: "status"
     },
   ];
 
-  const [data,setData] = useState([
-    {
-      key: "1",
-      name: "Department 1",
-      action:<Action/>
-    },
+  const [data,setData] = useState([]);
+  const [profileData, setProfileData] = useState([])
 
-  ]);
-
-  const getData =()=>{
+  const getData = () => {
+    enterLoading(2)
     apiProvider.getDepartment()
-    .then(res=>{
-      console.log(res)
-      const arr=[]
-      for (const i of res.data) {
-        const obj = {
-          key:i._id,
-          title:i.title,
-          description : i.description
-        }
-        arr.push(obj)
-      }
-      setData(arr)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
+        .then(res => {
+  
+            if (res.isSuccess) {
+                setData(res.data)
+                const arr = res.data.map(data => ({
+                    value: data._id,
+                    label: data.title
+                }))
+                setProfileData(arr)
+            }
+            return exitLoading(2)
+        })
+        .catch(err => {
+            console.log(err)
+            return exitLoading(2)
+  
+        })
   }
-
-  const handleSubmit =()=>{
-    apiProvider.createDepartment(user)
-    .then(res=>{
-      console.log(res)
-      getData()
-    })
-    .catch(err=>{
-      console.log(err)
+  
+  const handleSubmit = () => {
+  
+    enterLoading(1)
+    return apiProvider.createDepartment(department)
+        .then(res => {
+            exitLoading(1)
+            if (res.isSuccess) {
+                clearData()
+                getData()
+                return notify('success', 'added success');
+            } else {
+                return notify('error', res.message);
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            exitLoading(1)
+            return notify('error', err.message);
+        })
+  }
+  
+  const clearData = () => {
+    setDepartment({
+      title:"",
+      description:""
     })
   }
   
-  useEffect(()=>{
+  useEffect(() => {
     getData();
-  },[])
-
+  }, [])
+  
   return (
     <div>
         <Card>
@@ -100,8 +112,8 @@ const Department = () => {
               <Input
               label={'Department'}
               placeHolder = {'Enter Department Name'}
-              value = {user.title}
               name='title'
+              value={department?.title}
               onChange = {handleChange}
               />
             </div>
@@ -109,7 +121,7 @@ const Department = () => {
               <Input
               label={'Description'}
               placeHolder = {'Enter Description'}
-              value = {user.description}
+              value = {department?.description}
               name='description'
               onChange = {handleChange}
               />

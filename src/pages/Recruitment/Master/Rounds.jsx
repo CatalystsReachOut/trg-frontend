@@ -9,8 +9,10 @@ import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
 const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
-  const [round, setRound] = useState(1)
-
+ 
+  const [round, setRound] = useState({
+    roundName:""
+})
   const columns = [
     {
       title: "Round",

@@ -18,34 +18,7 @@ const Bussiness = () => {
       title: "Round",
       dataIndex: "name"
     },
-    {
-      title: "Chinese Score",
-      dataIndex: "chinese",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 3
-      }
-    },
-    {
-      title: "Math Score",
-      dataIndex: "math",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 2
-      }
-    },
-    {
-      title: "English Score",
-      dataIndex: "english",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
-      }
-    },
-    {
-      title: "Action",
-      dataIndex: "action"
-    },
+    
   ];
 
   const data = [

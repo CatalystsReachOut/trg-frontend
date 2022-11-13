@@ -63,6 +63,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     const handelChangeSelect = (e) => {
         const { name, value } = e;
+        console.log(e)
         setUser(prev => ({
             ...prev,
             [name]: value

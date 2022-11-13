@@ -8,13 +8,13 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
-const Rounds = () => {
-  const [name, setName] = useState()
+const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
+  const [round, setRound] = useState(1)
 
   const columns = [
     {
       title: "Round",
-      dataIndex: "name",
+      dataIndex: "roundName",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 4
@@ -26,47 +26,76 @@ const Rounds = () => {
     },
   ];
 
-  const [data, setData] = useState([
 
-  ]);
 
-  const getData =()=>{
-    apiProvider.getRound()
-    .then(res=>{
-      console.log(res.data)
-      const arr = []
-      for (const i of res.data) {
-        const obj = {
-          key:i._id,
-          name:i.roundName,
-          action:<Action/>
-        }
-        arr.push(obj)
-      }
-      setData(arr)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
+  
+  const [profileData, setProfileData] = useState([])
+
+
+
+  const [data, setData] = useState([]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRound(prev => ({
+        ...prev,
+        [name]: value
+    }))
+}
+
+
+  const getData = () => {
+      enterLoading(2)
+      apiProvider.getRound()
+          .then(res => {
+
+              if (res.isSuccess) {
+                  setData(res.data)
+                  const arr = res.data.map(data => ({
+                      value: data._id,
+                      label: data.roundName
+                  }))
+                  setProfileData(arr)
+              }
+              return exitLoading(2)
+          })
+          .catch(err => {
+              console.log(err)
+              return exitLoading(2)
+
+          })
   }
 
-  const handleSubmit =()=>{
-    apiProvider.createRound({roundName:name})
-    .then(res=>{
-      console.log(res)
-      getData()
-    })
-    .catch(err=>{
-      console.log(err)
-    })
+  const handleSubmit = () => {
+
+      enterLoading(1)
+      return apiProvider.createRound(round)
+          .then(res => {
+              exitLoading(1)
+              if (res.isSuccess) {
+                  clearData()
+                  getData()
+                  return notify('success', 'added success');
+              } else {
+                  return notify('error', res.message);
+              }
+          })
+          .catch(err => {
+              console.log(err)
+              exitLoading(1)
+              return notify('error', err.message);
+          })
   }
 
+  const clearData = () => {
+      setRound({
+          roundName: '',
+      })
+  }
 
-  useEffect(()=>{
-    getData();
-  },[])
-
-
+  useEffect(() => {
+      getData();
+  }, [])
   
 
   return (
@@ -76,10 +105,11 @@ const Rounds = () => {
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
               <Input
-              label={'Interview Round'}
+              label={'Round'}
               placeHolder = {'Enter Round Name'}
-              value = {name}
-              onChange = {e => setName(e.target.value)}
+              name="roundName"
+              value = {round?.roundName}
+              onChange={handleChange}            
               />
             </div>
           </div>
@@ -87,7 +117,7 @@ const Rounds = () => {
             <Button 
             title="Add Round" 
             className={'min-w-[100px]'}
-            onClick={handleSubmit}
+            onClick={()=>handleSubmit(round)}
             />
           </div>
         </Card>

@@ -127,6 +127,28 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
             })
     }
 
+
+    const handleEdit = (id) => {
+
+        enterLoading(1)
+        return apiProvider.editProfile(id, user)
+            .then(res => {
+                exitLoading(1)
+                if (res.isSuccess) {
+                    clearData()
+                    getData()
+                    return notify('success', 'added success');
+                } else {
+                    return notify('error', res.message);
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                exitLoading(1)
+                return notify('error', err.message);
+            })
+    }
+
     const clearData = () => {
         setUser({
             title: '',
@@ -203,7 +225,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                 <div className="font-bold my-3">
                     City
                 </div>
-                <Table loading={loadings[2]}  columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
+                <Table loading={loadings[2]} columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />
             </Card>
         </div>
     )

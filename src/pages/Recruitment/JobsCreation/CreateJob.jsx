@@ -50,6 +50,9 @@ const Create = () => {
     })
   }
   
+  
+
+  
   return (
     <div className='flex w-full relative min-h-[80vh]'>
     <div className=' h-auto w-full flex'>

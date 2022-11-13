@@ -11,13 +11,13 @@ import * as apiProvider from '../../../services/api/recruitment'
 
 const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [business, setBusiness] = useState({
-    businessName:"",
-    address:"",
-    businessUrl:"",
-    businessCode:"",
-    businessLogo:"",
-    summary:"",
-    description:""
+    businessName: "",
+    address: "",
+    businessUrl: "",
+    businessCode: "",
+    businessLogo: "",
+    summary: "",
+    description: ""
   })
 
 
@@ -78,165 +78,188 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
         multiple: 1
       }
     },
-    
-    
+
+
   ];
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
-    setBusiness(prev=>({
+    const { name, value } = e.target;
+    setBusiness(prev => ({
       ...prev,
-      [name]:value
+      [name]: value
     }))
   }
 
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
   const [profileData, setProfileData] = useState([])
 
 
   const getData = () => {
     enterLoading(2)
     apiProvider.getBusiness()
-        .then(res => {
-  
-            if (res.isSuccess) {
-              setData(res.data)
-                const arr = res.data.map(data => ({
-                    value: data._id,
-                    label: data.businessName
-                }))
-                setProfileData(arr)
-            }
-            return exitLoading(2)
-        })
-        .catch(err => {
-            console.log(err)
-            return exitLoading(2)
-  
-        })
+      .then(res => {
+
+        if (res.isSuccess) {
+          setData(res.data)
+          const arr = res.data.map(data => ({
+            value: data._id,
+            label: data.businessName
+          }))
+          setProfileData(arr)
+        }
+        return exitLoading(2)
+      })
+      .catch(err => {
+        console.log(err)
+        return exitLoading(2)
+
+      })
   }
-  
+
   const handleSubmit = () => {
-  
+
     enterLoading(1)
     return apiProvider.createBusiness(business)
-        .then(res => {
-            exitLoading(1)
-            if (res.isSuccess) {
-                clearData()
-                getData()
-                return notify('success', 'added success');
-            } else {
-                return notify('error', res.message);
-            }
-        })
-        .catch(err => {
-            console.log(err)
-            exitLoading(1)
-            return notify('error', err.message);
-        })
+      .then(res => {
+        exitLoading(1)
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          return notify('success', 'added success');
+        } else {
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        exitLoading(1)
+        return notify('error', err.message);
+      })
   }
-  
+
+
+  const handleEdit = (id) => {
+
+    enterLoading(1)
+    return apiProvider.editBusiness(id, business)
+      .then(res => {
+        exitLoading(1)
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          return notify('success', 'added success');
+        } else {
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        exitLoading(1)
+        return notify('error', err.message);
+      })
+  }
+
   const clearData = () => {
     setBusiness({
-      businessName:"",
-      address:"",
-      businessUrl:"",
-      businessCode:"",
-      businessLogo:"",
-      summary:"",
-      description:""
+      businessName: "",
+      address: "",
+      businessUrl: "",
+      businessCode: "",
+      businessLogo: "",
+      summary: "",
+      description: ""
     })
   }
-  
+
   useEffect(() => {
     getData();
   }, [])
 
   return (
     <div>
-        <Card>
-          <div className='font-bold'> Add Business </div>
-          <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
-            <div className="col-span-1">
-              <Input
+      <Card>
+        <div className='font-bold'> Add Business </div>
+        <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
+          <div className="col-span-1">
+            <Input
               label={'Title'}
-              placeHolder = {'Enter Title'}
-              value = {business?.businessName}
+              placeHolder={'Enter Title'}
+              value={business?.businessName}
               name="businessName"
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'Address'}
-              placeHolder = {'Enter Address'}
-              value = {business?.address}
-              name="address"
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'Bussiness Logo'}
-              placeHolder = {'Bussiness Logo'}
-              type="file"
-              value = {business?.businessLogo}
-              name = "businessLogo"
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'Bussiness URL'}
-              placeHolder = {'Bussiness URL'}
-              value = {business?.businessUrl}
-              name="businessUrl"
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'Bussiness Code'}
-              placeHolder = {'Bussiness Code'}
-              value = {business?.businessCode}
-              name="businessCode"
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'Summary'}
-              placeHolder = {'Summary'}
-              value = {business?.summary}
-              name="summary"
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <TextArea
-              label={'Description'}
-              placeHolder = {'Description'}
-              value = {business?.description}
-              name="description"
-              onChange = {handleChange}
-              />
-            </div>
-          </div>
-          <div className="flex justify-end mt-3">
-            <Button 
-            title="Add Business" 
-            className={'min-w-[100px]'}
-            onClick={handleSubmit}
+              onChange={handleChange}
             />
           </div>
-        </Card>
-        <Card className={'mt-3'}>
-          <div className="font-bold my-3">
-            Rounds
+          <div className="col-span-1">
+            <Input
+              label={'Address'}
+              placeHolder={'Enter Address'}
+              value={business?.address}
+              name="address"
+              onChange={handleChange}
+            />
           </div>
-          <Table columns={columns} dataSource={data}/>
-        </Card>
+          <div className="col-span-1">
+            <Input
+              label={'Bussiness Logo'}
+              placeHolder={'Bussiness Logo'}
+              type="file"
+              value={business?.businessLogo}
+              name="businessLogo"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-span-1">
+            <Input
+              label={'Bussiness URL'}
+              placeHolder={'Bussiness URL'}
+              value={business?.businessUrl}
+              name="businessUrl"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-span-1">
+            <Input
+              label={'Bussiness Code'}
+              placeHolder={'Bussiness Code'}
+              value={business?.businessCode}
+              name="businessCode"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-span-1">
+            <Input
+              label={'Summary'}
+              placeHolder={'Summary'}
+              value={business?.summary}
+              name="summary"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-span-1">
+            <TextArea
+              label={'Description'}
+              placeHolder={'Description'}
+              value={business?.description}
+              name="description"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+        <div className="flex justify-end mt-3">
+          <Button
+            loading={loadings[1]}
+            title="Add Business"
+            className={'min-w-[100px]'}
+            onClick={handleSubmit}
+          />
+        </div>
+      </Card>
+      <Card className={'mt-3'}>
+        <div className="font-bold my-3">
+          Rounds
+        </div>
+        <Table loading={loadings[2]} columns={columns} dataSource={data} />
+      </Card>
     </div>
   )
 }

@@ -2,3 +2,13 @@
 *{
     font-family: 'Manrope', sans-serif;
 }
+
+.ant-menu-submenu-title{
+    display: flex !important;
+    align-items: center;
+}
+
+.ant-menu-submenu-title:hover{
+    color: red !important;
+    border-color: red !important;
+}

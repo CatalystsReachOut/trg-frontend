@@ -144,3 +144,16 @@ export const getJobById = (id) =>{
 export const updateJobById = (id,data) =>{
     return apiProvider.put(apiConstant.Job,id,data)
 }
+
+// Job
+export const getProfile = () =>{
+    return apiProvider.getAll(apiConstant.Profile)
+}
+
+export const createProfile = (data) =>{
+    return apiProvider.post(apiConstant.Profile, data)
+}
+
+export const updateProfile = (id,data) =>{
+    return apiProvider.put(apiConstant.Profile)
+}

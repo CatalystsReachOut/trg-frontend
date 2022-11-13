@@ -10,8 +10,8 @@ module.exports = {
       },
       colors:{
         primary: '#EFE8E3',
+        primary10: '#E3EBF1',
         secondary: '#F1C40F',
-        third: '#E3EBF1',
         fourth:'var(--grey-black)'
       },
       fontSize: {

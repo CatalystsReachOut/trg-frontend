@@ -2,20 +2,21 @@ export const ROUTES = {
     Login:'/login',
     Recruitment:{
         Master:{
-            Rounds:'/rec/master/rounds',
-            InterviewRounds:'/rec/master/interview-rounds',
-            QuestionBank:'/rec/master/question-bank',
-            State:'/rec/master/state',
-            Department:'/rec/master/department',
-            Country:'/rec/master/country',
-            City:'/rec/master/city',
-            Bussiness:'/rec/master/bussiness'
+            Rounds:'/recruitment/master/rounds',
+            InterviewRounds:'/recruitment/master/interview-rounds',
+            QuestionBank:'/recruitment/master/question-bank',
+            State:'/recruitment/master/state',
+            Department:'/recruitment/master/department',
+            Country:'/recruitment/master/country',
+            City:'/recruitment/master/city',
+            Bussiness:'/recruitment/master/bussiness'
         },
-        CreateJob:'/rec/create-job',
-        ViewJobs:'/rec/view-job',
-        trackJobProgree:'/rec/track-job'
+        CreateJob:'/recruitment/create-job',
+        ViewJobs:'/recruitment/view-job',
+        TrackJobProgrees:'/recruitment/track-job',
+        Profile: '/recruitment/profile'
     },
-    Jobs:'/rec/jobs',
+    Jobs:'/recruitment/jobs',
     Home:'/',
     About:'/about'
 }

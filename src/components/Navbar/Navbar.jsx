@@ -16,8 +16,8 @@ export default function Navbar() {
           <Menu.Item key="mail" icon={<MailOutlined />} className='flex items-center border-0 active:border-0 text-[white]'>
             Home
           </Menu.Item>
-          <Menu.SubMenu key="SubMenu" className='hover:text-[white] flex items-center text-[white]' title="Recruitment" icon={<SettingOutlined />}>
-            <Menu.Item>
+          <Menu.SubMenu key="SubMenu" className='flex items-center hover:text-[white] flex items-center text-[white]' title="Recruitment" icon={<SettingOutlined />}>
+            <Menu.Item className='flex items-center'>
               Dashboard
             </Menu.Item>
             <Menu.Item>
@@ -30,6 +30,12 @@ export default function Navbar() {
                 View Job
               </Link>
             </Menu.Item>
+            <Menu.Item>
+              <Link to={ROUTES.Recruitment.Profile}>
+                Profile
+              </Link>
+            </Menu.Item>
+            
             <Menu.SubMenu title='Master' className='text-[red] focus:text-[red] hover:text-[red] active:text-[red]'>
               <Menu.Item>
                 <Link to={ROUTES.Recruitment.Master.Bussiness}>

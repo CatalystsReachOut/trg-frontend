@@ -14,7 +14,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [city, setCity] = useState({
     country: '',
     state: '',
-    cityName: ''
+    name: ''
   })
 
   const handleChange = (e) => {
@@ -41,7 +41,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
   const columns = [
     {
       title: "City",
-      dataIndex: "cityName"
+      dataIndex: "name"
     },
     {
       title: "State",
@@ -80,9 +80,9 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         for (const i of res.data) {
           const obj = {
             key: i._id,
-            cityName: i.cityName,
-            state: i.state,
-            country: i.country
+            name: i.name,
+            state: state?.map(s=>s?.value==i?.state)?.label,
+            country: country?.map(s=>s?.value==i?.country)?.label
           }
           arr.push(obj)
         }
@@ -101,7 +101,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         .then(res => {
           const arr = res.data?.map(data => ({
             value: data._id,
-            label: data.countryName
+            label: data.name
           }))
           return arr
         })
@@ -112,7 +112,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         .then(res => {
           const arr = res.data?.map(data => ({
             value: data._id,
-            label: data.title
+            label: data.name
           }))
           return arr
         })
@@ -154,13 +154,13 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
     setCity({
       country: '',
       state: '',
-      cityName: ''
+      name: ''
     })
   }
 
   useEffect(() => {
-    getData();
     getAllData()
+    getData();
   }, [])
 
 
@@ -193,8 +193,8 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
             <Input
               label={'City'}
               placeHolder={'Enter City Name'}
-              name="cityName"
-              value={city.cityName}
+              name="name"
+              value={city.name}
               onChange={handleChange}
             />
           </div>

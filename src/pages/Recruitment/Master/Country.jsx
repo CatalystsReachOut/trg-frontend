@@ -11,7 +11,7 @@ import * as apiProvider from '../../../services/api/recruitment'
 const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [country, setCountry] = useState({
-    countryName:'',
+    name:'',
     code:''
   })
 
@@ -28,7 +28,7 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
   const columns = [
     {
       title: "Country Name",
-      dataIndex: "countryName",
+      dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 2
@@ -96,7 +96,7 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
   
   const clearData = () => {
     setCountry({
-      countryName:"",
+      name:"",
       code:""
     })
   }
@@ -115,8 +115,8 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
               <Input
               label={'Country'}
               placeHolder = {'Enter Country Name'}
-              value = {country?.countryName}
-              name ={'countryName'}
+              value = {country?.name}
+              name ={'name'}
               onChange = {handleChange}
               />
             </div>

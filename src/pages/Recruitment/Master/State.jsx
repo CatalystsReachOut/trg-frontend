@@ -13,19 +13,19 @@ const State = ({notify, enterLoading, exitLoading, loadings}) => {
 
   const [state, setState] = useState({
     country:'',
-    stateName:''
+    name:''
   })
 
-  const country = [
+  const [country, setCountry] = useState([
     { value: 'India', label: 'India' },
     { value: 'USA', label: 'USA' },
     { value: 'UK', label: 'UK' }
-  ]
+  ])
 
   const columns = [
     {
       title: "State",
-      dataIndex: "stateName",
+      dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 3
@@ -46,6 +46,7 @@ const State = ({notify, enterLoading, exitLoading, loadings}) => {
   ];
 
   const [data,setData]=useState([])
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,14 +69,13 @@ const getData = () => {
   enterLoading(2)
   apiProvider.getState()
       .then(res => {
-
           if (res.isSuccess) {
-              setData(res.data)
-              const arr = res.data.map(data => ({
-                  value: data._id,
-                  label: data.roundName
-              }))
-              setState(arr)
+            const arr = res.data.map(i => ({
+              id:i?._id,
+              name:i?.name,
+              country:country?.find(s=>s?.value==i?.country)?.label,
+            }))
+            setData(arr)
           }
           return exitLoading(2)
       })
@@ -84,6 +84,22 @@ const getData = () => {
           return exitLoading(2)
 
       })
+}
+
+const getAllData = async() => {
+  enterLoading(2)
+  await apiProvider.getCountry()
+  .then(res=>{
+    const arr = res.data?.map(i=>({
+      label:i?.name,
+      value:i?._id
+    }))
+    setCountry(arr)
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+  exitLoading(2)
 }
 
   const handleSubmit = () => {
@@ -110,12 +126,13 @@ const getData = () => {
 const clearData = () => {
   setState({
       country:'',
-      stateName:''
+      name:''
   })
 }
 
 
   useEffect(()=>{
+    getAllData();
     getData();
   },[])
 
@@ -137,10 +154,10 @@ const clearData = () => {
             </div>
             <div className="col-span-1">
               <Input
-              label={'Sate'}
+              label={'State'}
               placeHolder = {'Enter State Name'}
-              name="stateName"
-              value = {state?.stateName}
+              name="name"
+              value = {state?.name}
               onChange = {handleChange}
               />
             </div>

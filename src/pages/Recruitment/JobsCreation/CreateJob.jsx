@@ -8,11 +8,18 @@ import Card from './../../../components/Card/Card'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as apiProvider from '../../../services/api/recruitment'
+import { useEffect } from 'react'
 
 
 const Create = () => {
 
   const navigate = useNavigate()
+
+  const [profileOpt, setProfileOpt] = useState([])
+  const [bussinessOpt, setBussinessOpt] = useState([])
+  const [countryOpt, setCountryOpt] = useState([])
+  const [stateOpt, setStateOpt] = useState([])
+  const [cityOpt, setCityOpt] = useState([])
   
   const [user, setUser] = useState({
     profile:'',
@@ -39,7 +46,6 @@ const Create = () => {
     }))
   }
 
-
   const handleSubmit =()=>{
     apiProvider.createJob({user})
     .then(res=>{
@@ -50,6 +56,70 @@ const Create = () => {
     })
   }
   
+
+  const getBasicData = async() => {
+    const [data1, data2, data3, data4, data5] = await Promise.all([
+      apiProvider.getProfile()
+      .then(res=>{
+        const arr = res.data?.map(i=>({
+          label:i?.name,
+          value:i?._id
+        }))
+        return arr;
+      })
+      .catch(err=>(console.log(err)))
+      ,
+      apiProvider.getBusiness()
+      .then(res=>{
+        const arr = res.data?.map(i=>({
+          label:i?.name,
+          value:i?._id
+        }))
+        return arr;
+      })
+      .catch(err=>(console.log(err)))
+      ,
+      apiProvider.getCountry()
+      .then(res=>{
+        const arr = res.data?.map(i=>({
+          label:i?.name,
+          value:i?._id
+        }))
+        return arr;
+      })
+      .catch(err=>(console.log(err)))
+      ,
+      apiProvider.getState()
+      .then(res=>{
+        const arr = res.data?.map(i=>({
+          label:i?.title,
+          value:i?._id
+        }))
+        return arr;
+      })
+      .catch(err=>(console.log(err)))
+      ,
+      apiProvider.getCity()
+      .then(res=>{
+        const arr = res.data?.map(i=>({
+          label:i?.name,
+          value:i?._id
+        }))
+        return arr;
+      })
+      .catch(err=>(console.log(err)))
+    ])
+
+    setProfileOpt(data1);
+    setBussinessOpt(data2)
+    setCityOpt(data3)
+    setStateOpt(data4)
+    setCityOpt(data5)
+  }
+
+  useEffect(()=>{
+    getBasicData()
+  },[])
   
 
   

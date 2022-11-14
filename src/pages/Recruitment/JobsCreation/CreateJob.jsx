@@ -7,6 +7,8 @@ import Button from '../../../components/Button/Button'
 import Card from './../../../components/Card/Card'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import * as apiProvider from '../../../services/api/recruitment'
+
 
 const Create = () => {
 
@@ -37,6 +39,20 @@ const Create = () => {
     }))
   }
 
+
+  const handleSubmit =()=>{
+    apiProvider.createJob({user})
+    .then(res=>{
+      console.log(res)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
+  
+  
+
+  
   return (
     <div className='flex w-full relative min-h-[80vh]'>
     <div className=' h-auto w-full flex'>
@@ -92,7 +108,7 @@ const Create = () => {
           </div>
         </div>
         <div className='mt-auto flex gap-3 py-3'>
-          <Button title="Submit" onClick={()=>navigate('/s1')} className=' ' />
+          <Button title="Submit" onClick={()=>handleSubmit()} className=' ' />
           <Button type='2' title="Cancel" className='' />
         </div>
         

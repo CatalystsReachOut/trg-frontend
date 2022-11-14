@@ -8,8 +8,12 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
-const InterviewRounds = () => {
-  const [name, setName] = useState()
+const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
+  const [interviewRound, setInterviewRound] = useState({
+    profile:"",
+    noOfRound:"",
+    noOfQuestion:""
+  })
 
 
   const columns = [
@@ -46,41 +50,72 @@ const InterviewRounds = () => {
   const [data, setData] = useState([
   ]);
 
-  const getData =()=>{
-    apiProvider.getInterviewRounds()
-    .then(res=>{
-      console.log(res)
-      const arr =[]
-      for (const i of res.data) {
-        const obj = {
-          key:i._id,
-          profile:i.profile,
-          noOfRound:i.noOfRound,
-          noOfQuestion:i.noOfQuestion,
-        }
-        arr.push(obj)
-      }
-      setData(arr)
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  }
+  const [profileData, setProfileData] = useState([])
 
-  const handleSubmit =()=>{
-    apiProvider.createInterviewRounds({name:name})
-    .then(res=>{
-      console.log(res)
-      getData()
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  }
-  
-  useEffect(()=>{
-    getData();
-  },[])
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInterviewRound(prev => ({
+        ...prev,
+        [name]: value
+    }))
+}
+
+const getData = () => {
+  enterLoading(2)
+  apiProvider.getInterviewRounds()
+      .then(res => {
+
+          if (res.isSuccess) {
+              setData(res.data)
+              const arr = res.data.map(data => ({
+                  value: data._id,
+                  label: data.profile
+              }))
+              setProfileData(arr)
+          }
+          return exitLoading(2)
+      })
+      .catch(err => {
+          console.log(err)
+          return exitLoading(2)
+
+      })
+}
+
+const handleSubmit = () => {
+
+  enterLoading(1)
+  return apiProvider.createInterviewRounds(interviewRound)
+      .then(res => {
+          exitLoading(1)
+          if (res.isSuccess) {
+              clearData()
+              getData()
+              return notify('success', 'added success');
+          } else {
+              return notify('error', res.message);
+          }
+      })
+      .catch(err => {
+          console.log(err)
+          exitLoading(1)
+          return notify('error', err.message);
+      })
+}
+
+const clearData = () => {
+  setInterviewRound({
+    profile:"",
+    noOfRound:"",
+    noOfQuestion:""
+  })
+}
+
+useEffect(() => {
+  getData();
+}, [])
+
 
   return (
     <div>
@@ -89,16 +124,35 @@ const InterviewRounds = () => {
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
               <Input
-              label={'Interview Round'}
-              placeHolder = {'Enter Round Name'}
-              value = {name}
-              onChange = {e => setName(e.target.value)}
+              label={'Profile'}
+              placeHolder = {'Profile'}
+              name="profile"
+              value = {interviewRound?.profile}
+              onChange = {handleChange}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'No Of Round'}
+              placeHolder = {'Enter Number Of Round'}
+              name="noOfRound"
+              value = {interviewRound?.noOfRound}
+              onChange = {handleChange}
+              />
+            </div>
+            <div className="col-span-1">
+              <Input
+              label={'No Of Question'}
+              placeHolder = {'Enter Number Of Question'}
+              name="noOfQuestion"
+              value = {interviewRound?.noOfQuestion}
+              onChange = {handleChange}
               />
             </div>
           </div>
           <div className="flex justify-end mt-3">
             <Button 
-            title="Add Round" 
+            title="Add Interview Round" 
             className={'min-w-[100px]'}
             onClick={handleSubmit}
             />

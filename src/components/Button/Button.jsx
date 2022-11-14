@@ -1,22 +1,25 @@
 import React from 'react'
+import { Button } from 'antd'
 
-const Button = (props) => {
+const Btn = (props) => {
   //props
   const {
     title,
     onClick,
     className,
     type,
-    } = props;
+    loading
+  } = props;
 
 
   return (
-    <button className={`min-w-[60px] p-2 rounded-lg ${type==1?'btn-primary':'btn-secondary'} transition ${className}`} onClick={onClick}>{title}</button>
+    <Button loading={loading} className={`min-w-[60px] h-auto p-2 rounded-lg ${type === 1 ? 'btn-primary' : 'btn-secondary'} transition ${className}`} onClick={onClick}>{title}</Button>
+    // <></>
   )
 }
 
-Button.defaultProps={
-  type:1
+Button.defaultProps = {
+  type: 1
 }
 
-export default Button
+export default Btn

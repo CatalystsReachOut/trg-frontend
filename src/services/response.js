@@ -2,7 +2,6 @@
 import * as errors from '../constants/errors';
 
 export function handleResponse(response) {
-    console.log(response.status)
     if (response.status === 200) {
         response.data.isSuccess = true;
     } else {

@@ -2,12 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer base{
+  :root{
+    --grey-black : #00000080;
+  }
+}
+
 @layer components {
     .btn-primary {
       @apply bg-[#838383] text-white hover:bg-primary hover:text-black hover:bg-black hover:text-primary;
     }
     .btn-secondary {
-      @apply bg-third text-black;
+      @apply bg-primary10 text-black;
     }
     .form-parent{
       @apply grid grid-cols-12 gap-4;

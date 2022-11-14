@@ -37,3 +37,10 @@ export const get = (resource, id) => {
       .then(handleResponse) 
       .catch(handleError); 
 };
+
+export const put = (resource, id, model) => { 
+  return axios 
+    .put(`${BASE_URL}${resource}${id}`,model, { headers: headers }) 
+    .then(handleResponse) 
+    .catch(handleError); 
+};

@@ -1,10 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import BackButton from '../../../components/Button/BackButton'
 import Card from '../../../components/Card/Card'
 import pendingPro from './../../../assets/images/recruitment/pending-status.png'
 import successPro from './../../../assets/images/recruitment/success-status.png'
+import * as apiProvider from '../../../services/api/recruitment'
+
+
+
+
+
 
 const Progress = () => {
+    const getData =()=>{
+        apiProvider.getJobById()
+        .then(res=>{
+          console.log(res.data)
+       
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      }
+    
+    
+      useEffect(()=>{
+        getData();
+      },[])
+    
+    
   return (
     <div>
         <Card>

@@ -35,49 +35,88 @@ import RecCreateJobApp4 from './../pages/Recruitment/JobsCreation/Approver4'
 import RecCreateJobProgrss from './../pages/Recruitment/JobsCreation/Progress'
 import Footer from '../components/Footer/Footer';
 import Login from '../pages/Register/Login';
+import Jobs from '../pages/Recruitment/Jobs/Jobs';
+import Profile from '../pages/Recruitment/Profile/Profile';
+
+import { notification } from 'antd';
+import { useState } from 'react';
 
 const Router = () => {
 
-    const RouteWithRole = ({ Element }) => {
-        return (
-          <div className='bg-[#F5F5F5]'>
-            <Navbar/>
-            <div className='container mx-auto p-[20px]  min-h-screen'>
-              <Element/>
-            </div>
-            <Footer/>
-          </div>
-        );
-      }
+  const RouteWithRole = ({ Element }) => {
+    const notify = (type, message, description) => {
+      notification[type]({
+        message: message,
+        description: description,
+      });
+    };
+
+    const [loadings, setLoadings] = useState([]);
+
+    const enterLoading = (index) => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = true;
+        return newLoadings;
+      });
+    }
+
+    const exitLoading = (index) => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }
+
+    return (
+      <div className='bg-[#F5F5F5]'>
+        <Navbar />
+        <div className='container mx-auto p-[20px]  min-h-screen'>
+          <Element notify={notify} enterLoading={enterLoading} exitLoading={exitLoading} loadings={loadings} />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div>
-        <Routes>
-            <Route exact path={ROUTES.Login} element={<Login/>}></Route>
-            <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
-            <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
+      <Routes>
+        <Route exact path={ROUTES.Login} element={<Login />}></Route>
+        <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
+        <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
 
-            ///////////////////Recruitment//////////////////////
-            /////Master
-            <Route exact path={ROUTES.Recruitment.Master.Rounds} element={<RouteWithRole Element={RecMasterRound} />}></Route>
-            <Route exact path={ROUTES.Recruitment.Master.Bussiness} element={<RouteWithRole Element={RecMasterBussiness} />}></Route>
-            <Route exact path={ROUTES.Recruitment.Master.City} element={<RouteWithRole Element={RecMasterCity} />}></Route>
-            <Route exact path={ROUTES.Recruitment.Master.Country} element={<RouteWithRole Element={RecMasterCountry} />}></Route>
-            <Route exact path={ROUTES.Recruitment.Master.Department} element={<RouteWithRole Element={RecMasterDepartment} />}></Route>
-            <Route exact path={ROUTES.Recruitment.Master.InterviewRounds} element={<RouteWithRole Element={RecMasterInterviewRounds} />}></Route>
-            <Route exact path={ROUTES.Recruitment.Master.QuestionBank} element={<RouteWithRole Element={RecMasterQuestionBank} />}></Route>
-            <Route exact path={ROUTES.Recruitment.Master.State} element={<RouteWithRole Element={RecMasterState} />}></Route>
+        /////////////////// Recruitment //////////////////////
+        // Master
+        <Route exact path={ROUTES.Recruitment.Master.Rounds} element={<RouteWithRole Element={RecMasterRound} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.Bussiness} element={<RouteWithRole Element={RecMasterBussiness} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.City} element={<RouteWithRole Element={RecMasterCity} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.Country} element={<RouteWithRole Element={RecMasterCountry} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.Department} element={<RouteWithRole Element={RecMasterDepartment} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.InterviewRounds} element={<RouteWithRole Element={RecMasterInterviewRounds} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.QuestionBank} element={<RouteWithRole Element={RecMasterQuestionBank} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.State} element={<RouteWithRole Element={RecMasterState} />}></Route>
 
 
-            ///////Create Job
-            <Route exact path={ROUTES.Recruitment.CreateJob} element={<RouteWithRole Element={RecCreateJob} />}></Route>
-            <Route exact path='/s1' element={<RouteWithRole Element={RecCreateJobApp1} />}></Route>
-            <Route exact path='/s2' element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
-            <Route exact path='/s3' element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
-            <Route exact path='/s4' element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
-            <Route exact path='/pp' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
+        //// Create Job /////
+        <Route exact path={ROUTES.Recruitment.CreateJob} element={<RouteWithRole Element={RecCreateJob} />}></Route>
+        <Route exact path='/s1' element={<RouteWithRole Element={RecCreateJobApp1} />}></Route>
+        <Route exact path='/s2' element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
+        <Route exact path='/s3' element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
+        <Route exact path='/s4' element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
+        <Route exact path='/pp' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
 
-        </Routes>
+        // jobs
+        <Route exact path={ROUTES.Jobs} element={<RouteWithRole Element={Jobs} />}></Route>
+
+      //profile
+
+        <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>
+
+
+
+      </Routes>
     </div>
   )
 }

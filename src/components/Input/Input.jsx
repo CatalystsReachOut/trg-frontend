@@ -13,11 +13,12 @@ const Input = (props) => {
         type,
         name,
         disabled,
-        readOnly
+        readOnly,
+        required
     } = props;
   return (
     <div className={`flex flex-col gap-2.5 ${className}`}>
-        <label htmlFor="" className={`text-base px-2  ${labelClassName}`}>{label}</label>
+        <label htmlFor="" className={`text-base px-2  ${labelClassName}`}>{label}{required?'*':null}</label>
         <div className='px-2 w-full min-h-[50px] h-full'>
           <input 
           type={type} 
@@ -37,7 +38,8 @@ const Input = (props) => {
 Input.defaultProps = {
     type:'text',
     label:'Default Label',
-    placeHolder:'Default Placeholder'
+    placeHolder:'Default Placeholder',
+    required:0
 }
 
 export default Input

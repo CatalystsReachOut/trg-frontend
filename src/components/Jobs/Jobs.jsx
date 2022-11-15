@@ -30,17 +30,17 @@ const Jobs = ({ data }) => {
 
     const items = [
         {
-          label: <Link className='px-2' to={'/'}>Edit</Link>,
-          key: '0',
+            label: <Link className='px-2' to={`/job/progress/${data?.id}`}>Edit</Link>,
+            key: '0',
         },
         {
-          label: <Link className='px-2' to={'/'}>View</Link>,
-          key: '1',
+            label: <Link className='px-2' to={`/job/progress/${data?._id}`}>View</Link>,
+            key: '1',
         }
     ]
     return (
         <div className='my-[20px]'>
-            <Card className="px-[2rem] pt-[2rem] pb-[5.5rem]">
+            <Card className="px-[2rem] pt-[2rem] pb-[2rem]">
                 <div className='flex items-center justify-between'>
                     <h1 className='text-Medium+/Title/Small '>{data.profileName} <span className='text-Medium+/SubTitle/Small text-fourth ml-[1.375rem] text-center'>{data.businessName}</span></h1>
 
@@ -67,7 +67,7 @@ const Jobs = ({ data }) => {
                                 </Space>
                             </a>
                         </Dropdown>
-                        
+
                     </div>
                 </div>
 

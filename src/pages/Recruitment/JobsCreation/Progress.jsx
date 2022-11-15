@@ -170,7 +170,7 @@ const Progress = () => {
                 </div>
             </Card>
             <Card className='mt-6 px-6'>
-                <div className='font-extrabold text-lg text-secondary'>Approver 1</div>
+                <div className='font-extrabold text-lg text-secondary'>Reporting Manager</div>
                 <div>2nd Nov 2022 | 4:06 pm</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">
@@ -180,7 +180,7 @@ const Progress = () => {
                 </div>
             </Card>
             <Card className='mt-6 px-6'>
-                <div className='font-extrabold text-lg text-secondary'>Approver 2</div>
+                <div className='font-extrabold text-lg text-secondary'>HR Manager</div>
                 <div>2nd Nov 2022 | 4:06 pm</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">
@@ -202,7 +202,7 @@ const Progress = () => {
                 </div>
             </Card>
             <Card className='mt-6 px-6'>
-                <div className='font-extrabold text-lg text-secondary'>Approver 3</div>
+                <div className='font-extrabold text-lg text-secondary'>Country Head</div>
                 <div>2nd Nov 2022 | 4:06 pm</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">
@@ -223,7 +223,7 @@ const Progress = () => {
                 </div>
             </Card>
             <Card className='mt-6 px-6'>
-                <div className='font-extrabold text-lg text-secondary'>Approver 4</div>
+                <div className='font-extrabold text-lg text-secondary'>HR Head</div>
                 <div>2nd Nov 2022 | 4:06 pm</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">

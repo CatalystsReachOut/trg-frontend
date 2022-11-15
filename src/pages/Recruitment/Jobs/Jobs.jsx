@@ -31,7 +31,7 @@ const Jobs = () => {
 
   return (
   <div>
-    <Card className='h-[50px] flex items-center justify-between px-3 '>
+    <Card className=' flex items-center justify-between px-3 '>
       <div className='flex items-center gap-3'>
         <Select/>
         <Select/>
@@ -49,12 +49,12 @@ const Jobs = () => {
           <RiSearch2Line/>
           <input type="text" placeholder='Search' className='outline-none focus:outline-none p-2 w-auto bg-transparent'/>
         </div>
-        <button className='bg-secondary h-[40px] p-2 rounded-lg'>
+        <button className='btn-primary text-white h-[40px] p-2 rounded-lg'>
            + Add Job
         </button>
       </div>
     </Card>
-    <Card className='mt-3'>
+    <Card className='mt-[60px]'>
     {
       data && data?.length !=0 ? data.map((item, key) => {
 

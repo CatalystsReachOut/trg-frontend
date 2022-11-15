@@ -38,6 +38,11 @@ import Login from '../pages/Register/Login';
 import Jobs from '../pages/Recruitment/Jobs/Jobs';
 import Profile from '../pages/Recruitment/Profile/Profile';
 
+
+////Job seeker
+import JobSeekerCreate from './../pages/Recruitment/Jobseeker/Add'
+import JobSeekerProfile from './../pages/Recruitment/Jobseeker/Profile'
+
 import { notification } from 'antd';
 import { useState } from 'react';
 
@@ -111,8 +116,11 @@ const Router = () => {
         <Route exact path={ROUTES.Jobs} element={<RouteWithRole Element={Jobs} />}></Route>
 
       //profile
-
         <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>
+
+      //JobSeeker
+        <Route exact path={'/aa'} element={<RouteWithRole Element={JobSeekerProfile} />}></Route>
+        <Route exact path={'/ab'} element={<RouteWithRole Element={JobSeekerCreate} />}></Route>
 
 
 

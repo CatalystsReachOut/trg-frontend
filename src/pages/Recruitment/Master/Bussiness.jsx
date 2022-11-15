@@ -256,7 +256,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       </Card>
       <Card className={'mt-3'}>
         <div className="font-bold my-3">
-          Rounds
+          Bussiness
         </div>
         <Table loading={loadings[2]} columns={columns} dataSource={data} />
       </Card>

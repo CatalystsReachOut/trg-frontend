@@ -113,7 +113,7 @@ const Home = () => {
               <div className='flex justify-between font-bold'>
                 <FiUsers className='text-2xl '/> Total Users
               </div>
-              <div className="text-center font-medium text-3xl mt-3">
+              <div className="text-end font-medium text-3xl mt-3">
                 53
               </div>
             </div>
@@ -125,7 +125,7 @@ const Home = () => {
               <div className='flex justify-between font-bold'>
                 <BsBriefcase className='text-2xl '/> Total Jobs
               </div>
-              <div className="text-center font-medium text-3xl mt-3">
+              <div className="text-end font-medium text-3xl mt-3">
                 3
               </div>
             </div>
@@ -137,7 +137,7 @@ const Home = () => {
               <div className='flex justify-between font-bold'>
                 <RiUserSearchLine className='text-2xl '/> Total Jobseekers
               </div>
-              <div className="text-center font-medium text-3xl mt-3">
+              <div className="text-end font-medium text-3xl mt-3">
                 34
               </div>
             </div>
@@ -149,7 +149,7 @@ const Home = () => {
               <div className='flex justify-between font-bold'>
                 <TbUser className='text-2xl '/> Total Applicants
               </div>
-              <div className="text-center font-medium text-3xl mt-3">
+              <div className="text-end font-medium text-3xl mt-3">
                 12
               </div>
             </div>

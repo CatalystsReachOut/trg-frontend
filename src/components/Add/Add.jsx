@@ -8,10 +8,12 @@ const Add = () => {
   return (
     <div>
     {flag?
-    <Input/>
+    <div>
+        <input type="text" className='border border-2 border-secondary focus:outline-none'/>
+    </div>
     :
-    <button className='flex items-center gap-2 text-secondary mt-3'>
-        <FiPlusCircle onClick={()=>setFlag(true)}/> Add Awards and Accomplishment
+    <button className='flex items-center gap-2 text-secondary mt-3' onClick={()=>{setFlag(true)}}>
+        <FiPlusCircle /> Add Awards and Accomplishment
     </button>}
     </div>
   )

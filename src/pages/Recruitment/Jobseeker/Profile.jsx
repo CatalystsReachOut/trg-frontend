@@ -1,6 +1,5 @@
 import React from 'react'
-import { AiOutlineDownload, AiOutlineMessage, AiOutlinePhone } from 'react-icons/ai'
-import { IoDocumentOutline, IoDocumentsOutline, IoLocationOutline } from 'react-icons/io5'
+import { IoDocumentOutline} from 'react-icons/io5'
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi'
 import Card from '../../../components/Card/Card'
 import sampleImage from './../../../assets/images/recruitment/sample.png'

@@ -8,7 +8,6 @@
     align-items: center;
 }
 
-.ant-menu-submenu-title:hover{
-    color: red !important;
-    border-color: red !important;
+.ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
+    border: none !important;
 }

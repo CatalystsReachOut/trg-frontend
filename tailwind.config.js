@@ -12,7 +12,8 @@ module.exports = {
         primary: '#EFE8E3',
         primary10: '#E3EBF1',
         secondary: '#F1C40F',
-        fourth:'var(--grey-black)'
+        fourth:'var(--grey-black)',
+        white10:'#F5F5F5'
       },
       fontSize: {
         'Medium+/Display/Large': ['64px', {

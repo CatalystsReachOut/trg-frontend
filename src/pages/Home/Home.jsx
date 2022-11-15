@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import Card from '../../components/Card/Card'
 import { ROUTES } from '../../routes/RouterConfig'
 import ReactApexChart from "react-apexcharts";
+import { TbUser } from 'react-icons/tb';
+import {RiUserSearchLine} from 'react-icons/ri'
+import {BsBriefcase} from 'react-icons/bs'
+import {FiUsers} from 'react-icons/fi'
 
 const Home = () => {
 
@@ -102,31 +106,78 @@ const Home = () => {
       <div className=" px-2 text-lg my-3">
         Dashboard
       </div>
-      <div className="grid grid-cols-4 gap-5 my-4">
+      <div className="grid grid-cols-4 gap-4">
         <div className="col-span-1">
-          <Card>
-            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          <Card className='px-6'>
+            <div>
+              <div className='flex justify-between font-bold'>
+                <FiUsers className='text-2xl '/> Total Users
+              </div>
+              <div className="text-center font-medium text-3xl mt-3">
+                53
+              </div>
+            </div>
           </Card>
         </div>
         <div className="col-span-1">
-          <Card>
-            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          <Card className='px-6'>
+            <div>
+              <div className='flex justify-between font-bold'>
+                <BsBriefcase className='text-2xl '/> Total Jobs
+              </div>
+              <div className="text-center font-medium text-3xl mt-3">
+                3
+              </div>
+            </div>
           </Card>
         </div>
         <div className="col-span-1">
-          <Card>
-            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          <Card className='px-6'>
+            <div>
+              <div className='flex justify-between font-bold'>
+                <RiUserSearchLine className='text-2xl '/> Total Jobseekers
+              </div>
+              <div className="text-center font-medium text-3xl mt-3">
+                34
+              </div>
+            </div>
           </Card>
         </div>
         <div className="col-span-1">
-          <Card>
-            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          <Card className='px-6'>
+            <div>
+              <div className='flex justify-between font-bold'>
+                <TbUser className='text-2xl '/> Total Applicants
+              </div>
+              <div className="text-center font-medium text-3xl mt-3">
+                12
+              </div>
+            </div>
           </Card>
         </div>
       </div>
-      <Card>
-        Dashboard
-      </Card>
+      {/* <div className="grid grid-cols-4 gap-5 my-4">
+        <div className="col-span-1">
+          <Card>
+            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          </Card>
+        </div>
+        <div className="col-span-1">
+          <Card>
+            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          </Card>
+        </div>
+        <div className="col-span-1">
+          <Card>
+            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          </Card>
+        </div>
+        <div className="col-span-1">
+          <Card>
+            <ReactApexChart options={option1.options} series={option1.series} type="radialBar" />
+          </Card>
+        </div>
+      </div> */}
    </div>
   )
 }

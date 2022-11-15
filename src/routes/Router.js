@@ -48,6 +48,14 @@ import { useState } from 'react';
 
 const Router = () => {
 
+  const notify = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+    });
+  };
+
+
   const RouteWithRole = ({ Element }) => {
     const notify = (type, message, description) => {
       notification[type]({
@@ -88,12 +96,13 @@ const Router = () => {
   return (
     <div>
       <Routes>
-        <Route exact path={ROUTES.Login} element={<Login />}></Route>
+        <Route exact path={ROUTES.Login} element={<Login notify={notify} />}></Route>
         <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
         <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
 
         /////////////////// Recruitment //////////////////////
         // Master
+        
         <Route exact path={ROUTES.Recruitment.Master.Rounds} element={<RouteWithRole Element={RecMasterRound} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.Bussiness} element={<RouteWithRole Element={RecMasterBussiness} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.City} element={<RouteWithRole Element={RecMasterCity} />}></Route>
@@ -110,10 +119,10 @@ const Router = () => {
         <Route exact path='/s2' element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
         <Route exact path='/s3' element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
         <Route exact path='/s4' element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
-        <Route exact path='/pp' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
+        <Route exact path='/job/progress/:id' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
 
         // jobs
-        <Route exact path={ROUTES.Jobs} element={<RouteWithRole Element={Jobs} />}></Route>
+        <Route exact path={ROUTES.Recruitment.ViewJobs} element={<RouteWithRole Element={Jobs} />}></Route>
 
       //profile
         <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>

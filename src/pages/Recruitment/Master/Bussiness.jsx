@@ -11,11 +11,11 @@ import * as apiProvider from '../../../services/api/recruitment'
 
 const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [business, setBusiness] = useState({
-    businessName: "",
+    name: "",
     address: "",
-    businessUrl: "",
-    businessCode: "",
-    businessLogo: "",
+    url: "",
+    code: "",
+    logo: "",
     summary: "",
     description: ""
   })
@@ -24,7 +24,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   const columns = [
     {
       title: "Business Name",
-      dataIndex: "businessName",
+      dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 2
@@ -40,7 +40,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
     {
       title: "Business Logo",
-      dataIndex: "businessLogo",
+      dataIndex: "logo",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
@@ -48,7 +48,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
     {
       title: "Business URL",
-      dataIndex: "businessUrl",
+      dataIndex: "url",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
@@ -56,7 +56,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
     {
       title: "Business Code",
-      dataIndex: "businessCode",
+      dataIndex: "code",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
@@ -161,11 +161,11 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const clearData = () => {
     setBusiness({
-      businessName: "",
+      name: "",
       address: "",
-      businessUrl: "",
-      businessCode: "",
-      businessLogo: "",
+      url: "",
+      code: "",
+      logo: "",
       summary: "",
       description: ""
     })
@@ -182,10 +182,10 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
           <div className="col-span-1">
             <Input
-              label={'Title'}
-              placeHolder={'Enter Title'}
-              value={business?.businessName}
-              name="businessName"
+              label={'Name'}
+              placeHolder={'Enter Business Name'}
+              value={business?.name}
+              name="name"
               onChange={handleChange}
             />
           </div>
@@ -203,8 +203,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
               label={'Bussiness Logo'}
               placeHolder={'Bussiness Logo'}
               type="file"
-              value={business?.businessLogo}
-              name="businessLogo"
+              value={business?.logo}
+              name="logo"
               onChange={handleChange}
             />
           </div>
@@ -212,8 +212,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
             <Input
               label={'Bussiness URL'}
               placeHolder={'Bussiness URL'}
-              value={business?.businessUrl}
-              name="businessUrl"
+              value={business?.url}
+              name="url"
               onChange={handleChange}
             />
           </div>
@@ -221,8 +221,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
             <Input
               label={'Bussiness Code'}
               placeHolder={'Bussiness Code'}
-              value={business?.businessCode}
-              name="businessCode"
+              value={business?.code}
+              name="code"
               onChange={handleChange}
             />
           </div>

@@ -16,7 +16,6 @@ export const ROUTES = {
         TrackJobProgrees:'/recruitment/track-job',
         Profile: '/recruitment/profile'
     },
-    Jobs:'/recruitment/jobs',
     Home:'/',
     About:'/about'
 }

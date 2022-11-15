@@ -34,9 +34,9 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
 
-  const [country, setCountry] = useState([])
+  const [countryOptions, setCountryOptions] = useState([])
 
-  const [state, setState] = useState([])
+  const [stateOptions, setStateOptions] = useState([])
 
   const columns = [
     {
@@ -46,18 +46,14 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
     {
       title: "State",
       dataIndex: "state",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
-      }
+      render: (_, { state }) => (<> {stateOptions.find(item => item.value === state)?.label} </>)
+
     },
     {
       title: "Country",
       dataIndex: "country",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
-      }
+      render: (_, { country }) => (<> {countryOptions.find(item => item.value === country)?.label} </>)
+
     },
     {
       title: "Action",
@@ -75,18 +71,17 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
     enterLoading(2)
     apiProvider.getCity()
       .then(res => {
-        console.log(res)
-        const arr = []
-        for (const i of res.data) {
-          const obj = {
-            key: i._id,
-            name: i.name,
-            state: state?.map(s=>s?.value==i?.state)?.label,
-            country: country?.map(s=>s?.value==i?.country)?.label
-          }
-          arr.push(obj)
-        }
-        setData(arr)
+        // const arr = []
+        // for (const i of res.data) {
+        //   const obj = {
+        //     key: i._id,
+        //     name: i.name,
+        //     state: state?.map(s=>s?.value==i?.state)?.label,
+        //     country: country?.map(s=>s?.value==i?.country)?.label
+        //   }
+        //   arr.push(obj)
+        // }
+        setData(res.data)
         return exitLoading(2)
       })
       .catch(err => {
@@ -121,8 +116,8 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         }),
     ])
 
-    setCountry(data1);
-    setState(data2)
+    setCountryOptions(data1);
+    setStateOptions(data2)
 
   }
 
@@ -172,7 +167,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
           <div className="col-span-1">
             <Select
               label="Country"
-              options={country}
+              options={countryOptions}
               name="country"
               value={city?.country}
               onChange={handelChangeSelect}
@@ -182,7 +177,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
           <div className="col-span-1">
             <Select
               label="State"
-              options={state}
+              options={stateOptions}
               name="state"
               value={city?.state}
               onChange={handelChangeSelect}
@@ -201,6 +196,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         </div>
         <div className="flex justify-end mt-3">
           <Button
+            loading={loadings[1]}
             title="Add City"
             className={'min-w-[100px]'}
             onClick={handleSubmit}
@@ -212,7 +208,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         <div className="font-bold my-3">
           City
         </div>
-        <Table columns={columns} dataSource={data} />
+        <Table loading={loadings[2]} columns={columns} dataSource={data} />
       </Card>
     </div>
   )

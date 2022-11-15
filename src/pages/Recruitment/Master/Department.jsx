@@ -132,6 +132,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
             title="Add Round" 
             className={'min-w-[100px]'}
             onClick={handleSubmit}
+            loading={loadings[1]}
             />
           </div>
         </Card>
@@ -140,7 +141,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
           <div className="font-bold my-3">
             Department
           </div>
-          <Table columns={columns} dataSource={data}/>
+          <Table loading={loadings[2]} columns={columns} dataSource={data}/>
         </Card>
     </div>
   )

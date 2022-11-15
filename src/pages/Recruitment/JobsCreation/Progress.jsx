@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import BackButton from '../../../components/Button/BackButton'
 import Card from '../../../components/Card/Card'
 import pendingPro from './../../../assets/images/recruitment/pending-status.png'
@@ -7,128 +7,181 @@ import * as apiProvider from '../../../services/api/recruitment'
 
 
 
-
+import { useParams } from 'react-router-dom'
 
 
 const Progress = () => {
-    const getData =()=>{
-        apiProvider.getJobById()
-        .then(res=>{
-          console.log(res.data)
-       
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-      }
     
+    const { id } = useParams()
     
-      useEffect(()=>{
+    const [data, setData] = useState()
+    const [statusImage, setStatusImage] = useState()
+
+    const getData = () => {
+        apiProvider.getJobById(id)
+            .then(res => {
+                if (res.isSuccess) {
+                    setData(res.data)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+
+    useEffect(() => {
         getData();
-      },[])
-    
-    
-  return (
-    <div>
-        <Card>
-            <div className='flex gap-3 items-center'>
-                <BackButton/>
-                <div className='text-lg'>Software Developer</div>
-            </div>
-            <div className='px-6 py-6 grid grid-cols-11'>
-                <div className="col-span-2 flex items-center justify-center">
-                    <img src={successPro} alt="" className='w-[50px]' />
-                </div>
-                <div className="col-span-1 flex items-center justify-center">
-                    <div className='h-[2px] bg-third w-full'></div>
+    }, [])
 
-                </div>
-                <div className="col-span-2 flex items-center justify-center">
-                    <img src={successPro} alt="" className='w-[50px]' />
-                </div>
-                <div className="col-span-1 flex items-center justify-center">
-                    <div className='h-[2px] bg-third w-full'></div>
 
-                </div>
-                <div className="col-span-2 flex items-center justify-center">
-                    <img src={pendingPro} alt="" className='w-[50px]' />
-                </div>
-                <div className="col-span-1 flex items-center justify-center">
-                    <div className='h-[2px] bg-third w-full'></div>
+    useEffect(() => {
+        if (data && data.job) {
+            const jb = data.job;
 
+            const obj = {}
+            if (jb.approver_1.status === "PENDING") {
+                obj.approver_1 = pendingPro
+            } else {
+                obj.approver_1 = successPro
+            }
+
+            if (jb.approver_2.status === "PENDING") {
+                obj.approver_2 = pendingPro
+            } else {
+                obj.approver_2 = successPro
+            }
+
+            if (jb.approver_3.status === "PENDING") {
+                obj.approver_3 = pendingPro
+            } else {
+                obj.approver_3 = successPro
+            }
+
+            if (jb.approver_4.status === "PENDING") {
+                obj.approver_4 = pendingPro
+            } else {
+                obj.approver_4 = successPro
+            }
+
+            setStatusImage(obj)
+        }
+    }, [data])
+
+
+    return (
+        <div>
+            <Card>
+                <div className='flex gap-3 items-center'>
+                    <BackButton />
+                    <div className='text-lg'>{data?.profileName}</div>
                 </div>
-                <div className="col-span-2 flex items-center justify-center">
-                    <img src={pendingPro} alt="" className='w-[50px]' />
-                </div>
-                <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
-                    <div className='sm:text-lg text-sm'>
-                        Reporting Manager
+                {/* success Image */}
+                <div className='px-6 py-6 grid grid-cols-11'>
+                    <div className="col-span-2 flex items-center justify-center">
+                        <img src={statusImage?.approver_1} alt="" className='w-[50px]' />
                     </div>
-                    <div className='sm:text-base text-xs'>
-                        2nd Nov 2022 | 4:06 pm
-                    </div>
-                </div>
-                <div className="col-span-1"></div>
-                <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
-                    <div  className='sm:text-lg text-sm'>
-                        Reporting Manager
-                    </div>
-                    <div className='sm:text-base text-xs'>
-                        2nd Nov 2022 | 4:06 pm
-                    </div>
-                </div>
-                <div className="col-span-1"></div>
-                <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
-                    <div  className='sm:text-lg text-sm'>
-                        Pending
-                    </div>
-                    <div className='sm:text-base text-xs'></div>
-                </div>
-                <div className="col-span-1"></div>
-                <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
-                    <div  className='sm:text-lg text-sm'>
-                        Pending
+                    <div className="col-span-1 flex items-center justify-center">
+                        <div className='h-[2px] bg-third w-full'></div>
 
                     </div>
-                    <div className='sm:text-base text-xs'></div>
+                    <div className="col-span-2 flex items-center justify-center">
+                        <img src={statusImage?.approver_2} alt="" className='w-[50px]' />
+                    </div>
+                    <div className="col-span-1 flex items-center justify-center">
+                        <div className='h-[2px] bg-third w-full'></div>
+
+                    </div>
+                    <div className="col-span-2 flex items-center justify-center">
+                        <img src={statusImage?.approver_3} alt="" className='w-[50px]' />
+                    </div>
+                    <div className="col-span-1 flex items-center justify-center">
+                        <div className='h-[2px] bg-third w-full'></div>
+
+                    </div>
+                    <div className="col-span-2 flex items-center justify-center">
+                        <img src={statusImage?.approver_4} alt="" className='w-[50px]' />
+                    </div>
+                    <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
+                        <div className='sm:text-lg text-sm'>
+                            Reporting Manager
+                        </div>
+                        <div className='sm:text-base text-xs'>
+                            {
+                                data?.approver_1?.status === "PENDING" ? "Pending Approval" : data?.approver_1?.approvedAt
+                            }
+                        </div>
+                    </div>
+                    <div className="col-span-1"></div>
+                    <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
+                        <div className='sm:text-lg text-sm'>
+                            HR Manager
+                        </div>
+                        <div className='sm:text-base text-xs'>
+                            {
+                                data?.approver_2?.status === "PENDING" ? "Pending Approval" : data?.approver_1?.approvedAt
+                            }
+                        </div>
+                    </div>
+                    <div className="col-span-1"></div>
+                    <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
+                        <div className='sm:text-lg text-sm'>
+                            Country Head
+                        </div>
+                        <div className='sm:text-base text-xs'>
+                            {
+                                data?.approver_1?.status === "PENDING" ? "Pending Approval" : data?.approver_1?.approvedAt
+                            }
+                        </div>
+                    </div>
+                    <div className="col-span-1"></div>
+                    <div className="col-span-2 flex flex-col items-center justify-center text-center mt-3">
+                        <div className='sm:text-lg text-sm'>
+                            HR Head
+                        </div>
+                        <div className='sm:text-base text-xs'>
+                            {
+                                data?.approver_1?.status === "PENDING" ? "Pending Approval" : data?.approver_1?.approvedAt
+                            }
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </Card>
-        <Card className='mt-6 px-6'>
-            <div className='font-extrabold text-lg text-secondary'>Job Created</div>
-            <div>2nd Nov 2022 | 4:06 pm</div>
-            <div className="grid grid-cols-3 my-6 text-lg">
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>Bussiness Name :</div>
-                    <div>This is bussiness name</div>
+            </Card>
+            <Card className='mt-6 px-6'>
+                <div className='font-extrabold text-lg text-secondary'>Job Created</div>
+                <div>2nd Nov 2022 | 4:06 pm</div>
+                <div className="grid grid-cols-3 my-6 text-lg">
+                    <div className="col-span-1 flex gap-3 mt-3">
+                        <div className='font-bold '>Bussiness Name :</div>
+                        <div>{data?.businessName}</div>
+                    </div>
+                    <div className="col-span-1 flex gap-3 mt-3">
+                        <div className='font-bold '>Country :</div>
+                        <div>India</div>
+                    </div>
+                    <div className="col-span-1 flex gap-3 mt-3">
+                        <div className='font-bold '>State :</div>
+                        <div>Karnataka</div>
+                    </div>
+                    <div className="col-span-1 flex gap-3 mt-3">
+                        <div className='font-bold '>City :</div>
+                        <div>{data?.cityName}</div>
+                    </div>
                 </div>
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>Country :</div>
-                    <div>India</div>
+            </Card>
+            <Card className='mt-6 px-6'>
+                <div className='font-extrabold text-lg text-secondary'>Approver 1</div>
+                <div>2nd Nov 2022 | 4:06 pm</div>
+                <div className="grid grid-cols-3 my-6 text-lg">
+                    <div className="col-span-1 flex gap-3 mt-3">
+                        <div className='font-bold '>Remarks :</div>
+                        <div>This is Remarks</div>
+                    </div>
                 </div>
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>State :</div>
-                    <div>Karnataka</div>
-                </div>
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>City :</div>
-                    <div>Bengaluru</div>
-                </div>
-            </div>
-        </Card>
-        <Card className='mt-6 px-6'>
-            <div className='font-extrabold text-lg text-secondary'>Approver 1</div>
-            <div>2nd Nov 2022 | 4:06 pm</div>
-            <div className="grid grid-cols-3 my-6 text-lg">
-                <div className="col-span-1 flex gap-3 mt-3">
-                    <div className='font-bold '>Remarks :</div>
-                    <div>This is Remarks</div>
-                </div>
-            </div>
-        </Card>
-        <Card className='mt-6 px-6'>
-        <div className='font-extrabold text-lg text-secondary'>Approver 2</div>
-            <div>2nd Nov 2022 | 4:06 pm</div>
+            </Card>
+            <Card className='mt-6 px-6'>
+                <div className='font-extrabold text-lg text-secondary'>Approver 2</div>
+                <div>2nd Nov 2022 | 4:06 pm</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">
                         <div className='font-bold '>Eligibility Criteria :</div>
@@ -147,10 +200,10 @@ const Progress = () => {
                         <div>This is Remark by Approver 1</div>
                     </div>
                 </div>
-        </Card>
-        <Card className='mt-6 px-6'>
-        <div className='font-extrabold text-lg text-secondary'>Approver 3</div>
-            <div>2nd Nov 2022 | 4:06 pm</div>
+            </Card>
+            <Card className='mt-6 px-6'>
+                <div className='font-extrabold text-lg text-secondary'>Approver 3</div>
+                <div>2nd Nov 2022 | 4:06 pm</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">
                         <div className='font-bold '>Price Range :</div>
@@ -161,17 +214,17 @@ const Progress = () => {
                         <div>Mode 1</div>
                     </div>
                     <div className="col-span-1 flex gap-3 mt-3">
-                       
+
                     </div>
                     <div className="col-span-1 flex gap-3 mt-3">
                         <div className='font-bold '>Remark :</div>
                         <div>Remark 2</div>
                     </div>
                 </div>
-        </Card>
-        <Card className='mt-6 px-6'>
-        <div className='font-extrabold text-lg text-secondary'>Approver 4</div>
-            <div>2nd Nov 2022 | 4:06 pm</div>
+            </Card>
+            <Card className='mt-6 px-6'>
+                <div className='font-extrabold text-lg text-secondary'>Approver 4</div>
+                <div>2nd Nov 2022 | 4:06 pm</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">
                         <div className='font-bold '>Hierarchy band :</div>
@@ -182,9 +235,9 @@ const Progress = () => {
                         <div>Interview</div>
                     </div>
                 </div>
-        </Card>
-    </div>
-  )
+            </Card>
+        </div>
+    )
 }
 
 export default Progress

@@ -9,18 +9,14 @@ import Select from '../../../components/Select/Select'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
-const State = ({notify, enterLoading, exitLoading, loadings}) => {
+const State = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [state, setState] = useState({
-    country:'',
-    name:''
+    country: '',
+    name: ''
   })
 
-  const [country, setCountry] = useState([
-    { value: 'India', label: 'India' },
-    { value: 'USA', label: 'USA' },
-    { value: 'UK', label: 'UK' }
-  ])
+  const [countryData, setCountryData] = useState([])
 
   const columns = [
     {
@@ -34,10 +30,7 @@ const State = ({notify, enterLoading, exitLoading, loadings}) => {
     {
       title: "Country",
       dataIndex: "country",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 2
-      }
+      render: (_, { country }) => (<> {countryData.find(item => item.value === country)?.label} </>)
     },
     {
       title: "Action",
@@ -45,138 +38,141 @@ const State = ({notify, enterLoading, exitLoading, loadings}) => {
     },
   ];
 
-  const [data,setData]=useState([])
+  const [data, setData] = useState([])
 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setState(prev => ({
-        ...prev,
-        [name]: value
+      ...prev,
+      [name]: value
     }))
-}
+  }
 
-const handelChangeSelect = (e) => {
+  const handelChangeSelect = (e) => {
     const { name, value } = e;
     console.log(e)
     setState(prev => ({
-        ...prev,
-        [name]: value
+      ...prev,
+      [name]: value
     }))
-}
+  }
 
-const getData = () => {
-  enterLoading(2)
-  apiProvider.getState()
+  const getData = () => {
+    enterLoading(2)
+    apiProvider.getState()
       .then(res => {
-          if (res.isSuccess) {
-            const arr = res.data.map(i => ({
-              id:i?._id,
-              name:i?.name,
-              country:country?.find(s=>s?.value==i?.country)?.label,
-            }))
-            setData(arr)
-          }
-          return exitLoading(2)
+        if (res.isSuccess) {
+          const arr = res.data
+          // .map(i => ({
+          //   id: i?._id,
+          //   name: i?.name,
+          //   country: country?.find(s => s?.value == i?.country)?.label,
+          //   status: i?.status
+          // }))
+          setData(arr)
+        }
+        return exitLoading(2)
       })
       .catch(err => {
-          console.log(err)
-          return exitLoading(2)
+        console.log(err)
+        return exitLoading(2)
 
       })
-}
+  }
 
-const getAllData = async() => {
-  enterLoading(2)
-  await apiProvider.getCountry()
-  .then(res=>{
-    const arr = res.data?.map(i=>({
-      label:i?.name,
-      value:i?._id
-    }))
-    setCountry(arr)
-  })
-  .catch(err=>{
-    console.log(err)
-  })
-  exitLoading(2)
-}
+  const getAllData = async () => {
+    enterLoading(2)
+    await apiProvider.getCountry()
+      .then(res => {
+        const arr = res.data?.map(i => ({
+          label: i?.name,
+          value: i?._id
+        }))
+        setCountryData(arr)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    exitLoading(2)
+  }
 
   const handleSubmit = () => {
 
     enterLoading(1)
     return apiProvider.createState(state)
-        .then(res => {
-            exitLoading(1)
-            if (res.isSuccess) {
-                clearData()
-                getData()
-                return notify('success', 'added success');
-            } else {
-                return notify('error', res.message);
-            }
-        })
-        .catch(err => {
-            console.log(err)
-            exitLoading(1)
-            return notify('error', err.message);
-        })
-}
+      .then(res => {
+        exitLoading(1)
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          return notify('success', 'added success');
+        } else {
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        exitLoading(1)
+        return notify('error', err.message);
+      })
+  }
 
-const clearData = () => {
-  setState({
-      country:'',
-      name:''
-  })
-}
+  const clearData = () => {
+    setState({
+      country: '',
+      name: ''
+    })
+  }
 
 
-  useEffect(()=>{
+  useEffect(() => {
     getAllData();
     getData();
-  },[])
+  }, [])
 
 
   return (
     <div>
-        <Card>
-          <div className='font-bold'> Add State </div>
-          <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
-            <div className="col-span-1">
-              <Select 
-                label="Country"
-                options={country}
-                name="country"
-                value={state?.country}
-                onChange={handelChangeSelect}
-              >
-              </Select>
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'State'}
-              placeHolder = {'Enter State Name'}
-              name="name"
-              value = {state?.name}
-              onChange = {handleChange}
-              />
-            </div>
+      <Card>
+        <div className='font-bold'> Add State </div>
+        <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
+          <div className="col-span-1">
+            <Select
+              label="Country"
+              options={countryData}
+              name="country"
+              value={state?.country}
+              onChange={handelChangeSelect}
+            >
+            </Select>
           </div>
-          <div className="flex justify-end mt-3">
-            <Button 
-            title="Add Sate" 
-            className={'min-w-[100px]'}
-            onClick={handleSubmit}
+          <div className="col-span-1">
+            <Input
+              label={'State'}
+              placeHolder={'Enter State Name'}
+              name="name"
+              value={state?.name}
+              onChange={handleChange}
             />
           </div>
-        </Card>
+        </div>
+        <div className="flex justify-end mt-3">
+          <Button
+            loading={loadings[1]}
+            title="Add Sate"
+            className={'min-w-[100px]'}
+            onClick={handleSubmit}
+          />
+        </div>
+      </Card>
 
-        <Card className={'mt-4'}>
-          <div className="font-bold my-3">
-            State
-          </div>
-          <Table columns={columns} dataSource={data}/>
-        </Card>
+      <Card className={'mt-4'}>
+        <div className="font-bold my-3">
+          State
+        </div>
+        <Table loading={loadings[2]} columns={columns} dataSource={data} />
+      </Card>
     </div>
   )
 }

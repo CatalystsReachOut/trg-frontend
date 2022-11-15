@@ -25,6 +25,8 @@ const Login = ({ notify }) => {
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.AUTH, res.token);
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.ROLE, res.role);
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.LEVEL, res.level);
+                    commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.USER, res._id);
+
                     navigate("/")
                     return notify('success', 'Logged In Successfully');
                 } else {

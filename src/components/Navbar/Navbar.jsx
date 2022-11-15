@@ -3,11 +3,18 @@ import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/ico
 import logo from './../../assets/images/logo/logo.png'
 import { ROUTES } from '../../routes/RouterConfig';
 import { Link, useNavigate } from 'react-router-dom';
+import { SlLogout } from 'react-icons/sl';
 
 
 export default function Navbar() {
 
   const navigate = useNavigate()
+
+
+  const logout = () => {
+    sessionStorage.clear();
+    navigate("/login")
+  }
 
   return (
     <div className='h-16 bg-[#0E223D] py-2 w-full'>
@@ -17,7 +24,7 @@ export default function Navbar() {
         </div>
         <Menu mode="horizontal" className='bg-transparent flex items-center w-[100%] justify-center border-0' defaultSelectedKeys={['mail']}>
           <Menu.Item key="mail" className='flex items-center border-0 text-[white]'>
-            <div className='flex items-center gap-2' onClick={()=>{navigate(ROUTES.Home)}}>
+            <div className='flex items-center gap-2' onClick={() => { navigate(ROUTES.Home) }}>
               Home
             </div>
           </Menu.Item>
@@ -40,7 +47,7 @@ export default function Navbar() {
                 Profile
               </Link>
             </Menu.Item>
-            
+
             <Menu.SubMenu title='Master' className=''>
               <Menu.Item>
                 <Link to={ROUTES.Recruitment.Master.Bussiness}>
@@ -87,6 +94,12 @@ export default function Navbar() {
           </Menu.SubMenu>
         </Menu>
         <div>
+
+          <div
+            onClick={() => logout()}
+            className={'cursor-pointer'}  >
+            <SlLogout color='white' />
+          </div>
 
         </div>
       </div>

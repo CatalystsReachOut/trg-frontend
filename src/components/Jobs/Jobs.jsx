@@ -2,6 +2,9 @@ import React from 'react'
 import { Select } from 'antd';
 import Card from '../Card/Card'
 import { TbDots } from 'react-icons/tb'
+import { DownOutlined } from '@ant-design/icons';
+import { Dropdown, Space } from 'antd';
+import { Link } from 'react-router-dom';
 
 
 const Jobs = ({ data }) => {
@@ -10,6 +13,31 @@ const Jobs = ({ data }) => {
         console.log(value);
     };
 
+    const options1 = [
+        {
+            value: 'PENDING',
+            label: 'Pending',
+        },
+        {
+            value: 'APPROVED',
+            label: 'Approved',
+        },
+        {
+            value: 'DECLINED',
+            label: 'Declined',
+        },
+    ]
+
+    const items = [
+        {
+          label: <Link className='px-2' to={'/'}>Edit</Link>,
+          key: '0',
+        },
+        {
+          label: <Link className='px-2' to={'/'}>View</Link>,
+          key: '1',
+        }
+    ]
     return (
         <div className='my-[20px]'>
             <Card className="px-[2rem] pt-[2rem] pb-[5.5rem]">
@@ -24,22 +52,22 @@ const Jobs = ({ data }) => {
                                 width: 120,
                             }}
                             onChange={handleChange}
-                            options={[
-                                {
-                                    value: 'PENDING',
-                                    label: 'Pending',
-                                },
-                                {
-                                    value: 'APPROVED',
-                                    label: 'Approved',
-                                },
-                                {
-                                    value: 'DECLINED',
-                                    label: 'Declined',
-                                },
-                            ]} />
+                            options={options1}
+                        />
 
-                        <TbDots className='text-[2rem]' />
+                        <Dropdown
+                            menu={{
+                                items,
+                            }}
+                            trigger={['click']}
+                        >
+                            <a onClick={(e) => e.preventDefault()}>
+                                <Space>
+                                    <TbDots className='text-[2rem]' />
+                                </Space>
+                            </a>
+                        </Dropdown>
+                        
                     </div>
                 </div>
 

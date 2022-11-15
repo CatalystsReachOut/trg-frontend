@@ -20,7 +20,10 @@ const Apprver1 = () => {
     openings:'',
     country:'',
     state:'',
-    city:''
+    city:'',
+    approver1:{
+      status:'APPROVED'
+    }
   })
 
   const handleConfirmation = async() => {
@@ -39,8 +42,8 @@ const Apprver1 = () => {
             'Job has been Approved.',
             'success'
           )
-          navigate('/s2')
-          apiProvider.updateJobById({user})
+          // navigate('/s2')
+          // apiProvider.updateJobById({user})
         }
       })
   }
@@ -132,7 +135,7 @@ const Apprver1 = () => {
           <Button 
           title="Approve" 
           className=' ' 
-          onClick={()=>{handleConfirmation();}}/>
+          onClick={()=>{handleSubmit();}}/>
           <Button type='2' title="Reject" className='' />
         </div>
         

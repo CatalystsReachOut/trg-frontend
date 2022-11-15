@@ -31,7 +31,7 @@ const Jobs = () => {
 
   return (
   <div>
-    <Card className='h-[50px] flex items-center justify-between px-3 '>
+    <Card className='h-[60px] flex items-center justify-between px-3 '>
       <div className='flex items-center gap-3'>
         <Select/>
         <Select/>

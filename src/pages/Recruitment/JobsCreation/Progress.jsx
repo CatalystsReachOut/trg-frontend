@@ -4,15 +4,17 @@ import Card from '../../../components/Card/Card'
 import pendingPro from './../../../assets/images/recruitment/pending-status.png'
 import successPro from './../../../assets/images/recruitment/success-status.png'
 import * as apiProvider from '../../../services/api/recruitment'
-import { useNavigate, useParams } from 'react-router-dom'
+import {ROUTES} from "../../../routes/RouterConfig.js"
+
+
+import { useParams, useNavigate } from 'react-router-dom'
 
 
 const Progress = () => {
 
     const navigate = useNavigate()
-    
     const { id } = useParams()
-    
+
     const [data, setData] = useState()
     const [statusImage, setStatusImage] = useState()
 
@@ -69,11 +71,13 @@ const Progress = () => {
 
 
     return (
-        <div>
+        <div className='py-[20px]'>
             <Card>
-                <div className='flex gap-3 items-center'>
-                    <BackButton onClick={()=>{navigate(-1)}}/>
-                    <div className='text-lg'>{data?.profileName}</div>
+                <div
+                    onClick={() => navigate(ROUTES.Recruitment.ViewJobs)}
+                    className='flex gap-3 items-center cursor-pointer'>
+                    <BackButton />
+                    {/* <div className='text-lg'>{data?.profileName}</div> */}
                 </div>
                 {/* success Image */}
                 <div className='px-6 py-6 grid grid-cols-11'>
@@ -148,19 +152,19 @@ const Progress = () => {
             </Card>
             <Card className='mt-6 px-6'>
                 <div className='font-extrabold text-lg text-secondary'>Job Created</div>
-                <div>2nd Nov 2022 | 4:06 pm</div>
+                <div>{data?.job?.createdAt?.split("T")[0]}</div>
                 <div className="grid grid-cols-3 my-6 text-lg">
                     <div className="col-span-1 flex gap-3 mt-3">
                         <div className='font-bold '>Bussiness Name :</div>
                         <div>{data?.businessName}</div>
                     </div>
                     <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Country :</div>
-                        <div>India</div>
+                        <div className='font-bold '>Profile :</div>
+                        <div>{data?.profileName}</div>
                     </div>
                     <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>State :</div>
-                        <div>Karnataka</div>
+                        <div className='font-bold '>Number Of Openings:</div>
+                        <div>{data?.job?.numberOfOpenings}</div>
                     </div>
                     <div className="col-span-1 flex gap-3 mt-3">
                         <div className='font-bold '>City :</div>
@@ -170,70 +174,91 @@ const Progress = () => {
             </Card>
             <Card className='mt-6 px-6'>
                 <div className='font-extrabold text-lg text-secondary'>Reporting Manager</div>
-                <div>2nd Nov 2022 | 4:06 pm</div>
-                <div className="grid grid-cols-3 my-6 text-lg">
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Remarks :</div>
-                        <div>This is Remarks</div>
-                    </div>
-                </div>
+
+
+                {
+                    data && data?.approver_1?.status == "PENDING" ? <>
+                        <div>2nd Nov 2022 | 4:06 pm</div>
+                        <div className="grid grid-cols-3 my-6 text-lg">
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Remarks :</div>
+                                <div>This is Remarks</div>
+                            </div>
+                        </div> </> : <h6 className='py-[15px] font-semibold'>Pending Approval</h6>
+                }
+
+
             </Card>
             <Card className='mt-6 px-6'>
                 <div className='font-extrabold text-lg text-secondary'>HR Manager</div>
-                <div>2nd Nov 2022 | 4:06 pm</div>
-                <div className="grid grid-cols-3 my-6 text-lg">
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Eligibility Criteria :</div>
-                        <div>B.E Computer Science</div>
-                    </div>
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Work Type :</div>
-                        <div>Remote</div>
-                    </div>
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Work Shift :</div>
-                        <div>Day</div>
-                    </div>
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Remark :</div>
-                        <div>This is Remark by Approver 1</div>
-                    </div>
-                </div>
+                {
+                    data && data?.approver_1?.status == "PENDING" ? <>
+
+                        <div>2nd Nov 2022 | 4:06 pm</div>
+                        <div className="grid grid-cols-3 my-6 text-lg">
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Eligibility Criteria :</div>
+                                <div>B.E Computer Science</div>
+                            </div>
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Work Type :</div>
+                                <div>Remote</div>
+                            </div>
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Work Shift :</div>
+                                <div>Day</div>
+                            </div>
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Remark :</div>
+                                <div>This is Remark by Approver 1</div>
+                            </div>
+                        </div>
+                    </> : <h6 className='py-[15px] font-semibold'>Pending Approval</h6>
+                }
+
             </Card>
             <Card className='mt-6 px-6'>
                 <div className='font-extrabold text-lg text-secondary'>Country Head</div>
-                <div>2nd Nov 2022 | 4:06 pm</div>
-                <div className="grid grid-cols-3 my-6 text-lg">
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Price Range :</div>
-                        <div>10,000 - 15,000</div>
-                    </div>
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Compensation mode: :</div>
-                        <div>Mode 1</div>
-                    </div>
-                    <div className="col-span-1 flex gap-3 mt-3">
 
-                    </div>
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Remark :</div>
-                        <div>Remark 2</div>
-                    </div>
-                </div>
+                {
+                    data && data?.approver_1?.status == "PENDING" ? <>
+                        <div>2nd Nov 2022 | 4:06 pm</div>
+                        <div className="grid grid-cols-3 my-6 text-lg">
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Price Range :</div>
+                                <div>10,000 - 15,000</div>
+                            </div>
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Compensation mode: :</div>
+                                <div>Mode 1</div>
+                            </div>
+                            <div className="col-span-1 flex gap-3 mt-3">
+
+                            </div>
+                            <div className="col-span-1 flex gap-3 mt-3">
+                                <div className='font-bold '>Remark :</div>
+                                <div>Remark 2</div>
+                            </div>
+                        </div>
+                    </> : <h6 className='py-[15px] font-semibold'>Pending Approval</h6>}
             </Card>
             <Card className='mt-6 px-6'>
                 <div className='font-extrabold text-lg text-secondary'>HR Head</div>
-                <div>2nd Nov 2022 | 4:06 pm</div>
-                <div className="grid grid-cols-3 my-6 text-lg">
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>Hierarchy band :</div>
-                        <div>10</div>
-                    </div>
-                    <div className="col-span-1 flex gap-3 mt-3">
-                        <div className='font-bold '>InterView</div>
-                        <div>Interview</div>
-                    </div>
-                </div>
+                {
+                    data && data?.approver_1?.status == "PENDING" ?
+                        <>
+                            <div>2nd Nov 2022 | 4:06 pm</div>
+                            <div className="grid grid-cols-3 my-6 text-lg">
+                                <div className="col-span-1 flex gap-3 mt-3">
+                                    <div className='font-bold '>Hierarchy band :</div>
+                                    <div>10</div>
+                                </div>
+                                <div className="col-span-1 flex gap-3 mt-3">
+                                    <div className='font-bold '>InterView</div>
+                                    <div>Interview</div>
+                                </div>
+                            </div>
+                        </> : <h6 className='py-[15px] font-semibold'>Pending Approval</h6>}
             </Card>
         </div>
     )

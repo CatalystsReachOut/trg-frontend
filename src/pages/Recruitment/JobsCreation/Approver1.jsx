@@ -7,12 +7,15 @@ import Button from '../../../components/Button/Button'
 import Card from './../../../components/Card/Card'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import * as apiProvider from '../../../services/api/recruitment'
+import { useEffect } from 'react'
 
 const Apprver1 = () => {
 
   const navigate = useNavigate()
+
+  const { id } = useParams()
   
   const [user, setUser] = useState({
     profile:'',
@@ -64,6 +67,28 @@ const Apprver1 = () => {
     }))
   }
 
+  const getData = () => {
+    apiProvider.getJobById(id)
+    .then(res=>{
+      console.log(res.data.job);
+      setUser({
+        profile:res.data.job.profileId,
+        bussiness:res.data.job.businessId,
+        openings:res.data.job.numberOfOpenings,
+        country:res.data.job.countryId,
+        state:res.data.job.stateId,
+        city:res.data.job.cityId,
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
+  const getAllData = () => {
+  
+  }
+
   
 
   const handleSubmit =()=>{
@@ -76,6 +101,9 @@ const Apprver1 = () => {
     })
   }
 
+  useEffect(()=>{
+    getData()
+  },[])
 
   return (
     <div className='flex w-full relative min-h-[80vh]'>
@@ -98,6 +126,7 @@ const Apprver1 = () => {
                 label="Bussiness"
                 name="bussiness"
                 onChange={handelChangeSelect}
+                defaultValue={user?.bussiness}
               />
             </div>
             <div className="lg:col-span-4 sm:col-span-6 col-span-12">

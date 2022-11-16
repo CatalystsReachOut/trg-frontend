@@ -5,6 +5,7 @@ import { TbDots } from 'react-icons/tb'
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '../../routes/RouterConfig';
 
 
 const Jobs = ({ data }) => {
@@ -30,12 +31,12 @@ const Jobs = ({ data }) => {
 
     const items = [
         {
-          label: <Link className='px-2' to={'/'}>Edit</Link>,
-          key: '0',
+            label: <Link className='px-2' to={data?.approver_1?.status=='PENDING'?`${ROUTES.Recruitment.Approval1}/${data?._id}`:data?.approver_2?.status=='PENDING'?`${ROUTES.Recruitment.Approval2}/${data?._id}`:data?.approver_3?.status=='PENDING'?`${ROUTES.Recruitment.Approval3}/${data?._id}`:data?.approver_4?.status=='PENDING'?`${ROUTES.Recruitment.Approval4}/${data?._id}`:`/job/progress/${data?._id}`}>Edit</Link>,
+            key: '0',
         },
         {
-          label: <Link className='px-2' to={'/'}>View</Link>,
-          key: '1',
+            label: <Link className='px-2' to={`/job/progress/${data?._id}`}>View</Link>,
+            key: '1',
         }
     ]
     return (
@@ -67,7 +68,7 @@ const Jobs = ({ data }) => {
                                 </Space>
                             </a>
                         </Dropdown>
-                        
+
                     </div>
                 </div>
 

@@ -4,8 +4,13 @@ import JobComponent from "../../../components/Jobs/Jobs"
 import { RiSearch2Line } from 'react-icons/ri'
 import Select from 'react-select'
 import Card from '../../../components/Card/Card'
+import * as storageConstant from './../../../utils/storageConstants'
+import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '../../../routes/RouterConfig'
 
 const Jobs = () => {
+
+  const navigate = useNavigate()
 
   const [data, setData] = useState()
 
@@ -21,6 +26,8 @@ const Jobs = () => {
       })
   }
 
+  const level = localStorage.getItem(storageConstant.LEVEL)
+
 
   useEffect(() => {
     getData();
@@ -31,8 +38,8 @@ const Jobs = () => {
 
   return (
   <div>
-    <Card className='h-[60px] flex items-center justify-between px-3 '>
-      <div className='flex items-center gap-3'>
+    <Card className=' flex items-center justify-between px-3 flex-wrap gap-3'>
+      <div className='flex items-center gap-3 flex-wrap'>
         <Select/>
         <Select/>
         <Select/>
@@ -49,15 +56,24 @@ const Jobs = () => {
           <RiSearch2Line/>
           <input type="text" placeholder='Search' className='outline-none focus:outline-none p-2 w-auto bg-transparent'/>
         </div>
-        <button className='bg-secondary h-[40px] p-2 rounded-lg'>
+        <button onClick={()=>{navigate(ROUTES.Recruitment.CreateJob)}} className='btn-primary text-white h-[40px] p-2 rounded-lg'>
            + Add Job
         </button>
       </div>
     </Card>
-    <Card className='mt-3'>
+    <Card className='mt-[60px]'>
     {
       data && data?.length !=0 ? data.map((item, key) => {
-
+        // return <JobComponent data={item} />
+        if(item?.approver_1?.status == 'PENDING' && level >= 5)
+        return <JobComponent data={item} />
+        else if(item?.approver_2?.status == 'PENDING' && level >= 4)
+        return <JobComponent data={item} />
+        else if(item?.approver_3?.status == 'PENDING' && level >= 3)
+        return <JobComponent data={item} />
+        else if(item?.approver_4?.status == 'PENDING' && level >= 2)
+        return <JobComponent data={item} />
+        else
         return <JobComponent data={item} />
       })
     :

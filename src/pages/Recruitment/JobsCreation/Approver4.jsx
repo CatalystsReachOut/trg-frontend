@@ -8,61 +8,141 @@ import Card from '../../../components/Card/Card'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 import TextArea from '../../../components/Input/TextArea'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import * as apiProvider from './../../../services/api/recruitment'
+import { useEffect } from 'react'
 
 const Apprver4 = () => {
 
   const navigate = useNavigate()
-  
+
+  const { id } = useParams()
+
   const [user, setUser] = useState({
-    profile:'',
-    bussiness:'',
-    openings:'',
-    country:'',
-    state:'',
-    city:''
+    profile: '',
+    bussiness: '',
+    openings: '',
+    country: '',
+    state: '',
+    city: ''
   })
 
-  const handleConfirmation = () => {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#2ecc71',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Approve'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire(
-            'Approved',
-            'Job has been Approved.',
-            'success'
-          )
-        }
-      })
-  }
+
+
+  const [profileOpt, setProfileOpt] = useState([])
+  const [bussinessOpt, setBussinessOpt] = useState([])
+  const [countryOpt, setCountryOpt] = useState([])
+  const [stateOpt, setStateOpt] = useState([])
+  const [cityOpt, setCityOpt] = useState([])
+
+  const [data, setData] = useState()
+
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
-    setUser(prev=>({
+    const { name, value } = e.target;
+    setUser(prev => ({
       ...prev,
-      [name]:value
+      [name]: value
     }))
   }
 
   const handelChangeSelect = (e) => {
-    const {name, value} = e;
-    setUser(prev=>({
+    const { name, value } = e;
+    setUser(prev => ({
       ...prev,
-      [name]:value
+      [name]: value
     }))
   }
+
+
+  const getData = () => {
+    apiProvider.getJobById(id)
+      .then(res => {
+        console.log(res.data.job);
+        setData(res.data.job)
+        setUser({
+          profile: res.data.job.profileId,
+          bussiness: res.data.job.businessId,
+          openings: res.data.job.numberOfOpenings,
+          country: res.data.job.countryId,
+          state: res.data.job.stateId,
+          city: res.data.job.cityId,
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  const getBasicData = async () => {
+    const [data1, data2, data3, data4, data5] = await Promise.all([
+      apiProvider.getProfile()
+        .then(res => {
+          const arr = res.data?.map(i => ({
+            label: i?.title,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+      ,
+      apiProvider.getBusiness()
+        .then(res => {
+          const arr = res.data?.map(i => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+      ,
+      apiProvider.getCountry()
+        .then(res => {
+          const arr = res.data?.map(i => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => { console.log(err); return null })
+      ,
+      apiProvider.getState()
+        .then(res => {
+          const arr = res.data?.map(i => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+      ,
+      apiProvider.getCity()
+        .then(res => {
+          const arr = res.data?.map(i => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+    ])
+
+    setProfileOpt(data1);
+    setBussinessOpt(data2)
+    setCountryOpt(data3)
+    setStateOpt(data4)
+    setCityOpt(data5)
+  }
+
+  useEffect(() => {
+    getData()
+    getBasicData()
+  }, [])
 
   return (
     <div className=' h-auto w-full flex'>
       <Card className='min-h-full h-full w-full relative px-6 flex flex-col'>
-        <BackButton onClick={()=>{navigate(-1)}}/>
+        <BackButton onClick={() => { navigate(-1) }} />
         <div className=''>
           <h3 className='text-Medium+/Title/Small mt-2'> Create New Job</h3>
           <hr className='my-3 h-3' />
@@ -71,6 +151,8 @@ const Apprver4 = () => {
               <Select
                 label="Profile"
                 name='profile'
+                options={profileOpt}
+                defaultValue={user?.profile}
                 onChange={handelChangeSelect}
               />
             </div>
@@ -78,6 +160,8 @@ const Apprver4 = () => {
               <Select
                 label="Bussiness"
                 name="bussiness"
+                options={bussinessOpt}
+                defaultValue={user?.bussiness}
                 onChange={handelChangeSelect}
               />
             </div>
@@ -93,6 +177,8 @@ const Apprver4 = () => {
               <Select
                 label="Country"
                 name="country"
+                options={countryOpt}
+                defaultValue={user?.country}
                 onChange={handelChangeSelect}
               />
             </div>
@@ -100,6 +186,8 @@ const Apprver4 = () => {
               <Select
                 label="State"
                 name="state"
+                options={stateOpt}
+                defaultValue={user?.state}
                 onChange={handelChangeSelect}
               />
             </div>
@@ -107,6 +195,8 @@ const Apprver4 = () => {
               <Select
                 label="City"
                 name="city"
+                options={cityOpt}
+                defaultValue={user?.city}
                 onChange={handelChangeSelect}
               />
             </div>
@@ -114,97 +204,97 @@ const Apprver4 = () => {
           <div className='form-parent mt-6'>
             <div className="form-child">
               <TextArea
-              label="Eligibility Criteria"
-              name="eligibility"
-              placeHolder="Enter Eligibility Criteria"
-              onChange={handleChange}
+                label="Eligibility Criteria"
+                name="eligibility"
+                placeHolder="Enter Eligibility Criteria"
+                onChange={handleChange}
               />
             </div>
             <div className="form-child">
               <Select
-              label="Work Type"
-              name="work_type"
-              onChange={handelChangeSelect}
+                label="Work Type"
+                name="work_type"
+                onChange={handelChangeSelect}
               />
             </div>
             <div className="form-child">
               <Select
-              label="Work Shift"
-              name="work_shift"
-              onChange={handelChangeSelect}
+                label="Work Shift"
+                name="work_shift"
+                onChange={handelChangeSelect}
               />
             </div>
             <div className="form-child">
               <TextArea
-              label="Remark"
-              name="remark"
-              placeHolder="Enter Remark"
-              onChange={handleChange}
+                label="Remark"
+                name="remark"
+                placeHolder="Enter Remark"
+                onChange={handleChange}
               />
             </div>
           </div>
           <div className="form-parent mt-6">
             <div className="form-child grid grid-cols-2">
-                <label htmlFor="" className='px-2 col-span-2'>Pay Range</label>
-                <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-2'>
-                    <div className="col-span-1">
-                        <input 
-                        className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
-                        type="number" 
-                        placeholder='From'
-                        value={user?.pay_from}
-                        name="pay_from"
-                        onChange={handleChange}
-                        />
-                    </div>
-                    <div className="col-span-1">
-                        <input 
-                        className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
-                        type="number" 
-                        placeholder='To'
-                        value={user?.pay_to}
-                        name="pay_to"
-                        onChange={handleChange}
-                        />
-                    </div>
-
+              <label htmlFor="" className='px-2 col-span-2'>Pay Range</label>
+              <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-2'>
+                <div className="col-span-1">
+                  <input
+                    className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                    type="number"
+                    placeholder='From'
+                    value={user?.pay_from}
+                    name="pay_from"
+                    onChange={handleChange}
+                  />
                 </div>
+                <div className="col-span-1">
+                  <input
+                    className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                    type="number"
+                    placeholder='To'
+                    value={user?.pay_to}
+                    name="pay_to"
+                    onChange={handleChange}
+                  />
+                </div>
+
+              </div>
             </div>
             <div className="form-child">
-                <Select
-                    label="Compensation Mode"
-                    onChange={handelChangeSelect}
-                    name="compensation"
-                />
+              <Select
+                label="Compensation Mode"
+                onChange={handelChangeSelect}
+                name="compensation"
+              />
             </div>
-        </div>
-        <div className="form-parent mt-4">
+          </div>
+          <div className="form-parent mt-4">
             <div className="form-child">
               <TextArea
-              label="Remark"
-              name="remark2"
-              placeHolder="Enter Remark"
-              onChange={handleChange}
-              value={user?.remark2}
+                label="Remark"
+                name="remark2"
+                placeHolder="Enter Remark"
+                onChange={handleChange}
+                value={user?.remark2}
               />
             </div>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3 mt-7">
-            <div className="sm:col-span-1 col-span-2">
-                <div className="max-w-[400px]">
-                    <Input/>
-                </div>
+          <div className="sm:col-span-1 col-span-2">
+            <div className="max-w-[400px]">
+              <Input />
             </div>
-            <div className="sm:col-span-1 col-span-2">
-            
-            </div>
+          </div>
+          <div className="sm:col-span-1 col-span-2">
+
+          </div>
         </div>
         <div className='mt-auto flex gap-3 py-3'>
-          <Button title="Approve" className=' ' onClick={handleConfirmation}/>
+          <Button title="Approve" className=' ' />
           <Button type='2' title="Reject" className='' />
         </div>
-        
+
       </Card>
 
     </div>

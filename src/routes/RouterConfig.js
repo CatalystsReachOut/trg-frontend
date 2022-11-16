@@ -14,7 +14,12 @@ export const ROUTES = {
         CreateJob:'/recruitment/create-job',
         ViewJobs:'/recruitment/view-job',
         TrackJobProgrees:'/recruitment/track-job',
-        Profile: '/recruitment/profile'
+        Profile: '/recruitment/profile',
+        Approval1:'/approval1',
+        Approval2:'/approval2',
+        Approval3:'/approval3',
+        Approval4:'/approval4',
+        progress:'/job/progress'
     },
     Home:'/',
     About:'/about'

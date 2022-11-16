@@ -115,10 +115,10 @@ const Router = () => {
 
         //// Create Job /////
         <Route exact path={ROUTES.Recruitment.CreateJob} element={<RouteWithRole Element={RecCreateJob} />}></Route>
-        <Route exact path='/s1' element={<RouteWithRole Element={RecCreateJobApp1} />}></Route>
-        <Route exact path='/s2' element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
-        <Route exact path='/s3' element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
-        <Route exact path='/s4' element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
+        <Route exact path={`${ROUTES.Recruitment.Approval1}/:id`} element={<RouteWithRole Element={RecCreateJobApp1} />}></Route>
+        <Route exact path={`${ROUTES.Recruitment.Approval2}/:id`} element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
+        <Route exact path={`${ROUTES.Recruitment.Approval3}/:id`} element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
+        <Route exact path={`${ROUTES.Recruitment.Approval4}/:id`} element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
         <Route exact path='/job/progress/:id' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
 
         // jobs

@@ -3,17 +3,6 @@ import Sel from 'react-select';
 import { Option } from 'antd/lib/mentions';
 import './Select.scss'
 
-const defaultOptions = [
-    {
-        label:'Default Opt1',
-        value:'val1'
-    },
-    {
-        label:'Default Opt2',
-        value:'val2'
-    },
-]
-
 
 const Select = (props) => {
     const {
@@ -25,7 +14,9 @@ const Select = (props) => {
         onChange,
         name,
         value,
-        disabled
+        disabled,
+        defaultValue,
+        placeholder
     } = props;  
 
     
@@ -38,8 +29,11 @@ const Select = (props) => {
             onChange={(p,e)=>{
                 onChange({...p,name:e.name})
             }}
+            defaultValue={options?.find(s=>s.value==defaultValue)}
             name={name}
             isDisabled={disabled}
+            placeholder={placeholder}
+            selelcted={defaultValue}
         />
     </div>
   )
@@ -47,7 +41,6 @@ const Select = (props) => {
 
 Select.defaultProps={
     label:'Default Label',
-    options:defaultOptions
 }
 
 export default Select

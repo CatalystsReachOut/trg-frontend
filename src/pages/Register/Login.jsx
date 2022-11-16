@@ -107,7 +107,7 @@ const Login = ({ notify }) => {
                     </div>
                     <div className="flex w-full">
                         <button
-                            className="py-2 px-4  bg-secondary focus:ring-secondary focus:ring-offset-secondary text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                            className="py-2 px-4  btn-primary focus:ring-secondary focus:ring-offset-secondary text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
                             onClick={(e) => handleSubmit(e)}
                         >
                             Login

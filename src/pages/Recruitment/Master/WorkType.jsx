@@ -8,24 +8,19 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
-const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
+const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [user, setUser] = useState({
-    name: "",
-    description:''
+    title: ""
   })
   const columns = [
     {
-      title: "WorkShift",
-      dataIndex: "name",
+      title: "WorkType",
+      dataIndex: "title",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 4
       }
-    },
-    {
-      title: "Description",
-      dataIndex: "description"
     },
     {
       title: "Action",
@@ -53,15 +48,17 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const getData = () => {
     enterLoading(2)
-    apiProvider.getDepartment()
+    apiProvider.getWorkType()
       .then(res => {
-        console.log(res.data);
+
+        if (res.isSuccess) {
           setData(res.data)
           const arr = res.data.map(data => ({
             value: data._id,
             label: data.title
           }))
           setProfileData(arr)
+        }
         return exitLoading(2)
       })
       .catch(err => {
@@ -74,7 +71,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
   const handleSubmit = () => {
 
     enterLoading(1)
-    return apiProvider.createDepartment(user)
+    return apiProvider.createWorkType(user)
       .then(res => {
         exitLoading(1)
         if (res.isSuccess) {
@@ -94,8 +91,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const clearData = () => {
     setUser({
-      name: '',
-      description:''
+      title: '',
     })
   }
 
@@ -107,32 +103,23 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
   return (
     <div>
       <Card>
-        <div className='font-bold'> Add Department </div>
+        <div className='font-bold'> Add Work Type </div>
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
           <div className="col-span-1">
             <Input
-              label={'Department'}
-              placeHolder={'Enter Department'}
-              name="name"
-              value={user?.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-span-1">
-            <Input
-              label={'Description'}
-              placeHolder={'Enter Description'}
-              name="description"
-              value={user?.description}
+              label={'Work Type'}
+              placeHolder={'Enter Work Type'}
+              name="title"
+              value={user?.title}
               onChange={handleChange}
             />
           </div>
         </div>
         <div className="flex justify-end mt-3">
           <Button
-            title="Add Department"
+            title="Add Work Shift"
             className={'min-w-[100px]'}
-            onClick={() => {handleSubmit(user)}}
+            onClick={() => handleSubmit(user)}
             loading={loadings[1]}
           />
         </div>
@@ -140,7 +127,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
       <Card className={'mt-3'}>
         <div className="font-bold my-3">
-            Department
+            Work Type
         </div>
         <Table loading={loadings[2]} columns={columns} dataSource={data} />
       </Card>
@@ -148,4 +135,4 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
   )
 }
 
-export default Department
+export default WorkShift

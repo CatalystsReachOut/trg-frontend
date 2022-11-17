@@ -4,12 +4,13 @@ import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
 import Card from '../../../components/Card/Card'
 import Input from '../../../components/Input/Input'
+import Select from '../../../components/Select/Select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
 const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
-  const [interviewRound, setInterviewRound] = useState({
+  const [user, setUser] = useState({
     profile:"",
     noOfRound:"",
     noOfQuestion:""
@@ -55,25 +56,49 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setInterviewRound(prev => ({
+    setUser(prev => ({
         ...prev,
         [name]: value
     }))
+}
+
+const handelChangeSelect = (e) => {
+  const { name, value } = e;
+  setUser(prev => ({
+    ...prev,
+    [name]: value
+  }))
+}
+
+const getBasicData = async() => {
+ const [data1, data2] = await Promise.all([
+  apiProvider.getProfile()
+  .then(res=>{
+    const arr = res?.data?.map((i,key)=>({
+      label:i?.title,
+      value:i?._id
+    }))
+    setProfileData(arr)
+  })
+  .catch(err=>{
+    console.log(err);
+  })
+  ,
+  apiProvider.getQuestionBank()
+  .then(res=>{
+    console.log(res);
+  })
+  .catch(err=>{
+    console.log(err);
+  })
+ ])
 }
 
 const getData = () => {
   enterLoading(2)
   apiProvider.getInterviewRounds()
       .then(res => {
-
-          if (res.isSuccess) {
               setData(res.data)
-              const arr = res.data.map(data => ({
-                  value: data._id,
-                  label: data.profile
-              }))
-              setProfileData(arr)
-          }
           return exitLoading(2)
       })
       .catch(err => {
@@ -84,9 +109,8 @@ const getData = () => {
 }
 
 const handleSubmit = () => {
-
   enterLoading(1)
-  return apiProvider.createInterviewRounds(interviewRound)
+  return apiProvider.createInterviewRounds(user)
       .then(res => {
           exitLoading(1)
           if (res.isSuccess) {
@@ -105,7 +129,7 @@ const handleSubmit = () => {
 }
 
 const clearData = () => {
-  setInterviewRound({
+  setUser({
     profile:"",
     noOfRound:"",
     noOfQuestion:""
@@ -114,6 +138,7 @@ const clearData = () => {
 
 useEffect(() => {
   getData();
+  getBasicData()
 }, [])
 
 
@@ -123,12 +148,12 @@ useEffect(() => {
           <div className='font-bold'> Add Interview Round </div>
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
             <div className="col-span-1">
-              <Input
+              <Select
               label={'Profile'}
               placeHolder = {'Profile'}
               name="profile"
-              value = {interviewRound?.profile}
-              onChange = {handleChange}
+              onChange = {handelChangeSelect}
+              options={profileData}
               />
             </div>
             <div className="col-span-1">
@@ -136,7 +161,7 @@ useEffect(() => {
               label={'No Of Round'}
               placeHolder = {'Enter Number Of Round'}
               name="noOfRound"
-              value = {interviewRound?.noOfRound}
+              value = {user?.noOfRound}
               onChange = {handleChange}
               />
             </div>
@@ -145,7 +170,7 @@ useEffect(() => {
               label={'No Of Question'}
               placeHolder = {'Enter Number Of Question'}
               name="noOfQuestion"
-              value = {interviewRound?.noOfQuestion}
+              value = {user?.noOfQuestion}
               onChange = {handleChange}
               />
             </div>

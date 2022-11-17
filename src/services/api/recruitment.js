@@ -145,7 +145,7 @@ export const updateJobById = (id, data) => {
     return apiProvider.put(apiConstant.Job, id, data)
 }
 
-// Job
+// Profile
 export const getProfile = () => {
     return apiProvider.getAll(apiConstant.Profile)
 }
@@ -155,9 +155,37 @@ export const createProfile = (data) => {
 }
 
 export const editProfile = (id, data) => {
-    return apiProvider.put(apiConstant.Business, id, data)
+    return apiProvider.put(apiConstant.Profile, id, data)
 }
 
 export const updateProfile = (id, data) => {
     return apiProvider.put(apiConstant.Profile)
+}
+
+//WorkType
+
+export const getWorkType = () => {
+    return apiProvider.getAll(apiConstant.workType)
+}
+
+export const createWorkType = (data) => {
+    return apiProvider.post(apiConstant.workType, data)
+}
+
+export const updateWorkType = (id, data) => {
+    return apiProvider.put(apiConstant.workType, id, data)
+}
+
+
+//WorkShift
+export const getWorkShift = () => {
+    return apiProvider.getAll(apiConstant.workShift)
+}
+
+export const createWorkShift = (data) => {
+    return apiProvider.post(apiConstant.workShift, data)
+}
+
+export const updateWorkShift = (id, data) => {
+    return apiProvider.put(apiConstant.workShift, id, data)
 }

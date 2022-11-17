@@ -9,7 +9,9 @@ export const ROUTES = {
             Department:'/recruitment/master/department',
             Country:'/recruitment/master/country',
             City:'/recruitment/master/city',
-            Bussiness:'/recruitment/master/bussiness'
+            Bussiness:'/recruitment/master/bussiness',
+            WorkType:'/recruitment/master/work-type',
+            WorkShift:'/recruitment/master/work-shift',
         },
         CreateJob:'/recruitment/create-job',
         ViewJobs:'/recruitment/view-job',

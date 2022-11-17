@@ -24,6 +24,8 @@ import RecMasterDepartment from './../pages/Recruitment/Master/Department'
 import RecMasterCountry from './../pages/Recruitment/Master/Country'
 import RecMasterCity from './../pages/Recruitment/Master/City'
 import RecMasterBussiness from './../pages/Recruitment/Master/Bussiness'
+import RecMasterWorkType from './../pages/Recruitment/Master/WorkType'
+import RecMasterWorkShift from './../pages/Recruitment/Master/WorkShift'
 
 
 ////Create Job
@@ -111,6 +113,8 @@ const Router = () => {
         <Route exact path={ROUTES.Recruitment.Master.InterviewRounds} element={<RouteWithRole Element={RecMasterInterviewRounds} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.QuestionBank} element={<RouteWithRole Element={RecMasterQuestionBank} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.State} element={<RouteWithRole Element={RecMasterState} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.WorkType} element={<RouteWithRole Element={RecMasterWorkType} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.WorkShift} element={<RouteWithRole Element={RecMasterWorkShift} />}></Route>
 
 
         //// Create Job /////

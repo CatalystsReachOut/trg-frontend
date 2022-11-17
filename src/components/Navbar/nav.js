@@ -56,6 +56,36 @@ export const navbarData = [
                         route:ROUTES.Recruitment.Master.Country,
                         type:stat
                     },
+                    {
+                        title:'Department',
+                        route:ROUTES.Recruitment.Master.Department,
+                        type:stat
+                    },
+                    {
+                        title:'Rounds',
+                        route:ROUTES.Recruitment.Master.Rounds,
+                        type:stat
+                    },
+                    {
+                        title:'Interview Rounds',
+                        route:ROUTES.Recruitment.Master.InterviewRounds,
+                        type:stat
+                    },
+                    {
+                        title:'Question Bank',
+                        route:ROUTES.Recruitment.Master.QuestionBank,
+                        type:stat
+                    },
+                    {
+                        title:'Work Type',
+                        route:ROUTES.Recruitment.Master.WorkType,
+                        type:stat
+                    },
+                    {
+                        title:'Work Shift',
+                        route:ROUTES.Recruitment.Master.WorkShift,
+                        type:stat
+                    },
                 ]
             },
         ]

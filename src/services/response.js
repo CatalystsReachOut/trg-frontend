@@ -25,8 +25,8 @@ export function handleError(error) {
         response.data.message = errors.SOMETHING_WENT_WRONG;
     }
     if ((response.status === 401 && response.statusText === 'Unauthorized') || (response.status === 401 && response.data.message === 'Unauthenticated.')) {
-        localStorage.clear();
-        window.location.href = '/login';
+        // localStorage.clear();
+        // window.location.href = '/login';
         return;
     } else {
         return response.data;

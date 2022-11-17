@@ -4,39 +4,152 @@ import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
 import Card from '../../../components/Card/Card'
 import Input from '../../../components/Input/Input'
+import Select from '../../../components/Select/Select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 
 const QuestionBank = () => {
-  const [name, setName] = useState()
 
+  const [user, setUser] = useState({
+    departmentName:'',
+    questionType:'',
+    question:'',
+    options:'',
+    correctAnswer:''
+  })
+
+  const [options, setOptions] = useState({
+    option1:'',
+    option2:'',
+    option3:'',
+    option4:'',
+  })
+
+  const [allOptions, setAllOptions] = useState([])
+
+  useEffect(()=>{
+    const arr = []
+    const arr1 = []
+    if(options.option1){
+      const obj = {
+        label:options.option1,
+        value:options.option1,
+      }
+      const obj1 = {
+        optionNumber:1,
+        answerBody:options.option1
+      }
+      arr.push(obj)
+      arr1.push(obj1)
+    }
+    if(options.option2){
+      const obj = {
+        label:options.option2,
+        value:options.option2,
+      }
+      const obj1 = {
+        optionNumber:2,
+        answerBody:options.option2
+      }
+      arr.push(obj)
+      arr1.push(obj1)
+    }
+    if(options.option3){
+      const obj = {
+        label:options.option3,
+        value:options.option3,
+      }
+      const obj1 = {
+        optionNumber:3,
+        answerBody:options.option3
+      }
+      arr.push(obj)
+      arr1.push(obj1)
+    }
+    if(options.option4){
+      const obj = {
+        label:options.option4,
+        value:options.option4,
+      }
+      const obj1 = {
+        optionNumber:4,
+        answerBody:options.option4
+      }
+      arr.push(obj)
+      arr1.push(obj1)
+    }
+    
+    setUser(prev=>({
+      ...prev,
+      options:arr1
+    }))
+    setAllOptions(arr)
+  },[options])
+
+  const questionType = [
+    {
+      label:'Subjective',
+      value:'Subjective'
+    },
+    {
+      label:'Objective',
+      value:'Objective'
+    },
+  ]
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleChangeOptions = (e) => {
+    const { name, value } = e.target;
+    setOptions(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+
+  const handelChangeSelect = (e) => {
+    const { name, value } = e;
+    setUser(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const [departmentOpt, setDepartmentOpt] = useState([])
 
 
   const columns = [
     {
       title: "Round",
-      dataIndex: "name"
+      dataIndex: "departmentName"
     },
     {
-      title: "Chinese Score",
-      dataIndex: "chinese",
+      title: "Question Type",
+      dataIndex: "questionType",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 3
       }
     },
     {
-      title: "Math Score",
-      dataIndex: "math",
+      title: "Question",
+      dataIndex: "question",
       sorter: {
         compare: Sorter.DEFAULT,
-        multiple: 2
+        multiple: 3
       }
     },
     {
-      title: "English Score",
-      dataIndex: "english",
+      title: "Options",
+      dataIndex: "options",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
@@ -48,7 +161,7 @@ const QuestionBank = () => {
     },
   ];
 
-  const data = [
+  const [data, setData] = useState([
     {
       key: "1",
       name: "John Brown",
@@ -81,12 +194,28 @@ const QuestionBank = () => {
       english: 89,
       action:<Action/>
     }
-  ];
+  ]);
+
+  const getBasicData = () => {
+    apiProvider.getDepartment()
+    .then(res=>{
+      console.log(res);
+      const arr = res?.data?.map((i,key)=>({
+        label:i?.name,
+        value:i?._id
+      }))
+      setDepartmentOpt(arr)
+    })
+    .catch(err=>{
+      // console.log(err);
+    })
+  }
 
   const getData =()=>{
     apiProvider.getQuestionBank()
     .then(res=>{
       console.log(res)
+      setData(res.data)
     })
     .catch(err=>{
       console.log(err)
@@ -94,7 +223,7 @@ const QuestionBank = () => {
   }
 
   const handleSubmit =()=>{
-    apiProvider.createQuestionBank({name:name})
+    apiProvider.createQuestionBank(user)
     .then(res=>{
       console.log(res)
     })
@@ -105,25 +234,100 @@ const QuestionBank = () => {
   
   useEffect(()=>{
     getData();
+    getBasicData();
   },[])
 
   return (
     <div>
         <Card>
-          <div className='font-bold'> Add Round </div>
-          <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
-            <div className="col-span-1">
-              <Input
-              label={'Interview Round'}
-              placeHolder = {'Enter Round Name'}
-              value = {name}
-              onChange = {e => setName(e.target.value)}
+          <div className='font-bold'> Add Department </div>
+          <div className='form-parent'>
+            <div className="form-child">
+              <Select
+                label="Department"
+                placeholder="Select Department"
+                onChange={handelChangeSelect}
+                options={departmentOpt}
+                name="departmentName"
               />
             </div>
+            <div className="form-child">
+              <Select
+                label="Question Type"
+                options={questionType}
+                name="questionType"
+                placeholder="Select Question Type"
+                onChange={handelChangeSelect}
+              />
+            </div>
+            <div className="form-child">
+              <Input
+                label="Question"
+                placeHolder="Enter Question"
+                onChange={handleChange}
+                name="question"
+                value={user?.question}
+              />
+            </div>
+            {
+              user?.questionType == "Objective"
+              ?
+              <>
+              <div className="form-child">
+              <Input
+                label="Option 1"
+                placeHolder="Enter Option 1"
+                onChange={handleChangeOptions}
+                name="option1"
+                value={options?.option1}
+              />
+            </div>
+            <div className="form-child">
+              <Input
+                label="Option 2"
+                placeHolder="Enter Option 2"
+                onChange={handleChangeOptions}
+                name="option2"
+                value={options?.option2}
+              />
+            </div>
+            <div className="form-child">
+              <Input
+                label="Option 3"
+                placeHolder="Enter Option 3"
+                onChange={handleChangeOptions}
+                name="option3"
+                value={options?.option3}
+              />
+            </div>
+            <div className="form-child">
+              <Input
+                label="Option 4"
+                placeHolder="Enter Option 4"
+                onChange={handleChangeOptions}
+                name="option4"
+                value={options?.option4}
+              />
+            </div>
+            <div className="form-child">
+              <Select
+                label="Correct Answer"
+                placeholder="Enter Correct Answer"
+                onChange={handelChangeSelect}
+                value={user?.correctAnswer}
+                options={allOptions}
+                name="correctAnswer"
+              />
+            </div>
+              </>
+              :
+              null
+            }
+            
           </div>
           <div className="flex justify-end mt-3">
             <Button 
-            title="Add Round" 
+            title="Add Question" 
             className={'min-w-[100px]'}
             onClick={handleSubmit}
             />

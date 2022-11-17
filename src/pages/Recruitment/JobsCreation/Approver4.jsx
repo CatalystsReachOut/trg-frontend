@@ -34,6 +34,8 @@ const Apprver4 = () => {
   const [countryOpt, setCountryOpt] = useState([])
   const [stateOpt, setStateOpt] = useState([])
   const [cityOpt, setCityOpt] = useState([])
+  const [workTypeOpt, setWorkTypeOpt] = useState([])
+  const [workShiftOpt, setWorkShiftOpt] = useState([])
 
   const [data, setData] = useState()
 
@@ -75,7 +77,7 @@ const Apprver4 = () => {
   }
 
   const getBasicData = async () => {
-    const [data1, data2, data3, data4, data5] = await Promise.all([
+    const [data1, data2, data3, data4, data5, data6, data7] = await Promise.all([
       apiProvider.getProfile()
         .then(res => {
           const arr = res.data?.map(i => ({
@@ -125,6 +127,27 @@ const Apprver4 = () => {
           return arr;
         })
         .catch(err => (console.log(err)))
+      ,
+      apiProvider.getWorkShift()
+        .then(res => {
+          const arr = res.data?.map(i => ({
+            label: i?.title,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+      ,
+      apiProvider.getWorkType()
+        .then(res => {
+          const arr = res.data?.map(i => ({
+            label: i?.title,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+      ,
     ])
 
     setProfileOpt(data1);
@@ -132,6 +155,9 @@ const Apprver4 = () => {
     setCountryOpt(data3)
     setStateOpt(data4)
     setCityOpt(data5)
+    setWorkShiftOpt(data6)
+    setWorkTypeOpt(data7)
+
   }
 
   useEffect(() => {
@@ -214,6 +240,7 @@ const Apprver4 = () => {
               <Select
                 label="Work Type"
                 name="work_type"
+                options={workTypeOpt}
                 onChange={handelChangeSelect}
               />
             </div>
@@ -221,6 +248,7 @@ const Apprver4 = () => {
               <Select
                 label="Work Shift"
                 name="work_shift"
+                options={workShiftOpt}
                 onChange={handelChangeSelect}
               />
             </div>
@@ -283,7 +311,11 @@ const Apprver4 = () => {
         <div className="grid grid-cols-2 gap-3 mt-7">
           <div className="sm:col-span-1 col-span-2">
             <div className="max-w-[400px]">
-              <Input />
+              <Input 
+              placeHolder="Enter Hierarchy and"
+              onChange={handleChange}
+              label="Hierarachy Band"
+              />
             </div>
           </div>
           <div className="sm:col-span-1 col-span-2">

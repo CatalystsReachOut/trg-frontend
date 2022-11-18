@@ -13,6 +13,9 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [round, setRound] = useState({
     name: ""
   })
+
+
+
   const columns = [
     {
       title: "Round",
@@ -24,11 +27,9 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
     {
       title: "Action",
-      dataIndex: "status"
+      dataIndex: "action"
     },
   ];
-
-
 
 
   const [profileData, setProfileData] = useState([])
@@ -45,6 +46,14 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     }))
   }
 
+  const handleDelete = (id) => {
+    console.log(id);
+  }
+
+  const handleEdit = (id) => {
+    console.log(id);
+  }
+
 
   const getData = () => {
     enterLoading(2)
@@ -52,12 +61,14 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
       .then(res => {
 
         if (res.isSuccess) {
-          setData(res.data)
-          const arr = res.data.map(data => ({
-            value: data._id,
-            label: data.roundName
+          const arr = res?.data?.map((i,key)=>({
+            ...i,
+            action:<Action
+                    handleClickDelete={handleDelete(i?.id)}
+                    handleClickEdit={handleEdit(i)}
+                    />
           }))
-          setProfileData(arr)
+          setData(arr)
         }
         return exitLoading(2)
       })

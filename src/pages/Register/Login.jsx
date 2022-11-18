@@ -4,10 +4,12 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import * as apiProvider from '../../services/api/recruitment'
 import * as commonServices from '../../services/common.js';
 import * as storageConstants from "../../utils/storageConstants.js"
+import Button from '../../components/Button/Button'
 
 
 
-const Login = ({ notify }) => {
+
+const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     const navigate = useNavigate()
 
@@ -16,24 +18,28 @@ const Login = ({ notify }) => {
 
     const handleSubmit = (e) => {
 
+
         e.preventDefault()
+        enterLoading(1)
 
         apiProvider.loginUser({ email, password })
             .then(res => {
-                console.log(res)
                 if (res.isSuccess) {
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.AUTH, res.token);
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.USER_ROLE, res.role);
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.LEVEL, res.level);
                     navigate("/")
+                    exitLoading(1)
                     return notify('success', 'Logged In Successfully');
                 } else {
+                    exitLoading(1)
                     return notify('warning', res.message);
                 }
 
             })
             .catch(err => {
                 console.log(err)
+                exitLoading(1)
                 return notify('error', 'Some error occured');
 
             })
@@ -103,13 +109,14 @@ const Login = ({ notify }) => {
                             </a>
                         </div>
                     </div>
-                    <div className="flex w-full">
-                        <button
-                            className="py-2 px-4  btn-primary focus:ring-secondary focus:ring-offset-secondary text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                            onClick={(e) => handleSubmit(e)}
-                        >
-                            Login
-                        </button>
+                    <div className="flex w-full ">
+                        <Button
+                            title="Login"
+                            loading={loadings[1]}
+                            className={'min-w-[100px] w-full'}
+                            type={1}
+                            onClick={handleSubmit}
+                        />
                     </div>
                 </div>
                 <div className="flex items-center justify-center mt-6">

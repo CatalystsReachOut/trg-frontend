@@ -52,6 +52,8 @@ import { useState } from 'react';
 // Storage constants
 import * as storageConstants from "../utils/storageConstants"
 
+
+
 const Router = () => {
 
   const notify = (type, message, description) => {
@@ -60,6 +62,24 @@ const Router = () => {
       description: description,
     });
   };
+
+  const [loadings, setLoadings] = useState([]);
+
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+  }
+
+  const exitLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = false;
+      return newLoadings;
+    });
+  }
 
 
   const RouteWithRole = ({ Element }) => {
@@ -71,23 +91,7 @@ const Router = () => {
     var userRole = JSON.parse(localStorage.getItem(storageConstants.USER_ROLE));
 
 
-    const [loadings, setLoadings] = useState([]);
 
-    const enterLoading = (index) => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = true;
-        return newLoadings;
-      });
-    }
-
-    const exitLoading = (index) => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }
 
     return (
       <>
@@ -107,7 +111,7 @@ const Router = () => {
   return (
     <div>
       <Routes>
-        <Route exact path={ROUTES.Login} element={<Login notify={notify} />}></Route>
+        <Route exact path={ROUTES.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading}  notify={notify} />}></Route>
         <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
         <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
 

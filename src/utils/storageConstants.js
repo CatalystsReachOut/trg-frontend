@@ -1,8 +1,8 @@
-export const AUTH = 'auth'
+export const AUTH = 'token'
 export const LEVEL = 'level'
-export const ROLE = 'role'
-export const USER = 'uid'
 
+
+export const USER_ROLE = 'user_role'
 export const LOCAL = 'local'
 export const SESSION = 'session'
 

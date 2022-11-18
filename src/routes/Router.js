@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 
 
 //Components
@@ -48,6 +48,10 @@ import JobSeekerProfile from './../pages/Recruitment/Jobseeker/Profile'
 import { notification } from 'antd';
 import { useState } from 'react';
 
+
+// Storage constants
+import * as storageConstants from "../utils/storageConstants"
+
 const Router = () => {
 
   const notify = (type, message, description) => {
@@ -59,12 +63,13 @@ const Router = () => {
 
 
   const RouteWithRole = ({ Element }) => {
-    const notify = (type, message, description) => {
-      notification[type]({
-        message: message,
-        description: description,
-      });
-    };
+
+
+    var auth = JSON.parse(localStorage.getItem(storageConstants.AUTH));
+
+    var redirect = "/login?redirect=" + window.location.pathname;
+    var userRole = JSON.parse(localStorage.getItem(storageConstants.USER_ROLE));
+
 
     const [loadings, setLoadings] = useState([]);
 
@@ -85,13 +90,17 @@ const Router = () => {
     }
 
     return (
-      <div className='bg-[#F5F5F5]'>
-        <Navbar />
-        <div className='container mx-auto p-[20px]  min-h-screen'>
-          <Element notify={notify} enterLoading={enterLoading} exitLoading={exitLoading} loadings={loadings} />
-        </div>
-        <Footer />
-      </div>
+      <>
+        {
+          auth ? <div className='bg-[#F5F5F5]'>
+            <Navbar />
+            <div className='container mx-auto p-[20px]  min-h-screen'>
+              <Element notify={notify} enterLoading={enterLoading} exitLoading={exitLoading} loadings={loadings} />
+            </div>
+            <Footer />
+          </div> : <Navigate replace to={redirect} />
+        }
+      </>
     );
   }
 

@@ -135,6 +135,7 @@ const Apprver1 = () => {
                 name="openings"
                 value={user?.openings}
                 onChange={handleChange}
+                placeholder="Please enter the details"
               />
             </div>
             <div className="lg:col-span-4 sm:col-span-6 col-span-12">

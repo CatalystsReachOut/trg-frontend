@@ -165,6 +165,7 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
                   name="numberOfOpenings"
                   value={user?.numberOfOpenings}
                   onChange={handleChange}
+                  placeholder="Please fill the details"
                 />
               </div>
               <div className="lg:col-span-4 sm:col-span-6 col-span-12">

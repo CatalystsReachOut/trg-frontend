@@ -21,6 +21,7 @@ const Progress = () => {
     const getData = () => {
         apiProvider.getJobById(id)
             .then(res => {
+                console.log(res)
                 if (res.isSuccess) {
                     setData(res.data)
                 }

@@ -2,7 +2,7 @@
 import * as errors from '../constants/errors';
 
 export function handleResponse(response) {
-    if (response.status === 201) {
+    if (response.status === 201 || response.status === 200) {
         response.data.isSuccess = true;
     } else {
         response.data.isSuccess = false;

@@ -36,6 +36,7 @@ const Apprver4 = () => {
   const [cityOpt, setCityOpt] = useState([])
   const [workTypeOpt, setWorkTypeOpt] = useState([])
   const [workShiftOpt, setWorkShiftOpt] = useState([])
+  const [interViewRounds, setInterviewRounds] = useState([])
 
   const [data, setData] = useState()
 
@@ -78,7 +79,7 @@ const Apprver4 = () => {
   }
 
   const getBasicData = async () => {
-    const [data1, data2, data3, data4, data5, data6, data7] = await Promise.all([
+    const [data1, data2, data3, data4, data5, data6, data7, data8] = await Promise.all([
       apiProvider.getProfile()
         .then(res => {
           const arr = res.data?.map(i => ({
@@ -149,6 +150,17 @@ const Apprver4 = () => {
         })
         .catch(err => (console.log(err)))
       ,
+      apiProvider.getInterviewRounds()
+        .then(res => {
+          console.log(res);
+          const arr = res.data?.map(i => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+      ,
     ])
 
     setProfileOpt(data1);
@@ -158,6 +170,7 @@ const Apprver4 = () => {
     setCityOpt(data5)
     setWorkShiftOpt(data6)
     setWorkTypeOpt(data7)
+    setInterviewRounds(data8)
 
   }
 
@@ -368,6 +381,13 @@ const Apprver4 = () => {
                             placeHolder="Enter Hierarchy and"
                             onChange={handleChange}
                             label="Hierarachy Band"
+                          />
+                        </div>
+                        <div className="form-child">
+                          <Select
+                            placeholder={'Select InterView Rounds'}
+                            onChange={handleChange}
+                            options={interViewRounds}
                           />
                         </div>
                       </div>

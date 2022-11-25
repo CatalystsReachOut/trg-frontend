@@ -85,8 +85,30 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
     const getData = () => {
-        enterLoading(2)
+        // enterLoading(2)
         apiProvider.getProfile()
+            .then(res => {
+                if (res.isSuccess) {
+                    setData(res.data)
+                    const arr = res.data.map(data => ({
+                        value: data._id,
+                        label: data.title
+                    }))
+                    setProfileData(arr)
+                    // exitLoading(2)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                // exitLoading(2)
+            })
+    }
+
+
+    const getDataum = () => {
+        console.log('hello')
+        enterLoading(2)
+        return apiProvider.getProfile()
             .then(res => {
 
                 if (res.isSuccess) {
@@ -114,7 +136,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                 exitLoading(1)
                 if (res.isSuccess) {
                     clearData()
-                    getData()
+                    // getData()
                     return notify('success', 'added success');
                 } else {
                     return notify('error', res.message);
@@ -136,7 +158,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                 exitLoading(1)
                 if (res.isSuccess) {
                     clearData()
-                    getData()
+                    // getData()
                     return notify('success', 'added success');
                 } else {
                     return notify('error', res.message);

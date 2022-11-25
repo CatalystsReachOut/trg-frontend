@@ -5,12 +5,12 @@ import { ROUTES } from '../../routes/RouterConfig';
 import { Link, useNavigate } from 'react-router-dom';
 import { SlLogout } from 'react-icons/sl';
 import {FiChevronDown} from 'react-icons/fi'
-import {navbarData} from './nav.js'
+// import {navbarData} from './nav.js'
 import Stat from './Stat';
 import Drop from './Drop';
 
 
-export default function Navbar() {
+export default function Navbar({navbarData}) {
 
   const navigate = useNavigate()
 

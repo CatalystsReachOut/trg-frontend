@@ -227,7 +227,24 @@ const Apprver4 = () => {
               />
             </div>
           </div>
-          <div className='form-parent mt-6'>
+
+
+          <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Reporting Manager </h6>
+          <div className="form-parent">
+            <div className="form-child">
+              <TextArea
+                label="Remarks"
+                name="eligibility"
+                placeHolder="Enter Eligibility Criteria"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR Manager</h6>
+
+
+          <div className='form-parent mt'>
             <div className="form-child">
               <TextArea
                 label="Eligibility Criteria"
@@ -261,7 +278,9 @@ const Apprver4 = () => {
               />
             </div>
           </div>
-          <div className="form-parent mt-6">
+          <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
+
+          <div className="form-parent">
             <div className="form-child grid grid-cols-2">
               <label htmlFor="" className='px-2 col-span-2'>Pay Range</label>
               <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-2'>
@@ -296,6 +315,10 @@ const Apprver4 = () => {
               />
             </div>
           </div>
+
+          <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
+
+
           <div className="form-parent mt-4">
             <div className="form-child">
               <TextArea
@@ -311,10 +334,10 @@ const Apprver4 = () => {
         <div className="grid grid-cols-2 gap-3 mt-7">
           <div className="sm:col-span-1 col-span-2">
             <div className="max-w-[400px]">
-              <Input 
-              placeHolder="Enter Hierarchy and"
-              onChange={handleChange}
-              label="Hierarachy Band"
+              <Input
+                placeHolder="Enter Hierarchy and"
+                onChange={handleChange}
+                label="Hierarachy Band"
               />
             </div>
           </div>

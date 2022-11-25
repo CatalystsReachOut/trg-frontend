@@ -52,6 +52,12 @@ import { useState } from 'react';
 // Storage constants
 import * as storageConstants from "../utils/storageConstants"
 
+
+
+// NavData
+
+import { defaultNavbarData, adminNavbarData } from "../../src/components/Navbar/nav.js"
+
 const Router = () => {
 
   const notify = (type, message, description) => {
@@ -61,39 +67,39 @@ const Router = () => {
     });
   };
 
+  const [loadings, setLoadings] = useState([]);
+
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+  }
+
+  const exitLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = false;
+      return newLoadings;
+    });
+  }
+
 
   const RouteWithRole = ({ Element }) => {
 
 
-    var auth = JSON.parse(localStorage.getItem(storageConstants.AUTH));
+    const [auth, setAuth] = useState(JSON.parse(localStorage.getItem(storageConstants.AUTH)))
+    const [role, setRole] = useState(JSON.parse(localStorage.getItem(storageConstants.USER_ROLE)))
+    const [redirect, setRedirect] = "/login?redirect=" + window.location.pathname;
 
-    var redirect = "/login?redirect=" + window.location.pathname;
-    var userRole = JSON.parse(localStorage.getItem(storageConstants.USER_ROLE));
-
-
-    const [loadings, setLoadings] = useState([]);
-
-    const enterLoading = (index) => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = true;
-        return newLoadings;
-      });
-    }
-
-    const exitLoading = (index) => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }
 
     return (
       <>
         {
           auth ? <div className='bg-[#F5F5F5]'>
-            <Navbar />
+
+            <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
             <div className='container mx-auto p-[20px]  min-h-screen'>
               <Element notify={notify} enterLoading={enterLoading} exitLoading={exitLoading} loadings={loadings} />
             </div>
@@ -107,7 +113,7 @@ const Router = () => {
   return (
     <div>
       <Routes>
-        <Route exact path={ROUTES.Login} element={<Login notify={notify} />}></Route>
+        <Route exact path={ROUTES.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
         <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
         <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
 
@@ -128,10 +134,7 @@ const Router = () => {
 
         //// Create Job /////
         <Route exact path={ROUTES.Recruitment.CreateJob} element={<RouteWithRole Element={RecCreateJob} />}></Route>
-        <Route exact path={`${ROUTES.Recruitment.Approval1}/:id`} element={<RouteWithRole Element={RecCreateJobApp1} />}></Route>
-        <Route exact path={`${ROUTES.Recruitment.Approval2}/:id`} element={<RouteWithRole Element={RecCreateJobApp2} />}></Route>
-        <Route exact path={`${ROUTES.Recruitment.Approval3}/:id`} element={<RouteWithRole Element={RecCreateJobApp3} />}></Route>
-        <Route exact path={`${ROUTES.Recruitment.Approval4}/:id`} element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
+        <Route exact path={`${ROUTES.Recruitment.Job}/:id`} element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
         <Route exact path='/job/progress/:id' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
 
         // jobs

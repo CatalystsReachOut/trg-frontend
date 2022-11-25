@@ -69,6 +69,7 @@ const Apprver4 = () => {
           country: res.data.job.countryId,
           state: res.data.job.stateId,
           city: res.data.job.cityId,
+          status: res.data.job.status
         })
       })
       .catch(err => {
@@ -160,6 +161,27 @@ const Apprver4 = () => {
 
   }
 
+
+  const updateJob = async () => {
+    apiProvider.updateJobById(id, user)
+      .then(res => {
+        console.log(res.data.job);
+        setData(res.data.job)
+        setUser({
+          profile: res.data.job.profileId,
+          bussiness: res.data.job.businessId,
+          openings: res.data.job.numberOfOpenings,
+          country: res.data.job.countryId,
+          state: res.data.job.stateId,
+          city: res.data.job.cityId,
+          status: res.data.job.status
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
   useEffect(() => {
     getData()
     getBasicData()
@@ -179,6 +201,7 @@ const Apprver4 = () => {
                 name='profile'
                 options={profileOpt}
                 defaultValue={user?.profile}
+                disabled
                 onChange={handelChangeSelect}
               />
             </div>
@@ -189,6 +212,7 @@ const Apprver4 = () => {
                 options={bussinessOpt}
                 defaultValue={user?.bussiness}
                 onChange={handelChangeSelect}
+                disabled
               />
             </div>
             <div className="form-child">
@@ -197,6 +221,7 @@ const Apprver4 = () => {
                 name="openings"
                 value={user?.openings}
                 onChange={handleChange}
+                disabled
               />
             </div>
             <div className="form-child">
@@ -206,6 +231,7 @@ const Apprver4 = () => {
                 options={countryOpt}
                 defaultValue={user?.country}
                 onChange={handelChangeSelect}
+                disabled
               />
             </div>
             <div className="form-child">
@@ -215,6 +241,7 @@ const Apprver4 = () => {
                 options={stateOpt}
                 defaultValue={user?.state}
                 onChange={handelChangeSelect}
+                disabled
               />
             </div>
             <div className="form-child">
@@ -224,10 +251,10 @@ const Apprver4 = () => {
                 options={cityOpt}
                 defaultValue={user?.city}
                 onChange={handelChangeSelect}
+                disabled
               />
             </div>
           </div>
-
 
           <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Reporting Manager </h6>
           <div className="form-parent">
@@ -241,112 +268,132 @@ const Apprver4 = () => {
             </div>
           </div>
 
-          <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR Manager</h6>
+          {
+            user?.status == ("APPROVER1" || "APPROVER2" || "APPROVER3") ? <>
+              <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR Manager</h6>
 
 
-          <div className='form-parent mt'>
-            <div className="form-child">
-              <TextArea
-                label="Eligibility Criteria"
-                name="eligibility"
-                placeHolder="Enter Eligibility Criteria"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-child">
-              <Select
-                label="Work Type"
-                name="work_type"
-                options={workTypeOpt}
-                onChange={handelChangeSelect}
-              />
-            </div>
-            <div className="form-child">
-              <Select
-                label="Work Shift"
-                name="work_shift"
-                options={workShiftOpt}
-                onChange={handelChangeSelect}
-              />
-            </div>
-            <div className="form-child">
-              <TextArea
-                label="Remark"
-                name="remark"
-                placeHolder="Enter Remark"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
-
-          <div className="form-parent">
-            <div className="form-child grid grid-cols-2">
-              <label htmlFor="" className='px-2 col-span-2'>Pay Range</label>
-              <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-2'>
-                <div className="col-span-1">
-                  <input
-                    className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
-                    type="number"
-                    placeholder='From'
-                    value={user?.pay_from}
-                    name="pay_from"
+              <div className='form-parent mt'>
+                <div className="form-child">
+                  <TextArea
+                    label="Eligibility Criteria"
+                    name="eligibility"
+                    placeHolder="Enter Eligibility Criteria"
                     onChange={handleChange}
                   />
                 </div>
-                <div className="col-span-1">
-                  <input
-                    className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
-                    type="number"
-                    placeholder='To'
-                    value={user?.pay_to}
-                    name="pay_to"
+                <div className="form-child">
+                  <Select
+                    label="Work Type"
+                    name="work_type"
+                    options={workTypeOpt}
+                    onChange={handelChangeSelect}
+                  />
+                </div>
+                <div className="form-child">
+                  <Select
+                    label="Work Shift"
+                    name="work_shift"
+                    options={workShiftOpt}
+                    onChange={handelChangeSelect}
+                  />
+                </div>
+                <div className="form-child">
+                  <TextArea
+                    label="Remark"
+                    name="remark"
+                    placeHolder="Enter Remark"
                     onChange={handleChange}
                   />
                 </div>
-
               </div>
-            </div>
-            <div className="form-child">
-              <Select
-                label="Compensation Mode"
-                onChange={handelChangeSelect}
-                name="compensation"
-              />
-            </div>
-          </div>
 
-          <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
+              {
+                user?.status == ("APPROVER2" || "APPROVER3") ? <>
+
+                  <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
+
+                  <div className="form-parent">
+                    <div className="form-child grid grid-cols-2">
+                      <label htmlFor="" className='px-2 col-span-2'>Pay Range</label>
+                      <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-2'>
+                        <div className="col-span-1">
+                          <input
+                            className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                            type="number"
+                            placeholder='From'
+                            value={user?.pay_from}
+                            name="pay_from"
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="col-span-1">
+                          <input
+                            className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                            type="number"
+                            placeholder='To'
+                            value={user?.pay_to}
+                            name="pay_to"
+                            onChange={handleChange}
+                          />
+                        </div>
+
+                      </div>
+                    </div>
+                    <div className="form-child">
+                      <Select
+                        label="Compensation Mode"
+                        onChange={handelChangeSelect}
+                        name="compensation"
+                      />
+                    </div>
+                  </div>
+
+                  {
+                    user?.status == ("APPROVER2" || "APPROVER3") ? <>
+                      <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR HEAD</h6>
+
+                      <div className="form-parent mt-4">
+                        <div className="form-child">
+                          <TextArea
+                            label="Remark"
+                            name="remark2"
+                            placeHolder="Enter Remark"
+                            onChange={handleChange}
+                            value={user?.remark2}
+                          />
+                        </div>
+                        <div className="form-child">
+                          <Input
+                            placeHolder="Enter Hierarchy and"
+                            onChange={handleChange}
+                            label="Hierarachy Band"
+                          />
+                        </div>
+                      </div>
+                    </> : null
+                  }
+                </> : null
+              }
+            </> : null
+          }
 
 
-          <div className="form-parent mt-4">
-            <div className="form-child">
-              <TextArea
-                label="Remark"
-                name="remark2"
-                placeHolder="Enter Remark"
-                onChange={handleChange}
-                value={user?.remark2}
-              />
-            </div>
-          </div>
+
+
         </div>
-        <div className="grid grid-cols-2 gap-3 mt-7">
+        {/* <div className="grid grid-cols-2 gap-3 mt-7">
           <div className="sm:col-span-1 col-span-2">
             <div className="max-w-[400px]">
-              <Input
-                placeHolder="Enter Hierarchy and"
-                onChange={handleChange}
-                label="Hierarachy Band"
-              />
+              
             </div>
           </div>
           <div className="sm:col-span-1 col-span-2">
 
           </div>
-        </div>
-        <div className='mt-auto flex gap-3 py-3'>
-          <Button title="Approve" className=' ' />
+        </div> */}
+        <div className='mt-[60px] flex gap-3 py-3'>
+          <Button title="Approve" className='' onClick={() => updateJob(user?.status)} />
           <Button type='2' title="Reject" className='' />
         </div>
 

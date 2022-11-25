@@ -95,15 +95,15 @@ const getBasicData = async() => {
 }
 
 const getData = () => {
-  enterLoading(2)
+  // enterLoading(2)
   apiProvider.getInterviewRounds()
       .then(res => {
               setData(res.data)
-          return exitLoading(2)
+          // return exitLoading(2)
       })
       .catch(err => {
           console.log(err)
-          return exitLoading(2)
+          // return exitLoading(2)
 
       })
 }

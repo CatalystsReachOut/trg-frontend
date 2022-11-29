@@ -37,6 +37,7 @@ const Apprver4 = ({ notify }) => {
   const [cityOpt, setCityOpt] = useState([])
   const [workTypeOpt, setWorkTypeOpt] = useState([])
   const [workShiftOpt, setWorkShiftOpt] = useState([])
+  const [interViewRounds, setInterviewRounds] = useState([])
 
   const [data, setData] = useState()
   const [userId, setUserId] = useState(JSON.parse(localStorage.getItem(sessionStorage.USER_ID)))
@@ -86,7 +87,7 @@ const Apprver4 = ({ notify }) => {
   }
 
   const getBasicData = async () => {
-    const [data1, data2, data3, data4, data5, data6, data7] = await Promise.all([
+    const [data1, data2, data3, data4, data5, data6, data7, data8] = await Promise.all([
       apiProvider.getProfile()
         .then(res => {
           const arr = res.data?.map(i => ({
@@ -157,6 +158,17 @@ const Apprver4 = ({ notify }) => {
         })
         .catch(err => (console.log(err)))
       ,
+      apiProvider.getInterviewRounds()
+        .then(res => {
+          console.log(res);
+          const arr = res.data?.map(i => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          return arr;
+        })
+        .catch(err => (console.log(err)))
+      ,
     ])
 
     setProfileOpt(data1);
@@ -166,6 +178,7 @@ const Apprver4 = ({ notify }) => {
     setCityOpt(data5)
     setWorkShiftOpt(data6)
     setWorkTypeOpt(data7)
+    setInterviewRounds(data8)
 
     getData()
 
@@ -425,6 +438,13 @@ const Apprver4 = ({ notify }) => {
                             placeHolder="Enter Hierarchy and"
                             onChange={handleChange}
                             label="Hierarachy Band"
+                          />
+                        </div>
+                        <div className="form-child">
+                          <Select
+                            placeholder={'Select InterView Rounds'}
+                            onChange={handleChange}
+                            options={interViewRounds}
                           />
                         </div>
                       </div>

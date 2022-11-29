@@ -11,6 +11,7 @@ import * as apiProvider from '../../../services/api/recruitment'
 
 const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [user, setUser] = useState({
+    name:"",
     profile:"",
     noOfRound:"",
     noOfQuestion:""
@@ -18,6 +19,10 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+    },
     {
       title: "Profile",
       dataIndex: "profile",
@@ -95,24 +100,24 @@ const getBasicData = async() => {
 }
 
 const getData = () => {
-  enterLoading(2)
+  // enterLoading(2)
   apiProvider.getInterviewRounds()
       .then(res => {
               setData(res.data)
-          return exitLoading(2)
+          // return exitLoading(2)
       })
       .catch(err => {
           console.log(err)
-          return exitLoading(2)
+          // return exitLoading(2)
 
       })
 }
 
 const handleSubmit = () => {
-  enterLoading(1)
+  // enterLoading(1)
   return apiProvider.createInterviewRounds(user)
       .then(res => {
-          exitLoading(1)
+          // exitLoading(1)
           if (res.isSuccess) {
               clearData()
               getData()
@@ -123,7 +128,7 @@ const handleSubmit = () => {
       })
       .catch(err => {
           console.log(err)
-          exitLoading(1)
+          // exitLoading(1)
           return notify('error', err.message);
       })
 }
@@ -147,6 +152,15 @@ useEffect(() => {
         <Card>
           <div className='font-bold'> Add Interview Round </div>
           <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
+          <div className="col-span-1">
+              <Input
+              label={'Name of Interview Round'}
+              placeHolder = {'Enter Name of Interview Round'}
+              name="name"
+              value = {user?.name}
+              onChange = {handleChange}
+              />
+            </div>
             <div className="col-span-1">
               <Select
               label={'Profile'}

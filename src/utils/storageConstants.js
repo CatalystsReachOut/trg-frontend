@@ -7,6 +7,10 @@ export const SESSION = 'session'
 ////////////////////////////////
 
 export const AUTH = 'token'
-export const LEVEL = 'level'
+export const BAND = 'band'
 export const USER_ROLE = 'user_role'
+export const USER_ID = 'user_id'
+export const EMPLOYEE = 'employee'
+
+
 

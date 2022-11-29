@@ -8,15 +8,23 @@ import Card from './../../../components/Card/Card'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as apiProvider from '../../../services/api/recruitment'
+import * as storageConstant from '../../../utils/storageConstants'
+
 import { useEffect } from 'react'
+
+import { Modal } from 'antd'
 
 
 const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
 
+
+
+
+
   const navigate = useNavigate()
 
   const [profileOpt, setProfileOpt] = useState([])
-  const [bussinessOpt, setBussinessOpt] = useState([])
+  const [businessOpt, setBusinessOpt] = useState([])
   const [countryOpt, setCountryOpt] = useState([])
   const [stateOpt, setStateOpt] = useState([])
   const [cityOpt, setCityOpt] = useState([])
@@ -30,6 +38,24 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
     numberOfOpenings: ''
   })
 
+  const [createdJob, setCreatedJob] = useState()
+
+  // modal thing
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser(prev => ({
@@ -37,6 +63,7 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
       [name]: value
     }))
   }
+
 
   const handelChangeSelect = (e) => {
     const { name, value } = e;
@@ -46,14 +73,22 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
     }))
   }
 
-  const handleSubmit = () => {
-    enterLoading(1)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if (!user?.profileId || !user.businessId || !user?.headcount || !user?.countryId || !user?.stateId || !user?.cityId) {
+      return notify('error', 'Please fill all the details');
+    }
+    // enterLoading(1)
 
     apiProvider.createJob(user)
       .then(res => {
-        exitLoading(1)
+        // exitLoading(1)
         if (res.isSuccess) {
-          navigate(`/job/progress/${res.data?._id}`)
+          // navigate(`/job/progress/${res.data?._id}`)
+          showModal()
+          setCreatedJob(res.data)
           return notify('success', 'job created successfully');
         } else {
           throw res.message;
@@ -69,17 +104,8 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const getBasicData = async () => {
-    const [data1, data2, data3, data4, data5] = await Promise.all([
-      apiProvider.getProfile()
-        .then(res => {
-          const arr = res.data?.map(i => ({
-            label: i?.title,
-            value: i?._id
-          }))
-          return arr;
-        })
-        .catch(err => (console.log(err)))
-      ,
+    const [data2, data3] = await Promise.all([
+
       apiProvider.getBusiness()
         .then(res => {
           const arr = res.data?.map(i => ({
@@ -99,43 +125,117 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
           return arr;
         })
         .catch(err => { console.log(err); return null })
-      ,
-      apiProvider.getState()
-        .then(res => {
-          const arr = res.data?.map(i => ({
-            label: i?.name,
-            value: i?._id
-          }))
-          return arr;
-        })
-        .catch(err => (console.log(err)))
-      ,
-      apiProvider.getCity()
-        .then(res => {
-          const arr = res.data?.map(i => ({
-            label: i?.name,
-            value: i?._id
-          }))
-          return arr;
-        })
-        .catch(err => (console.log(err)))
     ])
 
-    setProfileOpt(data1);
-    setBussinessOpt(data2)
+    setBusinessOpt(data2)
     setCountryOpt(data3)
-    setStateOpt(data4)
-    setCityOpt(data5)
   }
 
+
+  const getStateOpt = async (country) => {
+    apiProvider.getState(`?country=${country}`)
+      .then(res => {
+        const arr = res.data?.map(i => ({
+          label: i?.name,
+          value: i?._id
+        }))
+        setStateOpt(arr)
+      })
+      .catch(err => (console.log(err)))
+  }
+
+
+  const getCityOpt = async (state) => {
+    apiProvider.getCity(`?state=${state}`)
+      .then(res => {
+        const arr = res.data?.map(i => ({
+          label: i?.name,
+          value: i?._id
+        }))
+
+        setCityOpt(arr)
+
+      })
+      .catch(err => (console.log(err)))
+  }
+
+  const getProfileOpt = async (band, department) => {
+    apiProvider.getProfile(`?band=${band}&departmentId=${department}`)
+      .then(res => {
+        const arr = res.data?.map(i => ({
+          label: i?.title,
+          value: i?._id
+        }))
+        setProfileOpt(arr)
+      })
+      .catch(err => (console.log(err)))
+
+  }
+
+
+  const getDepartmentOpt = async (id) => {
+
+  }
+
+
   useEffect(() => {
+    getProfileOpt()
     getBasicData()
   }, [])
 
 
 
+  useEffect(() => {
+    if (user?.countryId) {
+      getStateOpt(user?.countryId)
+    }
+  }, [user?.countryId])
+
+
+
+  useEffect(() => {
+    if (user?.stateId) {
+      getCityOpt(user?.stateId)
+    }
+  }, [user?.stateId])
+
+
+
+
+  const getEmployee = () => {
+    return localStorage.getItem(storageConstant.EMPLOYEE) ? JSON.parse(localStorage.getItem(storageConstant.EMPLOYEE)) : null
+  }
+  const getBand = () => {
+    return localStorage.getItem(storageConstant.BAND) ? JSON.parse(localStorage.getItem(storageConstant.BAND)) : null
+  }
+
+  const [employee, setEmployee] = useState(getEmployee())
+  const [band, setBand] = useState(getBand())
+  const [businessId, setBusinessId] = useState(employee?.businessId || null)
+
+
+  useEffect(() => {
+    if (employee?.departmentId || band) {
+      setUser(prev => ({ ...prev, "businessId": employee.businessId }))
+      getProfileOpt(band, employee?.departmentId)
+    }
+  }, [employee?.departmentId, band])
+
+
+
   return (
     <div className='flex w-full relative min-h-[80vh]'>
+      <Modal title="Basic Modal" open={isModalOpen} footer={null} onCancel={handleCancel}>
+        <h6 className='text-center font-semibold text-[20px]'>Job ID : {createdJob?.jobId}</h6>
+
+        <p className='text-center mt-[20px]'>Note: Keep a note of this JOB ID for your future refernece.</p>
+
+        <div className='mt-[30px] justify-center flex gap-3 py-3'>
+          <Button title="Close" className="w-[100px] font-semibold" onClick={() => handleCancel()} />
+          <Button type='2' title="View Jobs" onClick={() => navigate("/recruitment/view-job")} className="w-[100px] font-semibold" />
+        </div>
+      </Modal>
+
       <div className=' h-auto w-full flex'>
         <Card className='min-h-full h-full w-full relative px-6 flex flex-col'>
           <BackButton onClick={() => navigate(-1)} />
@@ -155,19 +255,26 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
                 <Select
                   label="Business"
                   name="businessId"
-                  options={bussinessOpt}
+                  value={businessId}
+                  options={businessOpt}
                   onChange={handelChangeSelect}
+                  disabled={businessId ? true : false}
                 />
               </div>
+              <div className='col-span-4'></div>
               <div className="lg:col-span-4 sm:col-span-6 col-span-12">
                 <Input
-                  label="Number of Openings"
-                  name="numberOfOpenings"
-                  value={user?.numberOfOpenings}
+                  label="Headcount"
+                  name="headcount"
+                  value={user?.headcount}
                   onChange={handleChange}
                   placeholder="Please fill the details"
                 />
               </div>
+              <div className='col-span-4'></div>
+
+              <div className='col-span-4'></div>
+
               <div className="lg:col-span-4 sm:col-span-6 col-span-12">
                 <Select
                   label="Country"
@@ -195,7 +302,7 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
             </div>
           </div>
           <div className='mt-auto flex gap-3 py-3'>
-            <Button loading={loadings[1]} title="Submit" onClick={() => handleSubmit()} className=' ' />
+            <Button loading={loadings[1]} title="Submit" onClick={(e) => handleSubmit(e)} className=' ' />
             <Button type='2' title="Cancel" className='' />
           </div>
 

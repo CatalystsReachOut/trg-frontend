@@ -8,6 +8,8 @@ import Select from '../../../components/Select/Select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+// import Button from '../../../components/Button/Button'
+
 
 const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
@@ -68,30 +70,17 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const getData = () => {
-    enterLoading(2)
     apiProvider.getCity()
       .then(res => {
-        // const arr = []
-        // for (const i of res.data) {
-        //   const obj = {
-        //     key: i._id,
-        //     name: i.name,
-        //     state: state?.map(s=>s?.value==i?.state)?.label,
-        //     country: country?.map(s=>s?.value==i?.country)?.label
-        //   }
-        //   arr.push(obj)
-        // }
         setData(res.data)
-        return exitLoading(2)
       })
       .catch(err => {
         console.log(err)
-        exitLoading(2)
       })
   }
 
   const getAllData = async () => {
-    const [data1, data2] = await Promise.all([
+    const [data1] = await Promise.all([
       apiProvider.getCountry()
         .then(res => {
           const arr = res.data?.map(data => ({
@@ -102,23 +91,25 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         })
         .catch(err => {
           console.log(err)
-        }),
-      apiProvider.getState()
-        .then(res => {
-          const arr = res.data?.map(data => ({
-            value: data._id,
-            label: data.name
-          }))
-          return arr
         })
-        .catch(err => {
-          console.log(err)
-        }),
     ])
 
     setCountryOptions(data1);
-    setStateOptions(data2)
 
+  }
+
+  const getStateOpt = async (id) => {
+    apiProvider.getState(`?country=${id}`)
+      .then(res => {
+        const arr = res.data?.map(data => ({
+          value: data._id,
+          label: data.name
+        }))
+        setStateOptions(arr)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   const handleSubmit = () => {
@@ -158,6 +149,11 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
     getData();
   }, [])
 
+  useEffect(() => {
+    if (city?.country) {
+      getStateOpt(city?.country)
+    }
+  }, [city?.country])
 
   return (
     <div>

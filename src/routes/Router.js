@@ -57,6 +57,7 @@ import * as storageConstants from "../utils/storageConstants"
 // NavData
 
 import { defaultNavbarData, adminNavbarData } from "../../src/components/Navbar/nav.js"
+import JobDescription from '../pages/Recruitment/Master/JobDescription';
 
 const Router = () => {
 
@@ -130,6 +131,8 @@ const Router = () => {
         <Route exact path={ROUTES.Recruitment.Master.State} element={<RouteWithRole Element={RecMasterState} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.WorkType} element={<RouteWithRole Element={RecMasterWorkType} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.WorkShift} element={<RouteWithRole Element={RecMasterWorkShift} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.JobDescription} element={<RouteWithRole Element={JobDescription} />}></Route>
+
 
 
         //// Create Job /////
@@ -142,6 +145,7 @@ const Router = () => {
 
       //profile
         <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>
+        
 
       //JobSeeker
         <Route exact path={'/aa'} element={<RouteWithRole Element={JobSeekerProfile} />}></Route>

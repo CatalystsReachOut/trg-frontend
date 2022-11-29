@@ -59,30 +59,24 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
   const getData = () => {
-    enterLoading(2)
+    // enterLoading(2)
     apiProvider.getState()
       .then(res => {
         if (res.isSuccess) {
           const arr = res.data
-          // .map(i => ({
-          //   id: i?._id,
-          //   name: i?.name,
-          //   country: country?.find(s => s?.value == i?.country)?.label,
-          //   status: i?.status
-          // }))
           setData(arr)
         }
-        return exitLoading(2)
+        // return exitLoading(2)
       })
       .catch(err => {
         console.log(err)
-        return exitLoading(2)
+        // return exitLoading(2)
 
       })
   }
 
   const getAllData = async () => {
-    enterLoading(2)
+    // enterLoading(2)
     await apiProvider.getCountry()
       .then(res => {
         const arr = res.data?.map(i => ({
@@ -94,7 +88,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
       .catch(err => {
         console.log(err)
       })
-    exitLoading(2)
+    // exitLoading(2)
   }
 
   const handleSubmit = () => {

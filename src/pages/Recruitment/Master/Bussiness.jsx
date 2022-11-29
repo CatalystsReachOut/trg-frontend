@@ -95,7 +95,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const getData = () => {
-    enterLoading(2)
+    // enterLoading(2)
     apiProvider.getBusiness()
       .then(res => {
 
@@ -107,11 +107,11 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
           }))
           setProfileData(arr)
         }
-        return exitLoading(2)
+        // return exitLoading(2)
       })
       .catch(err => {
         console.log(err)
-        return exitLoading(2)
+        // return exitLoading(2)
 
       })
   }

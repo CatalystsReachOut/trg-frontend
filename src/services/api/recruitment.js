@@ -21,8 +21,8 @@ export const getBusinessById = (id) => {
 
 
 // City
-export const getCity = () => {
-    return apiProvider.getAll(apiConstant.City)
+export const getCity = (query) => {
+    return apiProvider.getAll(apiConstant.City, query)
 }
 
 export const createCity = (data) => {
@@ -102,8 +102,8 @@ export const getRoundById = (id) => {
 
 
 // State
-export const getState = () => {
-    return apiProvider.getAll(apiConstant.State)
+export const getState = (query) => {
+    return apiProvider.getAll(apiConstant.State, query)
 }
 
 export const createState = (data) => {
@@ -146,8 +146,8 @@ export const updateJobById = (id, data) => {
 }
 
 // Profile
-export const getProfile = () => {
-    return apiProvider.getAll(apiConstant.Profile)
+export const getProfile = (query) => {
+    return apiProvider.getAll(apiConstant.Profile, query)
 }
 
 export const createProfile = (data) => {

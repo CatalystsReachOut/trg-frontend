@@ -31,7 +31,7 @@ const Jobs = ({ data }) => {
 
     const items = [
         {
-            label: <Link className='px-2' to={data?.approver_1?.status=='PENDING'?`${ROUTES.Recruitment.Approval1}/${data?._id}`:data?.approver_2?.status=='PENDING'?`${ROUTES.Recruitment.Approval2}/${data?._id}`:data?.approver_3?.status=='PENDING'?`${ROUTES.Recruitment.Approval3}/${data?._id}`:data?.approver_4?.status=='PENDING'?`${ROUTES.Recruitment.Approval4}/${data?._id}`:`/job/progress/${data?._id}`}>Edit</Link>,
+            label: <Link className='px-2' to={`/recruitment/job/${data?._id}`}>Edit</Link>,
             key: '0',
         },
         {

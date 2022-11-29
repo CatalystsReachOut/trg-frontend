@@ -17,30 +17,30 @@ const Select = (props) => {
         disabled,
         defaultValue,
         placeholder
-    } = props;  
+    } = props;
 
-    
-  return (
-    <div className={`custom-select w-full flex flex-col gap-2.5 ${className}`}>
-        <label className={`text-base px-2 ${labelClassName}`} htmlFor="">{label}</label>
-        <Sel
-            className={`text-sm px-2 outline-0 ${selectClassName}`}
-            options={options}
-            onChange={(p,e)=>{
-                onChange({...p,name:e.name})
-            }}
-            defaultValue={options?.find(s=>s.value==defaultValue)}
-            name={name}
-            isDisabled={disabled}
-            placeholder={placeholder}
-            selelcted={defaultValue}
-        />
-    </div>
-  )
+
+    return (
+        <div className={`custom-select w-full flex flex-col gap-2.5 ${className}`}>
+            <label className={`text-base px-2 ${labelClassName}`} htmlFor="">{label}</label>
+            <Sel
+                className={`text-sm px-2 outline-0 ${selectClassName}`}
+                options={options}
+                onChange={(p, e) => {
+                    onChange({ ...p, name: e.name })
+                }}
+                value={options?.find(s => (s.value == value))}
+                name={name}
+                isDisabled={disabled}
+                placeholder={placeholder}
+                selelcted={defaultValue}
+            />
+        </div>
+    )
 }
 
-Select.defaultProps={
-    label:'Default Label',
+Select.defaultProps = {
+    label: 'Default Label',
 }
 
 export default Select

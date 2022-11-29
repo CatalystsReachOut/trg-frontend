@@ -12,9 +12,11 @@ export const ROUTES = {
             Bussiness: '/recruitment/master/bussiness',
             WorkType: '/recruitment/master/work-type',
             WorkShift: '/recruitment/master/work-shift',
+            JobDescription : '/recruitment/master/job-description'
         },
         CreateJob: '/recruitment/create-job',
         Job: '/recruitment/job',
+        
         ViewJobs: '/recruitment/view-job',
         TrackJobProgrees: '/recruitment/track-job',
         Profile: '/recruitment/profile',

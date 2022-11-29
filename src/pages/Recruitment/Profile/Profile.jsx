@@ -34,8 +34,8 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
             }
         },
         {
-            title: "Level",
-            dataIndex: "level",
+            title: "Band",
+            dataIndex: "band",
             sorter: {
                 compare: Sorter.DEFAULT,
                 multiple: 1
@@ -45,7 +45,12 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
         {
             title: "Reports To",
             dataIndex: "reportProfile",
-            render: (_, { reportProfile }) => (<> {profileData.find(item => item.value === reportProfile)?.label} </>)
+            render: (_, { reportProfile }) => (<> {profileData.find(item => item.value === reportProfile)?.label || "null"} </>)
+        },
+        {
+            title: "Department",
+            dataIndex: "departmentId",
+            render: (_, { departmentId }) => (<> {departmentData.find(item => item.value === departmentId)?.label || "null"} </>)
         },
         {
             title: "Action",
@@ -78,55 +83,56 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
     ])
 
     const [profileData, setProfileData] = useState([])
+    const [departmentData, setDepartmentData] = useState([])
+
 
 
 
     const [data, setData] = useState([]);
 
 
-    const getData = () => {
+    const getData = async () => {
         // enterLoading(2)
-        apiProvider.getProfile()
-            .then(res => {
-                if (res.isSuccess) {
-                    setData(res.data)
-                    const arr = res.data.map(data => ({
-                        value: data._id,
-                        label: data.title
-                    }))
-                    setProfileData(arr)
-                    // exitLoading(2)
-                }
-            })
-            .catch(err => {
-                console.log(err)
-                // exitLoading(2)
-            })
+        const [data1, data2] = await Promise.all([
+            apiProvider.getProfile()
+                .then(res => {
+                    if (res.isSuccess) {
+                        setData(res.data)
+                        const arr = res.data.map(data => ({
+                            value: data._id,
+                            label: data.title
+                        }))
+                        return arr
+
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    return null
+                }),
+
+            apiProvider.getDepartment()
+                .then(res => {
+                    if (res.isSuccess) {
+                        const arr = res.data.map(data => ({
+                            value: data._id,
+                            label: data.name
+                        }))
+                        return arr
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    return null
+                }),
+
+
+        ])
+        setProfileData(data1)
+        setDepartmentData(data2)
     }
 
 
-    const getDataum = () => {
-        console.log('hello')
-        enterLoading(2)
-        return apiProvider.getProfile()
-            .then(res => {
-
-                if (res.isSuccess) {
-                    setData(res.data)
-                    const arr = res.data.map(data => ({
-                        value: data._id,
-                        label: data.title
-                    }))
-                    setProfileData(arr)
-                }
-                return exitLoading(2)
-            })
-            .catch(err => {
-                console.log(err)
-                return exitLoading(2)
-
-            })
-    }
 
     const handleSubmit = () => {
 
@@ -212,10 +218,10 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                     </div>
                     <div className="col-span-1">
                         <Input
-                            label={'Level'}
-                            placeHolder={'Enter Level Name'}
-                            name="level"
-                            value={user?.level}
+                            label={'Band'}
+                            placeHolder={'Enter Band'}
+                            name="band"
+                            value={user?.band}
                             onChange={handleChange}
                         />
                     </div>
@@ -226,6 +232,17 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             options={profileData}
                             name="reportProfile"
                             value={user?.reportProfile}
+                            onChange={handelChangeSelect}
+                        >
+                        </Select>
+                    </div>
+
+                    <div className="col-span-1">
+                        <Select
+                            label="Department"
+                            options={departmentData}
+                            name="departmentId"
+                            value={user?.departmentId}
                             onChange={handelChangeSelect}
                         >
                         </Select>

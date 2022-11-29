@@ -115,6 +115,11 @@ export const adminNavbarData = [
                         route: ROUTES.Recruitment.Master.WorkShift,
                         type: stat
                     },
+                    {
+                        title: 'Job Description',
+                        route: ROUTES.Recruitment.Master.JobDescription,
+                        type: stat
+                    },
                 ]
             },
         ]

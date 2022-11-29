@@ -12,7 +12,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [user, setUser] = useState({
     name: "",
-    description:''
+    description: ''
   })
   const columns = [
     {
@@ -52,22 +52,21 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const getData = () => {
-    enterLoading(2)
+    // enterLoading(2)
     apiProvider.getDepartment()
       .then(res => {
         console.log(res.data);
-          setData(res.data)
-          const arr = res.data.map(data => ({
-            value: data._id,
-            label: data.title
-          }))
-          setProfileData(arr)
-        return exitLoading(2)
+        setData(res.data)
+        const arr = res.data.map(data => ({
+          value: data._id,
+          label: data.title
+        }))
+        setProfileData(arr)
+        // return exitLoading(2)
       })
       .catch(err => {
         console.log(err)
-        return exitLoading(2)
-
+        // return exitLoading(2)
       })
   }
 
@@ -95,7 +94,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
   const clearData = () => {
     setUser({
       name: '',
-      description:''
+      description: ''
     })
   }
 
@@ -132,7 +131,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
           <Button
             title="Add Department"
             className={'min-w-[100px]'}
-            onClick={() => {handleSubmit(user)}}
+            onClick={() => { handleSubmit(user) }}
             loading={loadings[1]}
           />
         </div>
@@ -140,7 +139,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
       <Card className={'mt-3'}>
         <div className="font-bold my-3">
-            Department
+          Department
         </div>
         <Table loading={loadings[2]} columns={columns} dataSource={data} />
       </Card>

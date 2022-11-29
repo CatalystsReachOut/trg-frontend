@@ -40,7 +40,7 @@ export const get = (resource, id) => {
 
 export const put = (resource, id, model) => {
   return axios
-    .put(`${BASE_URL}${resource}${id}`, model, { headers: headers })
+    .put(`${BASE_URL}${resource}/${id}`, model, { headers: headers })
     .then(handleResponse)
     .catch(handleError);
 };

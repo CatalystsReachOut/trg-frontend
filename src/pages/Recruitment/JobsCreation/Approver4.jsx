@@ -11,8 +11,9 @@ import TextArea from '../../../components/Input/TextArea'
 import { useNavigate, useParams } from 'react-router-dom'
 import * as apiProvider from './../../../services/api/recruitment'
 import { useEffect } from 'react'
+import * as sessionStorage from '../../../utils/storageConstants'
 
-const Apprver4 = () => {
+const Apprver4 = ({ notify }) => {
 
   const navigate = useNavigate()
 
@@ -38,7 +39,7 @@ const Apprver4 = () => {
   const [workShiftOpt, setWorkShiftOpt] = useState([])
 
   const [data, setData] = useState()
-
+  const [userId, setUserId] = useState(JSON.parse(localStorage.getItem(sessionStorage.USER_ID)))
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,7 +70,14 @@ const Apprver4 = () => {
           country: res.data.job.countryId,
           state: res.data.job.stateId,
           city: res.data.job.cityId,
-          status: res.data.job.status
+          status: res.data.job.status,
+          remarks1: res.data.job.approver1?.remarks,
+          remarks2: res.data.job.approver2?.remarks,
+          remarks3: res.data.job.approver3?.remarks,
+          remarks4: res.data.job.approver4?.remarks,
+          eligibilty: res.data.job.eligibilty,
+          workTypeId: res.data.job.workTypeId,
+          workShiftId: res.data.job.workShiftId
         })
       })
       .catch(err => {
@@ -159,23 +167,66 @@ const Apprver4 = () => {
     setWorkShiftOpt(data6)
     setWorkTypeOpt(data7)
 
+    getData()
+
   }
 
 
-  const updateJob = async () => {
-    apiProvider.updateJobById(id, user)
+  const updateJob = async (status) => {
+
+    let obj = {}
+
+    switch (status) {
+      case "PENDING":
+        obj = {
+          status: "APPROVED1", approver_1: {
+            id: userId,
+            status: "APPROVED",
+            approved_at: new Date(),
+            remarks: user?.remarks1
+          }
+        }
+        break;
+      case "APPROVED1":
+
+        obj = {
+          status: "APPROVED2", approver_2: {
+            id: userId,
+            status: "APPROVED",
+            approved_at: new Date(),
+            remarks: user?.remarks2
+          }
+        }
+        break;
+      case "APPROVED2":
+        obj = {
+          status: "APPROVED3", approver_3: {
+            id: userId,
+            status: "APPROVED",
+            approved_at: new Date(),
+            remarks: user?.remarks3
+          }
+        }
+        break;
+      case "APPROVED3":
+        obj = {
+          status: "APPROVED", approver_4: {
+            id: userId,
+            status: "APPROVED",
+            approved_at: new Date(),
+            remarks: user?.remarks4
+          }
+        }
+        break;
+    }
+
+    apiProvider.updateJobById(id, { ...user, ...obj })
       .then(res => {
-        console.log(res.data.job);
-        setData(res.data.job)
-        setUser({
-          profile: res.data.job.profileId,
-          bussiness: res.data.job.businessId,
-          openings: res.data.job.numberOfOpenings,
-          country: res.data.job.countryId,
-          state: res.data.job.stateId,
-          city: res.data.job.cityId,
-          status: res.data.job.status
-        })
+        if (res.isSuccess) {
+          console.log(res.data);
+          getData()
+          return notify('success', 'Update Success');
+        }
       })
       .catch(err => {
         console.log(err);
@@ -183,7 +234,7 @@ const Apprver4 = () => {
   }
 
   useEffect(() => {
-    getData()
+    // getData()
     getBasicData()
   }, [])
 
@@ -201,6 +252,7 @@ const Apprver4 = () => {
                 name='profile'
                 options={profileOpt}
                 defaultValue={user?.profile}
+                value={user?.profile}
                 disabled
                 onChange={handelChangeSelect}
               />
@@ -210,7 +262,7 @@ const Apprver4 = () => {
                 label="Bussiness"
                 name="bussiness"
                 options={bussinessOpt}
-                defaultValue={user?.bussiness}
+                value={user?.bussiness}
                 onChange={handelChangeSelect}
                 disabled
               />
@@ -229,7 +281,7 @@ const Apprver4 = () => {
                 label="Country"
                 name="country"
                 options={countryOpt}
-                defaultValue={user?.country}
+                value={user?.country}
                 onChange={handelChangeSelect}
                 disabled
               />
@@ -239,7 +291,7 @@ const Apprver4 = () => {
                 label="State"
                 name="state"
                 options={stateOpt}
-                defaultValue={user?.state}
+                value={user?.state}
                 onChange={handelChangeSelect}
                 disabled
               />
@@ -249,7 +301,7 @@ const Apprver4 = () => {
                 label="City"
                 name="city"
                 options={cityOpt}
-                defaultValue={user?.city}
+                value={user?.city}
                 onChange={handelChangeSelect}
                 disabled
               />
@@ -261,23 +313,25 @@ const Apprver4 = () => {
             <div className="form-child">
               <TextArea
                 label="Remarks"
-                name="eligibility"
-                placeHolder="Enter Eligibility Criteria"
+                name="remarks1"
+                placeHolder="Enter Remarks"
+                value={user?.remarks1}
                 onChange={handleChange}
+                disabled={user?.status == "PENDING" ? false : true}
               />
             </div>
           </div>
 
           {
-            user?.status == ("APPROVER1" || "APPROVER2" || "APPROVER3") ? <>
+            user?.status === "APPROVED1" || user?.status === "APPROVED2" || user?.status === "APPROVED3" || user?.status === "APPROVED" ? <>
               <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR Manager</h6>
-
 
               <div className='form-parent mt'>
                 <div className="form-child">
                   <TextArea
                     label="Eligibility Criteria"
                     name="eligibility"
+                    value={user?.eligibilty}
                     placeHolder="Enter Eligibility Criteria"
                     onChange={handleChange}
                   />
@@ -285,7 +339,8 @@ const Apprver4 = () => {
                 <div className="form-child">
                   <Select
                     label="Work Type"
-                    name="work_type"
+                    name="workTypeId"
+                    value={user?.workTypeId}
                     options={workTypeOpt}
                     onChange={handelChangeSelect}
                   />
@@ -293,7 +348,8 @@ const Apprver4 = () => {
                 <div className="form-child">
                   <Select
                     label="Work Shift"
-                    name="work_shift"
+                    name="workShiftId"
+                    value={user?.workShiftId}
                     options={workShiftOpt}
                     onChange={handelChangeSelect}
                   />
@@ -301,7 +357,8 @@ const Apprver4 = () => {
                 <div className="form-child">
                   <TextArea
                     label="Remark"
-                    name="remark"
+                    name="remark2"
+                    value={user?.remark2}
                     placeHolder="Enter Remark"
                     onChange={handleChange}
                   />
@@ -309,7 +366,7 @@ const Apprver4 = () => {
               </div>
 
               {
-                user?.status == ("APPROVER2" || "APPROVER3") ? <>
+                user?.status == "APPROVED2" || user?.status === "APPROVED3" || user?.status === "APPROVED" ? <>
 
                   <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
 
@@ -350,7 +407,7 @@ const Apprver4 = () => {
                   </div>
 
                   {
-                    user?.status == ("APPROVER2" || "APPROVER3") ? <>
+                    user?.status == "APPROVED3" || user?.status === "APPROVED" ? <>
                       <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR HEAD</h6>
 
                       <div className="form-parent mt-4">
@@ -382,16 +439,6 @@ const Apprver4 = () => {
 
 
         </div>
-        {/* <div className="grid grid-cols-2 gap-3 mt-7">
-          <div className="sm:col-span-1 col-span-2">
-            <div className="max-w-[400px]">
-              
-            </div>
-          </div>
-          <div className="sm:col-span-1 col-span-2">
-
-          </div>
-        </div> */}
         <div className='mt-[60px] flex gap-3 py-3'>
           <Button title="Approve" className='' onClick={() => updateJob(user?.status)} />
           <Button type='2' title="Reject" className='' />

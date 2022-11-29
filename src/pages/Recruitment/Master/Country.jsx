@@ -11,19 +11,19 @@ import * as apiProvider from '../../../services/api/recruitment'
 const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [country, setCountry] = useState({
-    name:'',
-    code:''
+    name: '',
+    code: ''
   })
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
-    setCountry(prev=>({
+    const { name, value } = e.target;
+    setCountry(prev => ({
       ...prev,
-      [name]:value
+      [name]: value
     }))
   }
 
- 
+
 
   const columns = [
     {
@@ -48,103 +48,102 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
   ];
 
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
   const [profileData, setProfileData] = useState([])
 
   const getData = () => {
-    enterLoading(2)
+    // enterLoading(2)
     apiProvider.getCountry()
-        .then(res => {
-  
-            if (res.isSuccess) {
-              setData(res.data)
-                const arr = res.data.map(data => ({
-                    value: data._id,
-                    label: data.title
-                }))
-                setProfileData(arr)
-            }
-            return exitLoading(2)
-        })
-        .catch(err => {
-            console.log(err)
-            return exitLoading(2)
-  
-        })
+      .then(res => {
+
+        if (res.isSuccess) {
+          setData(res.data)
+          const arr = res.data.map(data => ({
+            value: data._id,
+            label: data.title
+          }))
+          setProfileData(arr)
+        }
+        // return exitLoading(2)
+      })
+      .catch(err => {
+        console.log(err)
+        // return exitLoading(2)
+      })
   }
-  
+
   const handleSubmit = () => {
-  
+
     enterLoading(1)
     return apiProvider.createCountry(country)
-        .then(res => {
-            exitLoading(1)
-            if (res.isSuccess) {
-                clearData()
-                getData()
-                return notify('success', 'added success');
-            } else {
-                return notify('error', res.message);
-            }
-        })
-        .catch(err => {
-            console.log(err)
-            exitLoading(1)
-            return notify('error', err.message);
-        })
+      .then(res => {
+        exitLoading(1)
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          return notify('success', 'added success');
+        } else {
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        exitLoading(1)
+        return notify('error', err.message);
+      })
   }
-  
+
   const clearData = () => {
     setCountry({
-      name:"",
-      code:""
+      name: "",
+      code: ""
     })
   }
-  
+
   useEffect(() => {
     getData();
   }, [])
-  
+
 
   return (
     <div>
-        <Card>
-          <div className='font-bold'> Add Country </div>
-          <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
-            <div className="col-span-1">
-              <Input
+      <Card>
+        <div className='font-bold'> Add Country </div>
+        <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
+          <div className="col-span-1">
+            <Input
               label={'Country'}
-              placeHolder = {'Enter Country Name'}
-              value = {country?.name}
-              name ={'name'}
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'Country Code'}
-              placeHolder = {'Enter Country Code'}
-              value = {country?.code}
-              name ={'code'}
-              onChange = {handleChange}
-              />
-            </div>
-          </div>
-          <div className="flex justify-end mt-3">
-            <Button 
-            title="Add Country" 
-            className={'min-w-[100px]'}
-            onClick={handleSubmit}
+              placeHolder={'Enter Country Name'}
+              value={country?.name}
+              name={'name'}
+              onChange={handleChange}
             />
           </div>
-        </Card>
-
-        <Card className={'mt-3'}>
-          <div className="font-bold my-3">
-            Country
+          <div className="col-span-1">
+            <Input
+              label={'Country Code'}
+              placeHolder={'Enter Country Code'}
+              value={country?.code}
+              name={'code'}
+              onChange={handleChange}
+            />
           </div>
-          <Table columns={columns} dataSource={data}/>
-        </Card>
+        </div>
+        <div className="flex justify-end mt-3">
+          <Button
+            title="Add Country"
+            className={'min-w-[100px]'}
+            onClick={handleSubmit}
+          />
+        </div>
+      </Card>
+
+      <Card className={'mt-3'}>
+        <div className="font-bold my-3">
+          Country
+        </div>
+        <Table columns={columns} dataSource={data} />
+      </Card>
     </div>
   )
 }

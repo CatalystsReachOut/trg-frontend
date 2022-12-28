@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
 import Card from '../../../components/Card/Card'
@@ -7,6 +8,7 @@ import Input from '../../../components/Input/Input'
 import Select from '../../../components/Select/Select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
+import { ROUTES } from '../../../routes/RouterConfig'
 import * as apiProvider from '../../../services/api/recruitment'
 // import Button from '../../../components/Button/Button'
 
@@ -154,9 +156,55 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
       getStateOpt(city?.country)
     }
   }, [city?.country])
+  
+
+
+
+  const navigate = useNavigate();
+
+  
+  const changeRoute = (id) => {
+    switch (id?.value) {
+      case 'country':
+        navigate(ROUTES.Recruitment.Master.Country);
+        break;
+      case 'state':
+        navigate(ROUTES.Recruitment.Master.State);
+        break;
+
+    }
+  }
+
+  const selectData = [
+    {
+      label: 'Country',
+      value: 'country'
+    },
+    {
+      label: 'State',
+      value: 'state'
+    },
+    {
+      label: 'City',
+      value: 'city'
+    }
+  ]
 
   return (
     <div>
+
+      <Card className={'mb-[20px]'}>
+        <Select
+          className="w-[30%]"
+          label="Select"
+          options={selectData}
+          name="Select"
+          value={"city"}
+          onChange={(e) => changeRoute(e)}
+        >
+        </Select>
+
+      </Card>
       <Card>
         <div className='font-bold'> Add City </div>
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>

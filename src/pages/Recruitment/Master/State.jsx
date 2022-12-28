@@ -8,6 +8,8 @@ import Table from '../../../components/Table/Table'
 import Select from '../../../components/Select/Select'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+import { ROUTES } from '../../../routes/RouterConfig'
+import { useNavigate } from 'react-router-dom'
 
 const State = ({ notify, enterLoading, exitLoading, loadings }) => {
 
@@ -126,8 +128,55 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
   }, [])
 
 
+  useEffect(() => {
+    getData();
+  }, [])
+
+  const navigate = useNavigate();
+
+  const changeRoute = (id) => {
+    switch (id?.value) {
+      case 'country':
+        navigate(ROUTES.Recruitment.Master.Country);
+        break;
+      case 'city':
+        navigate(ROUTES.Recruitment.Master.City);
+        break;
+
+    }
+  }
+
+  const selectData = [
+    {
+      label: 'Country',
+      value: 'country'
+    },
+    {
+      label: 'State',
+      value: 'state'
+    },
+    {
+      label: 'City',
+      value: 'city'
+    }
+  ]
+
   return (
     <div>
+
+      <Card className={'mb-[20px]'}>
+        <Select
+          className="w-[30%]"
+          label="Select"
+          options={selectData}
+          name="Select"
+          value={"state"}
+          onChange={(e) => changeRoute(e)}
+        >
+        </Select>
+
+      </Card>
+
       <Card>
         <div className='font-bold'> Add State </div>
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>

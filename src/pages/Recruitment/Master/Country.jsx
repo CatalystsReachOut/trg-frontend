@@ -7,6 +7,9 @@ import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+import Select from '../../../components/Select/Select'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { ROUTES } from '../../../routes/RouterConfig'
 
 const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
 
@@ -104,9 +107,49 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
     getData();
   }, [])
 
+  const navigate = useNavigate();
+
+  const changeRoute = (id) => {
+    switch (id?.value) {
+      case 'state':
+        navigate(ROUTES.Recruitment.Master.State);
+        break;
+      case 'city':
+        navigate(ROUTES.Recruitment.Master.City);
+        break;
+
+    }
+  }
+
+  const selectData = [
+    {
+      label: 'Country',
+      value: 'country'
+    },
+    {
+      label: 'State',
+      value: 'state'
+    },
+    {
+      label: 'City',
+      value: 'city'
+    }
+  ]
 
   return (
     <div>
+      <Card className={'mb-[20px]'}>
+        <Select
+          className="w-[30%]"
+          label="Select"
+          options={selectData}
+          name="Select"
+          value={"country"}
+          onChange={(e) => changeRoute(e)}
+        >
+        </Select>
+
+      </Card>
       <Card>
         <div className='font-bold'> Add Country </div>
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>

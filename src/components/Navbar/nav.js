@@ -1,5 +1,7 @@
 import { FiHome, FiUser } from "react-icons/fi";
+import { Link } from "react-router-dom";
 import { ROUTES } from "../../routes/RouterConfig";
+
 
 const stat = 's'
 const drop = 'd'
@@ -35,93 +37,88 @@ export const defaultNavbarData = [
 
 export const adminNavbarData = [
     {
-        title: 'Home',
         route: ROUTES.Home,
-        type: stat,
+        label: "Home",
+        key: 'home',
+        children: [],
         icon: <FiHome />
     },
 
     {
-        title: 'Recruitment',
-        type: drop,
+        label: "Master",
+        key: 'master',
         icon: <FiUser />,
-        data: [
+        children: [
             {
-                title: 'Profile',
+                label: <Link to={ROUTES.Recruitment.Master.Bussiness} > Business </Link>,
+                route: ROUTES.Recruitment.Master.Bussiness,
+                key: 'bussiness',
+            },
+            {
+                label: <Link to={ROUTES.Recruitment.Master.Country} > Business Location </Link>,
+                route: ROUTES.Recruitment.Master.Country,
+                key: 'bussiness location',
+            },
+            {
+                label: <Link to={ROUTES.Recruitment.Master.Department} > Department </Link>,
+                route: ROUTES.Recruitment.Master.Department,
+                key: 'department',
+            }
+
+        ]
+    },
+    {
+        label: 'Recruitment',
+        key: 'recruitment',
+        icon: <FiUser />,
+        children: [
+            {
+                label: <Link to={ROUTES.Recruitment.Master.Profile} > Profile </Link>,
                 route: ROUTES.Recruitment.Profile,
-                type: stat
+                key: 'profile',
             },
             {
-                title: 'Create Job',
+                label: <Link to={ROUTES.Recruitment.Master.CreateJob} >Create job</Link>,
                 route: ROUTES.Recruitment.CreateJob,
-                type: stat
+                key: 'createjob',
             },
             {
-                title: 'View Jobs',
+                label: <Link to={ROUTES.Recruitment.Master.ViewJobs} > View Jobs </Link>,
                 route: ROUTES.Recruitment.ViewJobs,
-                type: stat
+                key: 'viewjobs',
+            },
+
+            {
+                label: <Link to={ROUTES.Recruitment.Master.QuestionBank} > Question Bank </Link>,
+                route: ROUTES.Recruitment.Master.QuestionBank,
+                key: 'questionbank',
             },
             {
-                title: 'Master',
-                type: drop,
-                data: [
-                    {
-                        title: 'Bussiness',
-                        route: ROUTES.Recruitment.Master.Bussiness,
-                        type: stat
-                    },
-                    {
-                        title: 'City',
-                        route: ROUTES.Recruitment.Master.City,
-                        type: stat
-                    },
-                    {
-                        title: 'State',
-                        route: ROUTES.Recruitment.Master.State,
-                        type: stat
-                    },
-                    {
-                        title: 'Country',
-                        route: ROUTES.Recruitment.Master.Country,
-                        type: stat
-                    },
-                    {
-                        title: 'Department',
-                        route: ROUTES.Recruitment.Master.Department,
-                        type: stat
-                    },
-                    {
-                        title: 'Rounds',
-                        route: ROUTES.Recruitment.Master.Rounds,
-                        type: stat
-                    },
-                    {
-                        title: 'Interview Rounds',
-                        route: ROUTES.Recruitment.Master.InterviewRounds,
-                        type: stat
-                    },
-                    {
-                        title: 'Question Bank',
-                        route: ROUTES.Recruitment.Master.QuestionBank,
-                        type: stat
-                    },
-                    {
-                        title: 'Work Type',
-                        route: ROUTES.Recruitment.Master.WorkType,
-                        type: stat
-                    },
-                    {
-                        title: 'Work Shift',
-                        route: ROUTES.Recruitment.Master.WorkShift,
-                        type: stat
-                    },
-                    {
-                        title: 'Job Description',
-                        route: ROUTES.Recruitment.Master.JobDescription,
-                        type: stat
-                    },
-                ]
+                label: <Link to={ROUTES.Recruitment.Master.Rounds} > Rounds </Link>,
+                route: ROUTES.Recruitment.Master.Rounds,
+                key: 'rounds',
             },
+
+            {
+                label: <Link to={ROUTES.Recruitment.Master.InterviewRounds} > Interview Rounds </Link>,
+                route: ROUTES.Recruitment.Master.InterviewRounds,
+                key: 'interviewrounds',
+            },
+            {
+                label: <Link to={ROUTES.Recruitment.Master.JobDescription} > Job Description </Link>,
+                route: ROUTES.Recruitment.Master.JobDescription,
+                key: 'jobdescription',
+            },
+            {
+                label: <Link to={ROUTES.Recruitment.Master.WorkType} > WorkType </Link>,
+                route: ROUTES.Recruitment.Master.WorkType,
+                key: 'worktype',
+            },
+            {
+                label: 'Work Shift',
+                route: ROUTES.Recruitment.Master.WorkShift,
+                key: 'workshift',
+            }
         ]
     }
 

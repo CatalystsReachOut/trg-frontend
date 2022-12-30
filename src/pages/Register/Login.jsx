@@ -62,7 +62,7 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     return (
         <>
-        <div className='font-medium text-[2rem] leading-[2.5rem]'>Personnel Sign in</div>
+        <div className='font-medium text-2xl leading-[2.5rem]'>Personal Sign in</div>
                 
         <Inputfield 
         prefix={<MdEmail/>} 
@@ -77,12 +77,12 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
         handleState = {handlePasswordState}
         />
 
-        <Link to="/forgotpassword" className='capitalize font-medium text-ternary leading-[19px] self-end mt-[0.5rem] hover:underline'>forget password ?</Link>
+        <Link to="/forgotpassword" className='capitalize font-medium text-ternary leading-[19px] self-end mt-[0.5rem] hover:underline'>Forgot password ?</Link>
 
          <SubmitButton label="sign in" handleEvent = {handleSubmit} />
 
-        <div className='text-Small/Title/Small text-black/50 self-center'>Looking for a job? 
-        <Link to = "/signup" className='text-ternary hover:underline'> Signup </Link>
+        <div className='text-Small/Title/Small text-black/50 text-lg self-center'>Looking for a job? 
+        <Link to = "/signup" className='text-ternary text-lg hover:underline'> Signup </Link>
         </div>
            
         </>

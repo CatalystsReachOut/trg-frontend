@@ -1,10 +1,10 @@
 export const ROUTES = {
-    User:{
-    Login: '/login',
-    SignUp : '/signup',
-    ForgotPassword : '/forgotpassword',
-    OTP:'/reset-otp',
-    Reset : '/resetpassword'
+    User: {
+        Login: '/login',
+        SignUp: '/signup',
+        ForgotPassword: '/forgotpassword',
+        OTP: '/reset-otp',
+        Reset: '/resetpassword'
     },
     Recruitment: {
         Master: {
@@ -18,7 +18,7 @@ export const ROUTES = {
             Bussiness: '/recruitment/master/bussiness',
             WorkType: '/recruitment/master/work-type',
             WorkShift: '/recruitment/master/work-shift',
-            JobDescription : '/recruitment/master/job-description'
+            JobDescription: '/recruitment/master/job-description'
         },
         CreateJob: '/recruitment/create-job',
         Job: '/recruitment/job',
@@ -32,5 +32,12 @@ export const ROUTES = {
         progress: '/job/progress'
     },
     Home: '/',
-    About: '/about'
+    About: '/about',
+    Profile:{
+        Initial:{
+            Root:'/new-user',
+            Registration:'registration',
+            VerifyOTP:'verify-otp',
+        }
+    }
 }

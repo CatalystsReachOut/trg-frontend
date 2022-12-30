@@ -12,7 +12,7 @@ const Container = () => {
         <>
        
         <div className='flex justify-center items-center min-h-screen'>
-            <div className='flex justify-center rounded-lg shadow-lg'>
+            <div className='flex justify-center rounded-lg'>
                 <div className=' -z-[1] bg-[#0E223D] min-h-[90vh] w-[400px] rounded-lg translate-x-[100px]'>
                     <img src={Raichand} alt="Company logo" className='w-[8rem] mt-[2.5rem] ml-[2.5rem]'/>
                 </div>

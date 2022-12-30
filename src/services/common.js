@@ -1,4 +1,5 @@
 import * as storageConstants from '../utils/storageConstants.js';
+import imgError from "../assets/images/logo/trg-black.png"
 
 
 export function storeLocalData(type, name, data) {
@@ -16,3 +17,6 @@ export function storeLocalData(type, name, data) {
     }
 
 }
+
+
+export const fallBackImage = imgError;

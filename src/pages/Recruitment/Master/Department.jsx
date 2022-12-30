@@ -7,6 +7,11 @@ import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+import ReactQuill from 'react-quill';
+import { BsThreeDots } from "react-icons/bs"
+import { Switch, Dropdown } from 'antd';
+
+
 
 const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
@@ -14,6 +19,21 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
     name: "",
     description: ''
   })
+
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setUser(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      // setBusiness(data.find(item => item._id === key[1]))
+    }
+  };
+
   const columns = [
     {
       title: "WorkShift",
@@ -28,9 +48,21 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
       dataIndex: "description"
     },
     {
-      title: "Action",
-      dataIndex: "status"
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
     },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
 
 
@@ -91,6 +123,29 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
+
+  const handleEdit = () => {
+
+    // enterLoading(1)
+    // return apiProvider.editDepartment(user?._id, user)
+    //   .then(res => {
+    //     if (res.isSuccess) {
+    //       clearData()
+    //       getData()
+    //       setEdit(false)
+    //       return notify('success', 'added success');
+    //     } else {
+    //       setEdit(false)
+    //       return notify('error', res.message);
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+
+    //     return notify('error', err.message);
+    //   })
+  }
+
   const clearData = () => {
     setUser({
       name: '',
@@ -117,14 +172,12 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
               onChange={handleChange}
             />
           </div>
-          <div className="col-span-1">
-            <Input
-              label={'Description'}
-              placeHolder={'Enter Description'}
-              name="description"
-              value={user?.description}
-              onChange={handleChange}
-            />
+
+          <div className="col-span-3">
+            <label htmlFor="" className={`text-base px-2  mb-[10px]`}>Enter Description</label>
+
+            <ReactQuill className='px-2 min-h-[100px]' label={"description"} theme="snow" value={user?.description} onChange={(e) => setUser((prev) => ({ ...prev, "description": e }))} />
+
           </div>
         </div>
         <div className="flex justify-end mt-3">

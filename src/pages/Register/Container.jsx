@@ -11,8 +11,8 @@ const Container = () => {
     return (
         <>
        
-        <div className='relative flex ml-[40%] items-center min-h-screen'>
-            <div className='absolute  -z-[1] right-[85%]  bg-[#0E223D] h-[90vh] w-[400px] rounded-lg'>
+        <div className='relative flex ml-[50%] items-center min-h-screen'>
+            <div className='absolute  -z-[1] ml-[-15rem]  bg-[#0E223D] h-[90vh] w-[400px] rounded-lg'>
 
             <img src={Raichand} alt="Company logo" className='w-[10rem] mt-[2.5rem] ml-[2.5rem]'/>
             </div>

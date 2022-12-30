@@ -108,8 +108,8 @@ export default function Navbar({ navbarData }) {
               }
             })
           } */}
-        <div className='d-[flex] items-center justify-center'>
-          <Menu className='w-[100%] bg-transparent text-white'  selectedKeys={['mail']} mode="horizontal" items={navbarData} />
+        <div className='flex w-[100%] items-center justify-center'>
+          <Menu className='w-[100%] bg-transparent text-white' selectedKeys={['mail']} mode="horizontal" items={navbarData} />
 
         </div>
 

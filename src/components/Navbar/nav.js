@@ -9,7 +9,7 @@ const drop = 'd'
 export const defaultNavbarData = [
     {
         title: 'Home',
-        route: ROUTES.Home,
+        route: ROUTES?.Home,
         type: stat,
         icon: <FiHome />
     },
@@ -21,12 +21,12 @@ export const defaultNavbarData = [
         data: [
             {
                 title: 'Create Job',
-                route: ROUTES.Recruitment.CreateJob,
+                route: ROUTES?.Recruitment?.CreateJob,
                 type: stat
             },
             {
                 title: 'View Jobs',
-                route: ROUTES.Recruitment.ViewJobs,
+                route: ROUTES?.Recruitment?.ViewJobs,
                 type: stat
             }
         ]
@@ -37,7 +37,7 @@ export const defaultNavbarData = [
 
 export const adminNavbarData = [
     {
-        route: ROUTES.Home,
+        route: ROUTES?.Home,
         label: "Home",
         key: 'home',
         children: [],
@@ -50,18 +50,18 @@ export const adminNavbarData = [
         icon: <FiUser />,
         children: [
             {
-                label: <Link to={ROUTES.Recruitment.Master.Bussiness} > Business </Link>,
-                route: ROUTES.Recruitment.Master.Bussiness,
+                label: <Link to={ROUTES?.Recruitment?.Master?.Bussiness || "#"} > Business </Link>,
+                route: ROUTES?.Recruitment?.Master?.Bussiness,
                 key: 'bussiness',
             },
             {
-                label: <Link to={ROUTES.Recruitment.Master.Country} > Business Location </Link>,
-                route: ROUTES.Recruitment.Master.Country,
+                label: <Link to={ROUTES?.Recruitment?.Master?.Country || "#"} > Business Location </Link>,
+                route: ROUTES?.Recruitment?.Master?.Country,
                 key: 'bussiness location',
             },
             {
-                label: <Link to={ROUTES.Recruitment.Master.Department} > Department </Link>,
-                route: ROUTES.Recruitment.Master.Department,
+                label: <Link to={ROUTES?.Recruitment?.Master?.Department || "#"} > Department </Link>,
+                route: ROUTES?.Recruitment?.Master?.Department,
                 key: 'department',
             }
 
@@ -73,50 +73,50 @@ export const adminNavbarData = [
         icon: <FiUser />,
         children: [
             {
-                label: <Link to={ROUTES.Recruitment.Master.Profile} > Profile </Link>,
-                route: ROUTES.Recruitment.Profile,
+                label: <Link to={ROUTES?.Recruitment?.Profile || "#"} > Profile </Link>,
+                route: ROUTES?.Recruitment.Profile,
                 key: 'profile',
             },
             {
-                label: <Link to={ROUTES.Recruitment.Master.CreateJob} >Create job</Link>,
-                route: ROUTES.Recruitment.CreateJob,
+                label: <Link to={ROUTES?.Recruitment?.CreateJob || "#"} >Create job</Link>,
+                route: ROUTES?.Recruitment.CreateJob,
                 key: 'createjob',
             },
             {
-                label: <Link to={ROUTES.Recruitment.Master.ViewJobs} > View Jobs </Link>,
-                route: ROUTES.Recruitment.ViewJobs,
+                label: <Link to={ROUTES?.Recruitment?.ViewJobs || "#"} > View Jobs </Link>,
+                route: ROUTES?.Recruitment.ViewJobs,
                 key: 'viewjobs',
             },
 
             {
-                label: <Link to={ROUTES.Recruitment.Master.QuestionBank} > Question Bank </Link>,
-                route: ROUTES.Recruitment.Master.QuestionBank,
+                label: <Link to={ROUTES?.Recruitment?.Master?.QuestionBank || "#"} > Question Bank </Link>,
+                route: ROUTES?.Recruitment?.Master?.QuestionBank,
                 key: 'questionbank',
             },
             {
-                label: <Link to={ROUTES.Recruitment.Master.Rounds} > Rounds </Link>,
-                route: ROUTES.Recruitment.Master.Rounds,
+                label: <Link to={ROUTES?.Recruitment?.Master?.Rounds || "#"} > Rounds </Link>,
+                route: ROUTES?.Recruitment?.Master?.Rounds,
                 key: 'rounds',
             },
 
             {
-                label: <Link to={ROUTES.Recruitment.Master.InterviewRounds} > Interview Rounds </Link>,
-                route: ROUTES.Recruitment.Master.InterviewRounds,
+                label: <Link to={ROUTES?.Recruitment?.Master?.InterviewRounds || "#"} > Interview Rounds </Link>,
+                route: ROUTES?.Recruitment?.Master?.InterviewRounds,
                 key: 'interviewrounds',
             },
             {
-                label: <Link to={ROUTES.Recruitment.Master.JobDescription} > Job Description </Link>,
-                route: ROUTES.Recruitment.Master.JobDescription,
+                label: <Link to={ROUTES?.Recruitment?.Master?.JobDescription || "#"} > Job Description </Link>,
+                route: ROUTES?.Recruitment?.Master?.JobDescription,
                 key: 'jobdescription',
             },
             {
-                label: <Link to={ROUTES.Recruitment.Master.WorkType} > WorkType </Link>,
-                route: ROUTES.Recruitment.Master.WorkType,
+                label: <Link to={ROUTES?.Recruitment?.Master?.WorkType || "#"} > Work Shift </Link>,
+                route: ROUTES?.Recruitment?.Master?.WorkType,
                 key: 'worktype',
             },
             {
-                label: 'Work Shift',
-                route: ROUTES.Recruitment.Master.WorkShift,
+                label: <Link to={ROUTES?.Recruitment?.Master?.WorkShift || "#"} > Work Shift</Link>,
+                route: ROUTES?.Recruitment?.Master?.WorkShift,
                 key: 'workshift',
             }
         ]

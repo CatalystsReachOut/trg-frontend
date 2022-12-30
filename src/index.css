@@ -6,6 +6,7 @@
 @layer base{
   :root{
     --grey-black : #00000080;
+    box-sizing: border-box;
   }
 }
 
@@ -22,4 +23,9 @@
     .form-child{
       @apply lg:col-span-4 sm:col-span-6 col-span-12;
     }
+
+    .pin-field {
+      @apply w-[3rem] h-[3rem] text-center text-2xl shadow-inset border-[#EBEAED] border-[1px] border-solid ;
+  }
+  
   }

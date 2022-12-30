@@ -1,0 +1,7 @@
+.ant-input-affix-wrapper > .ant-input:not(textarea){
+    background-color: #f8f8f8;
+}
+
+.ant-input-affix-wrapper{
+    border-radius: 10px;
+}

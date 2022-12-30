@@ -8,12 +8,16 @@ module.exports = {
       animation: {
         fade: 'fadeOut 5s ease-in-out',
       },
+      boxShadow:{
+        'inset' :  'inset 1px 1px 4px rgba(0, 0, 0, 0.25)'
+      },
       colors:{
         primary: '#EFE8E3',
         primary10: '#E3EBF1',
         secondary: '#F1C40F',
+        ternary:"#19435d",
         fourth:'var(--grey-black)',
-        white10:'#F5F5F5'
+        white10:'#F5F5F5',
       },
       fontSize: {
         'Medium+/Display/Large': ['64px', {

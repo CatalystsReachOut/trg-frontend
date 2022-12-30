@@ -37,6 +37,7 @@ import RecCreateJobApp4 from './../pages/Recruitment/JobsCreation/Approver4'
 import RecCreateJobProgrss from './../pages/Recruitment/JobsCreation/Progress'
 import Footer from '../components/Footer/Footer';
 import Login from '../pages/Register/Login';
+import SignUp from '../pages/Register/SignUp';
 import Jobs from '../pages/Recruitment/Jobs/Jobs';
 import Profile from '../pages/Recruitment/Profile/Profile';
 
@@ -58,6 +59,10 @@ import * as storageConstants from "../utils/storageConstants"
 
 import { defaultNavbarData, adminNavbarData } from "../../src/components/Navbar/nav.js"
 import JobDescription from '../pages/Recruitment/Master/JobDescription';
+import ForgotPassword from '../pages/Register/ForgotPassword';
+import Otp from '../pages/Register/Otp';
+import ResetPassword from '../pages/Register/ResetPassword';
+import Container from '../pages/Register/Container';
 
 const Router = () => {
 
@@ -115,7 +120,16 @@ const Router = () => {
   return (
     <div>
       <Routes>
-        <Route exact path={ROUTES.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+
+        <Route element={<Container/>}>
+
+        <Route index exact path={ROUTES.User.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+        <Route exact path={ROUTES.User.SignUp} element={<SignUp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+        <Route exact path={ROUTES.User.ForgotPassword} element={<ForgotPassword loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+        <Route exact path={ROUTES.User.OTP} element={<Otp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+        <Route exact path={ROUTES.User.Reset} element={<ResetPassword loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+        </Route>
+        
         <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
         <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
 

@@ -1,5 +1,11 @@
 export const ROUTES = {
+    User:{
     Login: '/login',
+    SignUp : '/signup',
+    ForgotPassword : '/forgotpassword',
+    OTP:'/reset-otp',
+    Reset : '/resetpassword'
+    },
     Recruitment: {
         Master: {
             Rounds: '/recruitment/master/rounds',

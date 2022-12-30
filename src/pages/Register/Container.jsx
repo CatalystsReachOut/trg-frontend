@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar } from 'antd';
+import Raichand  from '../../assets/images/footerlogo.png' 
 
 import './fieldstyles.css'
 
@@ -11,10 +11,10 @@ const Container = () => {
     return (
         <>
        
-        <div className='flex items-center justify-center min-h-screen'>
-            <div className='absolute right-[60%] bg-[#0E223D] h-[90vh] w-[30vw] rounded-lg'>
+        <div className='relative flex ml-[40%] items-center min-h-screen'>
+            <div className='absolute  -z-[1] right-[85%]  bg-[#0E223D] h-[90vh] w-[400px] rounded-lg'>
 
-            <Avatar size={56} className=" ml-[10%] mt-[10%] " icon={<UserOutlined />} />
+            <img src={Raichand} alt="Company logo" className='w-[10rem] mt-[2.5rem] ml-[2.5rem]'/>
             </div>
             <div className="relative  z-10 flex flex-col w-[50vw] max-w-md px-4 py-8 bg-white rounded-lg shadow-2xl shadow-gray-600/50 dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10 min-h-[80vh]">
 

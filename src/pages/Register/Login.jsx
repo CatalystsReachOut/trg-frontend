@@ -25,8 +25,9 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     const handleSubmit = (e) => {
 
-
+        
         e.preventDefault()
+        console.log(email,password)
         enterLoading(1)
 
         apiProvider.loginUser({ email, password })
@@ -55,6 +56,9 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
             })
     }
 
+    const handleEmailState = (e) => setEmail(e.target.value);
+    const handlePasswordState = (e) => setPassword(e.target.value);
+
 
     return (
         <>
@@ -64,13 +68,18 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
         prefix={<MdEmail/>} 
         placeholder="Enter Email" 
         type="email" 
+        value={email}
+        handleState = {handleEmailState}
         label="email"/>
                 
-        <Password />
+        <Password 
+        value={password}
+        handleState = {handlePasswordState}
+        />
 
         <Link to="/forgotpassword" className='capitalize font-medium text-ternary leading-[19px] self-end mt-[0.5rem] hover:underline'>forget password ?</Link>
 
-         <SubmitButton label="sign in"/>
+         <SubmitButton label="sign in" handleEvent = {handleSubmit} />
 
         <div className='text-Small/Title/Small text-black/50 self-center'>Looking for a job? 
         <Link to = "/signup" className='text-ternary hover:underline'> Signup </Link>

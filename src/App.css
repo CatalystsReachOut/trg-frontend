@@ -11,3 +11,7 @@
 .ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
     border: none !important;
 }
+
+.ant-switch-checked {
+    background-color: #F1C40F !important;
+ }

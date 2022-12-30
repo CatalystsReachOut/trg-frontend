@@ -8,6 +8,12 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import TextArea from './../../../components/Input/TextArea'
 import * as apiProvider from '../../../services/api/recruitment'
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+import { Switch, Dropdown } from 'antd';
+
+import { BsThreeDots } from "react-icons/bs"
 
 const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [business, setBusiness] = useState({
@@ -20,8 +26,51 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
     description: ""
   })
 
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setBusiness(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      // setBusiness(data.find(item => item._id === key[1]))
+    }
+  };
+
+
+
+  const items = [{
+    label: 'Edit',
+    key: "edit"
+  }, {
+    label: 'Delete',
+    key: "delete"
+  }
+  ]
+
+
 
   const columns = [
+    {
+      title: "Sl no.",
+      dataIndex: "index",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 2
+      },
+      render: (value, item, index) => index + 1
+    },
+    {
+      title: "Business Logo",
+      dataIndex: "logo",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 1
+      }
+    },
     {
       title: "Business Name",
       dataIndex: "name",
@@ -38,14 +87,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
         multiple: 1
       }
     },
-    {
-      title: "Business Logo",
-      dataIndex: "logo",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
-      }
-    },
+
     {
       title: "Business URL",
       dataIndex: "url",
@@ -78,6 +120,21 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
         multiple: 1
       }
     },
+    {
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+    },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
 
 
   ];
@@ -138,12 +195,12 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
 
-  const handleEdit = (id) => {
+  const handleEdit = () => {
 
-    enterLoading(1)
-    return apiProvider.editBusiness(id, business)
+    // enterLoading(1)
+    return apiProvider.editBusiness(business?._id, business)
       .then(res => {
-        exitLoading(1)
+        // exitLoading(1)
         if (res.isSuccess) {
           clearData()
           getData()
@@ -154,7 +211,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
       .catch(err => {
         console.log(err)
-        exitLoading(1)
+        // exitLoading(1)
         return notify('error', err.message);
       })
   }
@@ -226,7 +283,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
               onChange={handleChange}
             />
           </div>
-          <div className="col-span-1">
+          <div className="col-span-3">
             <Input
               label={'Summary'}
               placeHolder={'Summary'}
@@ -235,23 +292,35 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
               onChange={handleChange}
             />
           </div>
-          <div className="col-span-1">
-            <TextArea
+          <div className="col-span-3">
+            <label htmlFor="" className={`text-base px-2  mb-[10px]`}>Description</label>
+
+            <ReactQuill className='px-2 min-h-[100px]' label={"description"} theme="snow" value={business?.description} onChange={(e) => setBusiness((prev) => ({ ...prev, "description": e }))} />
+            {/* <TextArea
               label={'Description'}
               placeHolder={'Description'}
               value={business?.description}
               name="description"
               onChange={handleChange}
-            />
+            /> */}
           </div>
         </div>
         <div className="flex justify-end mt-3">
-          <Button
-            loading={loadings[1]}
-            title="Add Business"
-            className={'min-w-[100px]'}
-            onClick={handleSubmit}
-          />
+          {
+            edit ?
+              <Button
+                loading={loadings[1]}
+                title="Update Business"
+                className={'min-w-[100px]'}
+                onClick={handleEdit}
+              /> : <Button
+                loading={loadings[1]}
+                title="Add Business"
+                className={'min-w-[100px]'}
+                onClick={handleSubmit}
+              />
+          }
+
         </div>
       </Card>
       <Card className={'mt-3'}>

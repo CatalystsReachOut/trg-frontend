@@ -8,7 +8,7 @@ const Stat = ({data}) => {
     const navigate = useNavigate()
 
   return (
-    <Menu.Item key="mail" className='flex items-center border-0 text-[white]'>
+    <Menu.Item  className='flex items-center border-0 text-[white]'>
         <div className='flex items-center gap-2 text-white' onClick={() => { navigate(data?.route) }}>
            {data?.icon} {data?.title}
         </div>

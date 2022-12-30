@@ -47,7 +47,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const getData = () => {
-    enterLoading(2)
+    // enterLoading(2)
     apiProvider.getWorkShift()
       .then(res => {
 
@@ -59,21 +59,21 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
           }))
           setProfileData(arr)
         }
-        return exitLoading(2)
+        // return exitLoading(2)
       })
       .catch(err => {
         console.log(err)
-        return exitLoading(2)
+        // return exitLoading(2)
 
       })
   }
 
   const handleSubmit = () => {
 
-    enterLoading(1)
+    // enterLoading(1)
     return apiProvider.createWorkShift(user)
       .then(res => {
-        exitLoading(1)
+        // exitLoading(1)
         if (res.isSuccess) {
           clearData()
           getData()
@@ -84,7 +84,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
       .catch(err => {
         console.log(err)
-        exitLoading(1)
+        // exitLoading(1)
         return notify('error', err.message);
       })
   }

@@ -97,7 +97,8 @@ const Router = () => {
 
     const [auth, setAuth] = useState(JSON.parse(localStorage.getItem(storageConstants.AUTH)))
     const [role, setRole] = useState(JSON.parse(localStorage.getItem(storageConstants.USER_ROLE)))
-    const [redirect, setRedirect] = "/login?redirect=" + window.location.pathname;
+    const [redirect, setRedirect] = "/login"
+    // ?redirect=" + window.location.pathname;
 
 
     return (
@@ -134,7 +135,6 @@ const Router = () => {
 
         /////////////////// Recruitment //////////////////////
         // Master
-
         <Route exact path={ROUTES.Recruitment.Master.Rounds} element={<RouteWithRole Element={RecMasterRound} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.Bussiness} element={<RouteWithRole Element={RecMasterBussiness} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.City} element={<RouteWithRole Element={RecMasterCity} />}></Route>
@@ -159,7 +159,7 @@ const Router = () => {
 
       //profile
         <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>
-        
+
 
       //JobSeeker
         <Route exact path={'/aa'} element={<RouteWithRole Element={JobSeekerProfile} />}></Route>

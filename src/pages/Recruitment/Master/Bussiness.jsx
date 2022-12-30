@@ -14,6 +14,7 @@ import 'react-quill/dist/quill.snow.css';
 import { Switch, Dropdown } from 'antd';
 
 import { BsThreeDots } from "react-icons/bs"
+import { fallBackImage, onImageError } from '../../../services/common'
 
 const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [business, setBusiness] = useState({
@@ -69,7 +70,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
-      }
+      },
+      render: (logo) => <img src={logo ?? fallBackImage} alt="logo" width={100} />
     },
     {
       title: "Business Name",
@@ -200,18 +202,19 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
     // enterLoading(1)
     return apiProvider.editBusiness(business?._id, business)
       .then(res => {
-        // exitLoading(1)
         if (res.isSuccess) {
           clearData()
           getData()
+          setEdit(false)
           return notify('success', 'added success');
         } else {
+          setEdit(false)
           return notify('error', res.message);
         }
       })
       .catch(err => {
         console.log(err)
-        // exitLoading(1)
+
         return notify('error', err.message);
       })
   }

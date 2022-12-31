@@ -1,17 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
-*{
+
+* {
     font-family: 'Manrope', sans-serif;
 }
 
-.ant-menu-submenu-title{
+.ant-menu-submenu-title {
     display: flex !important;
     align-items: center;
 }
 
-.ant-menu-horizontal, .ant-menu-item::after, .ant-menu-submenu::after {
+.ant-menu-horizontal,
+.ant-menu-item::after,
+.ant-menu-submenu::after {
     border: none !important;
 }
 
 .ant-switch-checked {
     background-color: #F1C40F !important;
- }
+}
+
+
+
+/* Interview Round */
+
+.interview_round_modal .ant-btn,
+.interview_round_modal .ant-btn-primary {
+    color: black !important;
+    border: solid 1px  var(--grey-black);
+}
+
+.interview_round_modal .ant-btn-primary{
+    background-color: #EFE8E3;
+}
+
+.interview_round_modal .ant-btn-primary:hover{
+    background-color: #F1C40F;
+    color: #fff !important;
+}

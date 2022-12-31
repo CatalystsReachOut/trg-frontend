@@ -74,8 +74,8 @@ export const getInterviewRoundsById = (id) => {
 }
 
 // QuestionBank
-export const getQuestionBank = () => {
-    return apiProvider.getAll(apiConstant.QuestionBank)
+export const getQuestionBank = (e) => {
+    return apiProvider.getAll(apiConstant.QuestionBank, e)
 }
 
 export const createQuestionBank = (data) => {

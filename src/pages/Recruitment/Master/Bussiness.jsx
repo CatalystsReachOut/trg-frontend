@@ -238,7 +238,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   return (
     <div>
       <Card>
-        <div className='font-bold'> Add Business </div>
+        <div className='font-bold'>Add Business </div>
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
           <div className="col-span-1">
             <Input
@@ -287,25 +287,15 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
             />
           </div>
           <div className="col-span-3">
-            <Input
-              label={'Summary'}
-              placeHolder={'Summary'}
-              value={business?.summary}
-              name="summary"
-              onChange={handleChange}
-            />
+            <label htmlFor="" className={`text-base px-2  mb-[10px]`}>Summary</label>
+
+            <ReactQuill className='px-2 min-h-[100px]' label={"summary"} theme="snow" value={business?.summary} onChange={(e) => setBusiness((prev) => ({ ...prev, "summary": e }))} />
           </div>
           <div className="col-span-3">
             <label htmlFor="" className={`text-base px-2  mb-[10px]`}>Description</label>
 
             <ReactQuill className='px-2 min-h-[100px]' label={"description"} theme="snow" value={business?.description} onChange={(e) => setBusiness((prev) => ({ ...prev, "description": e }))} />
-            {/* <TextArea
-              label={'Description'}
-              placeHolder={'Description'}
-              value={business?.description}
-              name="description"
-              onChange={handleChange}
-            /> */}
+
           </div>
         </div>
         <div className="flex justify-end mt-3">

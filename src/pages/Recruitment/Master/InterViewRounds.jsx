@@ -8,14 +8,53 @@ import Select from '../../../components/Select/Select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+import { BsThreeDots } from "react-icons/bs"
+
+import { Modal, Switch, Dropdown } from 'antd'
+
 
 const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [user, setUser] = useState({
-    name:"",
-    profile:"",
-    noOfRound:"",
-    noOfQuestion:""
+    name: "",
+    profile: "",
+    noOfRound: "",
+    noOfQuestion: ""
   })
+
+
+
+  const columnsQues = [
+    {
+      title: "Action",
+      dataIndex: "_id",
+      render: (_id) => (<Switch className='bg-[gray] mr-[10px]'
+        defaultChecked={false}
+        onChange={() => setQuestionData(questionData.map(item => {
+          if (item?._id == _id) {
+            item.checked = !item.checked
+            return { ...item }
+          } else {
+            return { ...item }
+          }
+        }))} />)
+    },
+    ,
+    {
+      title: "Question",
+      dataIndex: "question",
+    },
+
+    {
+      title: "Question Type",
+      dataIndex: "questionType",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 4
+      }
+    },
+
+
+  ];
 
 
   const columns = [
@@ -53,157 +92,342 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
   ];
 
+
+  ///////////////// ADD ROUND QUESTION //////////////////////
+
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      showModal()
+      setEdit(true)
+      setQuestionData(addedRoundData.find(item => item.round === key[1])?.question)
+
+    } else {  // delete
+      // setBusiness(data.find(item => item._id === key[1]))
+    }
+  };
+
+  const columnsAddedRound = [
+    {
+      title: "Round",
+      dataIndex: "round",
+      render: (round) => (<p>{roundData?.find(item => item.value == round)?.label}</p>)
+    },
+    {
+      title: "No of Question",
+      dataIndex: "question",
+      render: (question) => {
+        var subjective = 0;
+        var objective = 0;
+
+        for (var quest of question) {
+          if (quest.questionType == "Subjective") {
+            subjective++;
+          } else {
+            objective++;
+          }
+        }
+
+        return <>
+          <p>Subjective : {subjective}</p>
+          <p>Objective : {objective}</p>
+        </>
+      }
+    },
+    {
+      title: "Time (Minutes)",
+      dataIndex: 'time',
+      render: (time, data) => {
+        return <Input
+          label=""
+          placeHolder=""
+          type="number"
+          value={data?.time}
+          name="logo"
+          onChange={(e) => setAddedRoundData(addedRoundData.map(item => {
+            if (item.round == data.round) {
+              item.time = e.target.value
+              return { ...item }
+            } else {
+              return { ...item }
+            }
+          }))}
+        />
+      }
+    },
+    {
+      title: "Total Marks",
+      dataIndex: "marks",
+      render: (marks, data) => {
+        return <Input
+          label=""
+          placeHolder=""
+          type="text"
+          value={marks}
+          onChange={(e) => setAddedRoundData(addedRoundData.map(item => {
+            if (item.round == data.round) {
+              item.marks = e.target.value
+              return { ...item }
+            } else {
+              return { ...item }
+            }
+          }))}
+        />
+      }
+    },
+    {
+      title: "Action",
+      dataIndex: "round",
+      render: (id) => (<Dropdown
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
+  ]
+
   const [data, setData] = useState([
   ]);
 
   const [profileData, setProfileData] = useState([])
+  const [roundData, setRoundData] = useState([])
+  const [departmentData, setDepartmentData] = useState([])
+  const [questionData, setQuestionData] = useState([])
+
+  const [addedRoundData, setAddedRoundData] = useState([])
 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser(prev => ({
-        ...prev,
-        [name]: value
+      ...prev,
+      [name]: value
     }))
-}
+  }
 
-const handelChangeSelect = (e) => {
-  const { name, value } = e;
-  setUser(prev => ({
-    ...prev,
-    [name]: value
-  }))
-}
-
-const getBasicData = async() => {
- const [data1, data2] = await Promise.all([
-  apiProvider.getProfile()
-  .then(res=>{
-    const arr = res?.data?.map((i,key)=>({
-      label:i?.title,
-      value:i?._id
+  const handelChangeSelect = (e) => {
+    const { name, value } = e;
+    setUser(prev => ({
+      ...prev,
+      [name]: value
     }))
-    setProfileData(arr)
-  })
-  .catch(err=>{
-    console.log(err);
-  })
-  ,
-  apiProvider.getQuestionBank()
-  .then(res=>{
-    console.log(res);
-  })
-  .catch(err=>{
-    console.log(err);
-  })
- ])
-}
+  }
 
-const getData = () => {
-  // enterLoading(2)
-  apiProvider.getInterviewRounds()
+  const getBasicData = async () => {
+    const [data1, data2, data3] = await Promise.all([
+      apiProvider.getProfile()
+        .then(res => {
+          const arr = res?.data?.map((i, key) => ({
+            label: i?.title,
+            value: i?._id
+          }))
+          setProfileData(arr)
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      ,
+      // apiProvider.getQuestionBank()
+      apiProvider.getRound()
+        .then(res => {
+          const arr = res?.data?.map((i, key) => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          setRoundData(arr)
+        })
+        .catch(err => {
+          console.log(err);
+        }),
+
+      apiProvider.getDepartment()
+        .then(res => {
+          const arr = res?.data?.map((i, key) => ({
+            label: i?.name,
+            value: i?._id
+          }))
+          setDepartmentData(arr)
+        })
+        .catch(err => {
+          console.log(err);
+        })
+
+    ])
+  }
+
+  const getData = () => {
+    // enterLoading(2)
+    apiProvider.getInterviewRounds()
       .then(res => {
-              setData(res.data)
-          // return exitLoading(2)
+        setData(res.data)
+        // return exitLoading(2)
       })
       .catch(err => {
-          console.log(err)
-          // return exitLoading(2)
+        console.log(err)
+        // return exitLoading(2)
 
       })
-}
+  }
 
-const handleSubmit = () => {
-  // enterLoading(1)
-  return apiProvider.createInterviewRounds(user)
+  const handleSubmit = () => {
+    // enterLoading(1)
+    return apiProvider.createInterviewRounds(user)
       .then(res => {
-          // exitLoading(1)
-          if (res.isSuccess) {
-              clearData()
-              getData()
-              return notify('success', 'added success');
-          } else {
-              return notify('error', res.message);
-          }
+        // exitLoading(1)
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          return notify('success', 'added success');
+        } else {
+          return notify('error', res.message);
+        }
       })
       .catch(err => {
-          console.log(err)
-          // exitLoading(1)
-          return notify('error', err.message);
+        console.log(err)
+        // exitLoading(1)
+        return notify('error', err.message);
       })
-}
+  }
 
-const clearData = () => {
-  setUser({
-    profile:"",
-    noOfRound:"",
-    noOfQuestion:""
-  })
-}
+  const clearData = () => {
+    setUser({
+      profile: "",
+      noOfRound: "",
+      noOfQuestion: ""
+    })
+  }
 
-useEffect(() => {
-  getData();
-  getBasicData()
-}, [])
+  useEffect(() => {
+    getData();
+    getBasicData()
+  }, [])
+
+
+
+  //////////////////////// MODAL ////////////////////////
+
+  const addRound = () => {
+
+    setAddedRoundData([...addedRoundData, { round: user?.round, question: questionData.filter(item => item.checked == true), time: 0, marks: 0, disclaimer: '' }])
+  }
+
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    if (!user?.round) {
+      return notify('error', 'Please select round first');
+    }
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    addRound()
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+
+  const getQuestions = (e) => {
+    apiProvider.getQuestionBank(`?departmentName=${e}`).then(res => {
+      console.log(res);
+      for (var dat of res.data) {
+        dat.checked = false
+      }
+      setQuestionData(res?.data)
+    })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 
 
   return (
-    <div>
-        <Card>
-          <div className='font-bold'> Add Interview Round </div>
-          <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
+    <div className='interview_round'>
+      <Modal width={800} className="interview_round_modal" title="Interview Round" open={isModalOpen} onCancel={handleCancel} onOk={handleOk}>
+        <div className='grid grid-cols-1 lg:grid-cols-3 '>
           <div className="col-span-1">
-              <Input
-              label={'Name of Interview Round'}
-              placeHolder = {'Enter Name of Interview Round'}
-              name="name"
-              value = {user?.name}
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Select
-              label={'Profile'}
-              placeHolder = {'Profile'}
-              name="profile"
-              onChange = {handelChangeSelect}
-              options={profileData}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'No Of Round'}
-              placeHolder = {'Enter Number Of Round'}
-              name="noOfRound"
-              value = {user?.noOfRound}
-              onChange = {handleChange}
-              />
-            </div>
-            <div className="col-span-1">
-              <Input
-              label={'No Of Question'}
-              placeHolder = {'Enter Number Of Question'}
-              name="noOfQuestion"
-              value = {user?.noOfQuestion}
-              onChange = {handleChange}
-              />
-            </div>
-          </div>
-          <div className="flex justify-end mt-3">
-            <Button 
-            title="Add Interview Round" 
-            className={'min-w-[100px]'}
-            onClick={handleSubmit}
+            <Select
+              label={'Department'}
+              placeHolder={'Department'}
+              name="department"
+              onChange={(e) => getQuestions(e.value)}
+              options={departmentData}
             />
           </div>
-        </Card>
 
-        <Card className={'mt-3'}>
-          <div className="font-bold my-3">
-            Interview Rounds
+          <div className="col-span-3 h-[30px]"></div>
+
+          <div className="col-span-3">
+
+            <Table columns={columnsQues} dataSource={questionData} pagination={false} />
+
           </div>
-          <Table columns={columns} dataSource={data}/>
-        </Card>
+
+
+        </div>
+      </Modal>
+      <Card>
+        <div className='font-bold'> Add Interview Round </div>
+        <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
+          <div className="col-span-1">
+            <Select
+              label={'Profile'}
+              placeHolder={'Profile'}
+              name="profile"
+              onChange={handelChangeSelect}
+              options={profileData}
+            />
+          </div>
+
+          <div className="col-span-1">
+            <Select
+              label={'Round'}
+              placeHolder={'Round'}
+              name="round"
+              onChange={handelChangeSelect}
+              options={roundData}
+            />
+          </div>
+
+          <div className="col-span-1 flex items-end">
+            <Button
+              title="Fetch Question"
+              className={'min-w-[100px]'}
+              onClick={() => showModal()}
+            />
+          </div>
+
+          <div className="col-span-3 py-[20px]">
+            <Table columns={columnsAddedRound} dataSource={addedRoundData} pagination={false} />
+
+          </div>
+
+
+        </div>
+        <div className="flex justify-end mt-3">
+          <Button
+            title="Add Interview Round"
+            className={'min-w-[100px]'}
+            onClick={handleSubmit}
+          />
+        </div>
+      </Card>
+
+      <Card className={'mt-3'}>
+        <div className="font-bold my-3">
+          Interview Rounds
+        </div>
+        <Table columns={columns} dataSource={data} />
+      </Card>
     </div>
   )
 }

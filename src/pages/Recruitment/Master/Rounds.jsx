@@ -7,6 +7,9 @@ import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+import { BsThreeDots } from "react-icons/bs"
+import { Switch, Dropdown } from 'antd';
+
 
 const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
@@ -14,6 +17,20 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     name: ""
   })
 
+
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setRound(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      // setBusiness(data.find(item => item._id === key[1]))
+    }
+  };
 
 
   const columns = [
@@ -27,8 +44,15 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
     {
       title: "Action",
-      dataIndex: "action"
-    },
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+      className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
 
 
@@ -61,12 +85,12 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
       .then(res => {
 
         if (res.isSuccess) {
-          const arr = res?.data?.map((i,key)=>({
+          const arr = res?.data?.map((i, key) => ({
             ...i,
-            action:<Action
-                    handleClickDelete={handleDelete(i?.id)}
-                    handleClickEdit={handleEdit(i)}
-                    />
+            action: <Action
+              handleClickDelete={handleDelete(i?.id)}
+              handleClickEdit={handleEdit(i)}
+            />
           }))
           setData(arr)
         }
@@ -118,7 +142,7 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
           <div className="col-span-1">
             <Input
-              label={'Round'}
+              label={'Round Name'}
               placeHolder={'Enter Round Name'}
               name="name"
               value={round?.name}
@@ -127,12 +151,19 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
           </div>
         </div>
         <div className="flex justify-end mt-3">
-          <Button
-            title="Add Round"
-            className={'min-w-[100px]'}
-            onClick={() => handleSubmit(round)}
-            loading={loadings[1]}
-          />
+          {
+            edit ?
+              <Button
+                title="Update Round"
+                className={'min-w-[100px]'}
+                onClick={() => console.log(round)}
+                loading={loadings[1]}
+              /> : <Button
+                title="Add Round"
+                className={'min-w-[100px]'}
+                onClick={() => handleSubmit(round)}
+                loading={loadings[1]}
+              />}
         </div>
       </Card>
 

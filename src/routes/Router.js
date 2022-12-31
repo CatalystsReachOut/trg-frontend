@@ -59,10 +59,20 @@ import * as storageConstants from "../utils/storageConstants"
 
 import { defaultNavbarData, adminNavbarData } from "../../src/components/Navbar/nav.js"
 import JobDescription from '../pages/Recruitment/Master/JobDescription';
+
+
+////Registration
 import ForgotPassword from '../pages/Register/ForgotPassword';
 import Otp from '../pages/Register/Otp';
 import ResetPassword from '../pages/Register/ResetPassword';
 import Container from '../pages/Register/Container';
+
+
+
+//Initial Profile setup
+import ProfileInitContainer from '../pages/UserProfile/Container'
+import ProfileInitRegistration from './../pages/UserProfile/Register'
+import ProfileInitOTP from './../pages/UserProfile/OTPVerification'
 
 const Router = () => {
 
@@ -121,13 +131,21 @@ const Router = () => {
     <div>
       <Routes>
 
-        <Route element={<Container/>}>
 
-        <Route index exact path={ROUTES.User.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
-        <Route exact path={ROUTES.User.SignUp} element={<SignUp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
-        <Route exact path={ROUTES.User.ForgotPassword} element={<ForgotPassword loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
-        <Route exact path={ROUTES.User.OTP} element={<Otp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
-        <Route exact path={ROUTES.User.Reset} element={<ResetPassword loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+        //Register Routing
+        <Route element={<Container/>}>
+          <Route index exact path={ROUTES.User.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+          <Route exact path={ROUTES.User.SignUp} element={<SignUp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+          <Route exact path={ROUTES.User.ForgotPassword} element={<ForgotPassword loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+          <Route exact path={ROUTES.User.OTP} element={<Otp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+          <Route exact path={ROUTES.User.Reset} element={<ResetPassword loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+        </Route>
+
+
+        ///User Profile Initial Completion Routing
+        <Route path={ROUTES.Profile.Initial.Root} element={<ProfileInitContainer/>}>
+          <Route exact index path={ROUTES.Profile.Initial.Registration} element={<ProfileInitRegistration/>}/>
+          <Route exact index path={ROUTES.Profile.Initial.VerifyOTP} element={<ProfileInitOTP/>}/>
         </Route>
         
         <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>

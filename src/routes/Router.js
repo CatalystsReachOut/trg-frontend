@@ -73,6 +73,7 @@ import Container from '../pages/Register/Container';
 import ProfileInitContainer from '../pages/UserProfile/Container'
 import ProfileInitRegistration from './../pages/UserProfile/Register'
 import ProfileInitOTP from './../pages/UserProfile/OTPVerification'
+import ProfileInitBasic from './../pages/UserProfile/Basic'
 
 const Router = () => {
 
@@ -86,19 +87,19 @@ const Router = () => {
   const [loadings, setLoadings] = useState([]);
 
   const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
+    // setLoadings((prevLoadings) => {
+    //   const newLoadings = [...prevLoadings];
+    //   newLoadings[index] = true;
+    //   return newLoadings;
+    // });
   }
 
   const exitLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = false;
-      return newLoadings;
-    });
+    // setLoadings((prevLoadings) => {
+    //   const newLoadings = [...prevLoadings];
+    //   newLoadings[index] = false;
+    //   return newLoadings;
+    // });
   }
 
 
@@ -118,7 +119,7 @@ const Router = () => {
 
             <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
             <div className='container mx-auto p-[20px]  min-h-screen'>
-              <Element notify={notify} enterLoading={enterLoading} exitLoading={exitLoading} loadings={loadings} />
+              <Element notify={notify} loadings={loadings} />
             </div>
             <Footer />
           </div> : <Navigate replace to={redirect} />
@@ -145,10 +146,11 @@ const Router = () => {
         ///User Profile Initial Completion Routing
         <Route path={ROUTES.Profile.Initial.Root} element={<ProfileInitContainer/>}>
           <Route exact index path={ROUTES.Profile.Initial.Registration} element={<ProfileInitRegistration/>}/>
-          <Route exact index path={ROUTES.Profile.Initial.VerifyOTP} element={<ProfileInitOTP/>}/>
+          <Route exact path={ROUTES.Profile.Initial.VerifyOTP} element={<ProfileInitOTP/>}/>
         </Route>
+        <Route exact path={ROUTES.Profile.Initial.Basic} element={<ProfileInitBasic/>}/>
         
-        <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route>
+        {/* <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route> */}
         <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
 
         /////////////////// Recruitment //////////////////////

@@ -38,6 +38,7 @@ export const ROUTES = {
             Root:'/new-user',
             Registration:'registration',
             VerifyOTP:'verify-otp',
+            Basic:'basic',
         }
     }
 }

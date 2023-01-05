@@ -12,7 +12,6 @@ import { BsThreeDots } from "react-icons/bs"
 import { Switch, Dropdown } from 'antd';
 
 
-
 const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [user, setUser] = useState({

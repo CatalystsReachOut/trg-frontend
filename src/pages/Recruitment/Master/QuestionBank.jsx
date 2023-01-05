@@ -131,8 +131,9 @@ const QuestionBank = ({ notify }) => {
 
   const columns = [
     {
-      title: "Round",
-      dataIndex: "departmentName"
+      title: "Department Name",
+      dataIndex: "departmentName",
+      render: (data) => <p>{departmentOpt?.find(item => item.value == data)?.label}</p>
     },
     {
       title: "Question Type",
@@ -152,7 +153,15 @@ const QuestionBank = ({ notify }) => {
     },
     {
       title: "Options",
-      dataIndex: "options",
+      dataIndex: "optio",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 1
+      }
+    },
+    {
+      title: "Answer",
+      dataIndex: "correctAnswer",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1

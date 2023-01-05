@@ -15,6 +15,7 @@ import { Switch, Dropdown } from 'antd';
 
 import { BsThreeDots } from "react-icons/bs"
 import { fallBackImage, onImageError } from '../../../services/common'
+import { SearchOutlined } from '@ant-design/icons'
 
 const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [business, setBusiness] = useState({
@@ -36,8 +37,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       setEdit(true)
       setBusiness(data.find(item => item._id === key[1]))
 
-    } else {  // delete
-      // setBusiness(data.find(item => item._id === key[1]))
+    } else if (key[0] === "delete") {  // delete
+      handleDelete(data.find(item => item._id === key[1])?._id)
     }
   };
 
@@ -79,6 +80,27 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 2
+      },
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+        return <Input autofocus
+          label=""
+          placeHolder="Search Name"
+          value={selectedKeys[0]}
+          onChange={e => { setSelectedKeys(e.target.value ? [e.target.value] : []) }
+          }
+          onPressEnter={() => {
+            confirm()
+          }}
+          onBlur={() => {
+            confirm()
+          }}
+        ></Input>
+      },
+      filterIcon: () => {
+        return <SearchOutlined />
+      },
+      onFilter: (value, record) => {
+        return record.name.toLowerCase().includes(value.toLowerCase())
       }
     },
     {
@@ -96,7 +118,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
-      }
+      },
+      render: (url) => <a href={url} target="_blank" rel="noreferrer">{url}</a>
     },
     {
       title: "Business Code",
@@ -112,7 +135,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
-      }
+      },
+      render: (summary) => <div className="content max-h-[100px] overflow-y-scroll" dangerouslySetInnerHTML={{ __html: summary }}></div>
     },
     {
       title: "Description",
@@ -120,7 +144,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
-      }
+      },
+      render: (description) => <div className="content max-h-[100px] overflow-y-scroll" dangerouslySetInnerHTML={{ __html: description }}></div>
     },
     {
       title: "Status",
@@ -133,6 +158,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       render: (id) => (<Dropdown
         menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
         trigger={['click']}
+        className="cursor-pointer"
       >
         <BsThreeDots />
       </Dropdown>)
@@ -201,6 +227,26 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     // enterLoading(1)
     return apiProvider.editBusiness(business?._id, business)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
+  const handleDelete = (id) => {
+    return apiProvider.editBusiness(id, { status: "DELETED" })
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -294,7 +340,9 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
           <div className="col-span-3">
             <label htmlFor="" className={`text-base px-2  mb-[10px]`}>Description</label>
 
-            <ReactQuill className='px-2 min-h-[100px]' label={"description"} theme="snow" value={business?.description} onChange={(e) => setBusiness((prev) => ({ ...prev, "description": e }))} />
+            <ReactQuill
+
+              className='px-2 min-h-[100px]' label={"description"} theme="snow" value={business?.description} onChange={(e) => setBusiness((prev) => ({ ...prev, "description": e }))} />
 
           </div>
         </div>
@@ -320,7 +368,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
         <div className="font-bold my-3">
           Bussiness
         </div>
-        <Table loading={loadings[2]} columns={columns} dataSource={data} />
+        <Table loading={loadings[2]} columns={columns} dataSource={data} pagination={false} />
       </Card>
     </div>
   )

@@ -33,6 +33,10 @@ export const getCityById = (id) => {
     return apiProvider.get(apiConstant.City, id)
 }
 
+export const editCity = (id, data) => {
+    return apiProvider.put(apiConstant.City, id, data)
+}
+
 // Country
 export const getCountry = () => {
     return apiProvider.getAll(apiConstant.Country)
@@ -46,6 +50,10 @@ export const getCountryById = (id) => {
     return apiProvider.get(apiConstant.Country, id)
 }
 
+export const editCountry = (id, data) => {
+    return apiProvider.put(apiConstant.Country, id, data)
+}
+
 // Department
 export const getDepartment = () => {
     return apiProvider.getAll(apiConstant.Department)
@@ -53,6 +61,10 @@ export const getDepartment = () => {
 
 export const createDepartment = (data) => {
     return apiProvider.post(apiConstant.Department, data)
+}
+
+export const editDepartment = (id, data) => {
+    return apiProvider.put(apiConstant.Department, id, data)
 }
 
 export const getDepartmentById = (id) => {
@@ -112,6 +124,10 @@ export const createState = (data) => {
 
 export const getStateById = (id) => {
     return apiProvider.get(apiConstant.State, id)
+}
+
+export const editState = (id, data) => {
+    return apiProvider.put(apiConstant.State, id, data)
 }
 
 // User

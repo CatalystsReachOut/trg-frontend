@@ -30,9 +30,9 @@ const Input = (props) => {
           onChange={onChange}
           disabled={disabled}
           readOnly={readOnly}
-          className={`text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]  ${inputClassName}`}
+          className={`text-sm p-1 px-2 min-w-full border-[1px] border-[#ccc] h-[40px] rounded-sm focus:outline-[#F1C40F]  ${inputClassName}`}
           onBlur={onBlur}
-          onPressEnter={onPressEnter}
+          onKeyDown={(e)=>{if(e.key=="Enter") onPressEnter()}}
         />
       </div>
     </div>

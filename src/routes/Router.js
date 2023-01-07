@@ -119,7 +119,7 @@ const Router = () => {
 
             <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
             <div className='container mx-auto p-[20px]  min-h-screen'>
-              <Element notify={notify} loadings={loadings} />
+              <Element notify={notify} loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading}/>
             </div>
             <Footer />
           </div> : <Navigate replace to={redirect} />

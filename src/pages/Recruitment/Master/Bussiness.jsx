@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import Action from '../../../components/Action/Action'
 import Button from '../../../components/Button/Button'
@@ -10,8 +10,9 @@ import TextArea from './../../../components/Input/TextArea'
 import * as apiProvider from '../../../services/api/recruitment'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Highlighter from 'react-highlight-words';
 
-import { Switch, Dropdown } from 'antd';
+import { Switch, Dropdown, Space } from 'antd';
 
 import { BsThreeDots } from "react-icons/bs"
 import { fallBackImage, onImageError } from '../../../services/common'
@@ -27,6 +28,117 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
     summary: "",
     description: ""
   })
+
+
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeHolder={`Search ${dataIndex}`}
+          label={'Type to Search'}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          onBlur={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1890ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const [edit, setEdit] = useState(false)
 
@@ -75,41 +187,17 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       render: (logo) => <img src={logo ?? fallBackImage} alt="logo" width={100} />
     },
     {
-      title: "Business Name",
-      dataIndex: "name",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 2
-      },
-      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
-        return <Input autofocus
-          label=""
-          placeHolder="Search Name"
-          value={selectedKeys[0]}
-          onChange={e => { setSelectedKeys(e.target.value ? [e.target.value] : []) }
-          }
-          onPressEnter={() => {
-            confirm()
-          }}
-          onBlur={() => {
-            confirm()
-          }}
-        ></Input>
-      },
-      filterIcon: () => {
-        return <SearchOutlined />
-      },
-      onFilter: (value, record) => {
-        return record.name.toLowerCase().includes(value.toLowerCase())
-      }
+      title: 'Bussiness Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: '30%',
+      ...getColumnSearchProps('name'),
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
-      }
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+      ...getColumnSearchProps('address'),
     },
 
     {
@@ -122,12 +210,10 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       render: (url) => <a href={url} target="_blank" rel="noreferrer">{url}</a>
     },
     {
-      title: "Business Code",
-      dataIndex: "code",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
-      }
+      title: 'Bussiness Code',
+      dataIndex: 'code',
+      key: 'code',
+      ...getColumnSearchProps('code'),
     },
     {
       title: "Summary",

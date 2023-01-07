@@ -10,15 +10,32 @@ import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 import { ROUTES } from '../../../routes/RouterConfig'
 import { useNavigate } from 'react-router-dom'
+import {getColumnSearchProps} from './../../../helpers/TableSearch'
+import { BsThreeDots } from 'react-icons/bs'
+import { Dropdown, Switch } from 'antd'
 
 const State = ({ notify, enterLoading, exitLoading, loadings }) => {
 
-  const [state, setState] = useState({
+  const [user, setUser] = useState({
     country: '',
     name: ''
   })
 
   const [countryData, setCountryData] = useState([])
+
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setUser(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      handleDelete(key[1])
+    }
+  };
 
   const columns = [
     {
@@ -27,7 +44,8 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 3
-      }
+      },
+      ...getColumnSearchProps('name')
     },
     {
       title: "Country",
@@ -35,9 +53,21 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
       render: (_, { country }) => (<> {countryData.find(item => item.value === country)?.label} </>)
     },
     {
-      title: "Action",
-      dataIndex: "status"
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
     },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
 
   const [data, setData] = useState([])
@@ -45,7 +75,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setState(prev => ({
+    setUser(prev => ({
       ...prev,
       [name]: value
     }))
@@ -54,7 +84,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
   const handelChangeSelect = (e) => {
     const { name, value } = e;
     console.log(e)
-    setState(prev => ({
+    setUser(prev => ({
       ...prev,
       [name]: value
     }))
@@ -96,7 +126,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
   const handleSubmit = () => {
 
     enterLoading(1)
-    return apiProvider.createState(state)
+    return apiProvider.createState(user)
       .then(res => {
         exitLoading(1)
         if (res.isSuccess) {
@@ -114,8 +144,50 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
+  const handleEdit = () => {
+
+    // enterLoading(1)
+    return apiProvider.editState(user?._id, user)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
+  const handleDelete = (id) => {
+    return apiProvider.editState(id, { status: "DELETED" })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
   const clearData = () => {
-    setState({
+    setUser({
       country: '',
       name: ''
     })
@@ -185,7 +257,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
               label="Country"
               options={countryData}
               name="country"
-              value={state?.country}
+              value={user?.country}
               onChange={handelChangeSelect}
             >
             </Select>
@@ -195,7 +267,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
               label={'State'}
               placeHolder={'Enter State Name'}
               name="name"
-              value={state?.name}
+              value={user?.name}
               onChange={handleChange}
             />
           </div>
@@ -205,7 +277,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
             loading={loadings[1]}
             title="Add Sate"
             className={'min-w-[100px]'}
-            onClick={handleSubmit}
+            onClick={() => { edit ? handleEdit() : handleSubmit() }}
           />
         </div>
       </Card>

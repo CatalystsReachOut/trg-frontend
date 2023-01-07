@@ -28,7 +28,7 @@ const TextArea = (props) => {
           disabled={disabled}
           readOnly={readOnly}
           rows={4}
-          className={`text-sm p-1 px-2 min-w-full border-[2px] rounded-sm focus:outline-[#F1C40F]  ${inputClassName}`}
+          className={`text-sm p-1 px-2 min-w-full border-[1px] border-[#ccc] rounded-sm focus:outline-[#F1C40F]  ${inputClassName}`}
           />
         </div>
     </div>

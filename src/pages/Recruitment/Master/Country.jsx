@@ -10,17 +10,34 @@ import * as apiProvider from '../../../services/api/recruitment'
 import Select from '../../../components/Select/Select'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../../routes/RouterConfig'
+import {getColumnSearchProps} from './../../../helpers/TableSearch'
+import { BsThreeDots } from 'react-icons/bs'
+import { Dropdown, Switch } from 'antd'
 
 const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
 
-  const [country, setCountry] = useState({
+  const [user, setUser] = useState({
     name: '',
     code: ''
   })
 
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setUser(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      handleDelete(key[1])
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCountry(prev => ({
+    setUser(prev => ({
       ...prev,
       [name]: value
     }))
@@ -35,7 +52,8 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 2
-      }
+      },
+      ...getColumnSearchProps('name')
     },
     {
       title: "Country Code",
@@ -43,12 +61,25 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
-      }
+      },
+      ...getColumnSearchProps('code')
+    },
+    {
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
     },
     {
       title: "Action",
-      dataIndex: "status"
-    },
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
 
   const [data, setData] = useState([]);
@@ -78,7 +109,7 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
   const handleSubmit = () => {
 
     enterLoading(1)
-    return apiProvider.createCountry(country)
+    return apiProvider.createCountry(user)
       .then(res => {
         exitLoading(1)
         if (res.isSuccess) {
@@ -96,8 +127,50 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
+  const handleEdit = () => {
+
+    // enterLoading(1)
+    return apiProvider.editCountry(user?._id, user)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
+  const handleDelete = (id) => {
+    return apiProvider.editCountry(id, { status: "DELETED" })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
   const clearData = () => {
-    setCountry({
+    setUser({
       name: "",
       code: ""
     })
@@ -157,7 +230,7 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
             <Input
               label={'Country'}
               placeHolder={'Enter Country Name'}
-              value={country?.name}
+              value={user?.name}
               name={'name'}
               onChange={handleChange}
             />
@@ -166,7 +239,7 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
             <Input
               label={'Country Code'}
               placeHolder={'Enter Country Code'}
-              value={country?.code}
+              value={user?.code}
               name={'code'}
               onChange={handleChange}
             />
@@ -176,7 +249,7 @@ const Country = ({ notify, enterLoading, exitLoading, loadings }) => {
           <Button
             title="Add Country"
             className={'min-w-[100px]'}
-            onClick={handleSubmit}
+            onClick={() => { edit ? handleEdit() : handleSubmit() }}
           />
         </div>
       </Card>

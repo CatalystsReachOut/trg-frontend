@@ -11,19 +11,36 @@ import { Sorter } from '../../../helpers/Sorter'
 import { ROUTES } from '../../../routes/RouterConfig'
 import * as apiProvider from '../../../services/api/recruitment'
 // import Button from '../../../components/Button/Button'
+import {getColumnSearchProps} from '../../../helpers/TableSearch'
+import { Dropdown, Switch } from 'antd'
+import { BsThreeDots } from 'react-icons/bs'
 
 
 const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
-  const [city, setCity] = useState({
+  const [user, setUser] = useState({
     country: '',
     state: '',
     name: ''
   })
 
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setUser(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      handleDelete(key[1])
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCity(prev => ({
+    setUser(prev => ({
       ...prev,
       [name]: value
     }))
@@ -31,7 +48,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const handelChangeSelect = (e) => {
     const { name, value } = e;
-    setCity(prev => ({
+    setUser(prev => ({
       ...prev,
       [name]: value
     }))
@@ -44,8 +61,18 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const columns = [
     {
+      title: "Sl No",
+      dataIndex: "index",
+      render:((i,key)=>(<div>{i}</div>))
+    },
+    {
       title: "City",
-      dataIndex: "name"
+      dataIndex: "name",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 3
+      },
+      ...getColumnSearchProps('name')
     },
     {
       title: "State",
@@ -60,9 +87,21 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     },
     {
-      title: "Action",
-      dataIndex: "status"
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
     },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
 
   const [data, setData] = useState([
@@ -116,7 +155,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const handleSubmit = () => {
     enterLoading(1)
-    apiProvider.createCity(city)
+    apiProvider.createCity(user)
       .then(res => {
         exitLoading(1)
         if (res.isSuccess) {
@@ -135,11 +174,52 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
+  const handleEdit = () => {
+    // enterLoading(1)
+    return apiProvider.editCity(user?._id, user)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
+  const handleDelete = (id) => {
+    return apiProvider.editCity(id, { status: "DELETED" })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
 
 
 
   const clearData = () => {
-    setCity({
+    setUser({
       country: '',
       state: '',
       name: ''
@@ -152,10 +232,10 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
   }, [])
 
   useEffect(() => {
-    if (city?.country) {
-      getStateOpt(city?.country)
+    if (user?.country) {
+      getStateOpt(user?.country)
     }
-  }, [city?.country])
+  }, [user?.country])
   
 
 
@@ -213,7 +293,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
               label="Country"
               options={countryOptions}
               name="country"
-              value={city?.country}
+              value={user?.country}
               onChange={handelChangeSelect}
             >
             </Select>
@@ -223,7 +303,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
               label="State"
               options={stateOptions}
               name="state"
-              value={city?.state}
+              value={user?.state}
               onChange={handelChangeSelect}
             >
             </Select>
@@ -233,7 +313,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
               label={'City'}
               placeHolder={'Enter City Name'}
               name="name"
-              value={city.name}
+              value={user.name}
               onChange={handleChange}
             />
           </div>
@@ -243,7 +323,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
             loading={loadings[1]}
             title="Add City"
             className={'min-w-[100px]'}
-            onClick={handleSubmit}
+            onClick={() => { edit ? handleEdit() : handleSubmit() }}
           />
         </div>
       </Card>

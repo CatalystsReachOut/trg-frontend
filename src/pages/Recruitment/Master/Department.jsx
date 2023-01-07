@@ -10,6 +10,7 @@ import * as apiProvider from '../../../services/api/recruitment'
 import ReactQuill from 'react-quill';
 import { BsThreeDots } from "react-icons/bs"
 import { Switch, Dropdown } from 'antd';
+import {getColumnSearchProps} from '../../../helpers/TableSearch'
 
 
 const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
@@ -29,22 +30,25 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
       setUser(data.find(item => item._id === key[1]))
 
     } else {  // delete
-      // setBusiness(data.find(item => item._id === key[1]))
+      handleDelete(key[1])
     }
   };
 
   const columns = [
     {
-      title: "WorkShift",
+      title: "Department Name",
       dataIndex: "name",
+      key:'name',
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 4
-      }
+      },
+      ...getColumnSearchProps('name')
     },
     {
       title: "Description",
-      dataIndex: "description"
+      dataIndex: "description",
+      render: (summary) => <div className="content max-h-[100px] overflow-y-scroll" dangerouslySetInnerHTML={{ __html: summary }}></div>
     },
     {
       title: "Status",
@@ -124,25 +128,44 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const handleEdit = () => {
+    enterLoading(1)
+    return apiProvider.editDepartment(user?._id, user)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'Edit success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
 
-    // enterLoading(1)
-    // return apiProvider.editDepartment(user?._id, user)
-    //   .then(res => {
-    //     if (res.isSuccess) {
-    //       clearData()
-    //       getData()
-    //       setEdit(false)
-    //       return notify('success', 'added success');
-    //     } else {
-    //       setEdit(false)
-    //       return notify('error', res.message);
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
+        return notify('error', err.message);
+      })
+  }
 
-    //     return notify('error', err.message);
-    //   })
+  const handleDelete = (id) => {
+    return apiProvider.editDepartment(id, { status: "DELETED" })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
   }
 
   const clearData = () => {
@@ -183,7 +206,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
           <Button
             title="Add Department"
             className={'min-w-[100px]'}
-            onClick={() => { handleSubmit(user) }}
+            onClick={() => { edit ? handleEdit() : handleSubmit() }}
             loading={loadings[1]}
           />
         </div>

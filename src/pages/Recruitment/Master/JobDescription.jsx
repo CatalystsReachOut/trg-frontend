@@ -89,7 +89,7 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
                 compare: Sorter.DEFAULT,
                 multiple: 1
             },
-            render: (summary) => <div className="content max-h-[100px] overflow-y-scroll" dangerouslySetInnerHTML={{ __html: summary }}></div>
+            render: (summary) => <div className="content max-h-[100px] overflow-y-auto" dangerouslySetInnerHTML={{ __html: summary }}></div>
         },
         {
             title: "Responsibility",
@@ -98,7 +98,7 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
                 compare: Sorter.DEFAULT,
                 multiple: 1
             },
-            render: (summary) => <div className="content max-h-[100px] overflow-y-scroll" dangerouslySetInnerHTML={{ __html: summary }}></div>
+            render: (summary) => <div className="content max-h-[100px] overflow-y-auto" dangerouslySetInnerHTML={{ __html: summary }}></div>
         },
         {
             title: "KPI",
@@ -107,7 +107,7 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
                 compare: Sorter.DEFAULT,
                 multiple: 1
             },
-            render: (summary) => <div className="content max-h-[100px] overflow-y-scroll" dangerouslySetInnerHTML={{ __html: summary }}></div>
+            render: (summary) => <div className="content max-h-[100px] overflow-y-auto" dangerouslySetInnerHTML={{ __html: summary }}></div>
         },
         {
             title: "Eligibility Criteria",
@@ -116,7 +116,7 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
                 compare: Sorter.DEFAULT,
                 multiple: 1
             },
-            render: (summary) => <div className="content max-h-[100px] overflow-y-scroll" dangerouslySetInnerHTML={{ __html: summary }}></div>
+            render: (summary) => <div className="content max-h-[100px] overflow-y-auto" dangerouslySetInnerHTML={{ __html: summary }}></div>
         },
         {
             title: "Status",

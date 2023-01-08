@@ -13,6 +13,7 @@ import SubmitButton from '../../components/RegisterInputs/SubmitButton';
 
 // react icons
 import { MdEmail } from 'react-icons/md'
+import { ROUTES } from '../../routes/RouterConfig';
 
 
 
@@ -39,7 +40,7 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.BAND, res.level);
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.EMPLOYEE, res.employee);
 
-                    navigate("/")
+                    navigate(ROUTES.Recruitment.Master.Bussiness)
                     exitLoading(1)
                     return notify('success', 'Logged In Successfully');
                 } else {

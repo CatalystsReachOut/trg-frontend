@@ -136,6 +136,7 @@ const Router = () => {
         //Register Routing
         <Route element={<Container/>}>
           <Route index exact path={ROUTES.User.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
+          <Route index exact path={ROUTES.Home} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
           <Route exact path={ROUTES.User.SignUp} element={<SignUp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
           <Route exact path={ROUTES.User.ForgotPassword} element={<ForgotPassword loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
           <Route exact path={ROUTES.User.OTP} element={<Otp loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>

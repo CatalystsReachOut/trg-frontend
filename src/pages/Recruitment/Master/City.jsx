@@ -61,9 +61,13 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const columns = [
     {
-      title: "Sl No",
+      title: "Sl no.",
       dataIndex: "index",
-      render:((i,key)=>(<div>{i}</div>))
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 2
+      },
+      render: (value, item, index) => index + 1
     },
     {
       title: "City",

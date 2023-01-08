@@ -9,18 +9,34 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 import ReactQuill from 'react-quill';
-import { Tag } from 'antd';
+import { Dropdown, Switch, Tag } from 'antd';
 import TextArea from '../../../components/Input/TextArea'
+import { BsThreeDots } from 'react-icons/bs'
 
 const QuestionBank = ({ notify }) => {
 
   const [user, setUser] = useState({
-    departmentName: '',
+    departmentId: '',
     questionType: '',
     question: '',
     options: '',
     correctAnswer: ''
   })
+
+
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setUser(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      handleDelete(key[1])
+    }
+  };
 
   const [options, setOptions] = useState({
     option1: '',
@@ -29,6 +45,23 @@ const QuestionBank = ({ notify }) => {
     option4: '',
   })
 
+
+  const clearData = () => {
+    setOptions({
+      option1: '',
+      option2: '',
+      option3: '',
+      option4: '',
+    })
+
+    setUser({
+      departmentId: '',
+      questionType: '',
+      question: '',
+      options: '',
+      correctAnswer: ''
+    })
+  }
   const [allOptions, setAllOptions] = useState([])
 
   useEffect(() => {
@@ -131,9 +164,18 @@ const QuestionBank = ({ notify }) => {
 
   const columns = [
     {
+      title: "Sl no.",
+      dataIndex: "index",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 2
+      },
+      render: (value, item, index) => index + 1
+    },
+    {
       title: "Department Name",
-      dataIndex: "departmentName",
-      render: (data) => <p>{departmentOpt?.find(item => item.value == data)?.label}</p>
+      dataIndex: "departmentId",
+      render: (val) => <p>{departmentOpt?.find(item => item.value == val)?.label}</p>
     },
     {
       title: "Question Type",
@@ -153,11 +195,25 @@ const QuestionBank = ({ notify }) => {
     },
     {
       title: "Options",
-      dataIndex: "optio",
+      dataIndex: "options",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
-      }
+      },
+      render: (summary, a) => <div className="content max-h-[100px] overflow-y-auto" >
+        {
+          summary?.length != 0 ? summary?.map((i, key) => (
+            <div className={`${i?.answerBody == a?.correctAnswer ? 'bg-[#78e08f] text-white font-bold' : ''} px-2`}>{i?.answerBody}</div>
+          ))
+            :
+            <div className='text-center'>
+              ------
+            </div>
+        }
+        {
+          console.log(a?.correctAnswer)
+        }
+      </div>
     },
     {
       title: "Answer",
@@ -165,56 +221,36 @@ const QuestionBank = ({ notify }) => {
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 1
-      }
+      },
+      render: (summary) => <div className="content max-h-[100px] overflow-y-auto" dangerouslySetInnerHTML={{ __html: summary }}></div>
+    },
+    {
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
     },
     {
       title: "Action",
-      dataIndex: "action"
-    },
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
 
-  const [data, setData] = useState([
-    {
-      key: "1",
-      name: "John Brown",
-      chinese: 98,
-      math: 60,
-      english: 70,
-      action: <Action />
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      chinese: 98,
-      math: 66,
-      english: 89,
-      action: <Action />
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      chinese: 98,
-      math: 90,
-      english: 70,
-      action: <Action />
-    },
-    {
-      key: "4",
-      name: "Jim Red",
-      chinese: 88,
-      math: 99,
-      english: 89,
-      action: <Action />
-    }
-  ]);
+  const [data, setData] = useState([]);
 
   const getBasicData = () => {
     apiProvider.getDepartment()
       .then(res => {
         console.log(res);
-        const arr = res?.data?.map((i, key) => ({
-          label: i?.name,
-          value: i?._id
+        const arr = res.data.map(data => ({
+          value: data._id,
+          label: data.name
         }))
         setDepartmentOpt(arr)
       })
@@ -238,11 +274,53 @@ const QuestionBank = ({ notify }) => {
     apiProvider.createQuestionBank(user)
       .then(res => {
         console.log(res)
+        getData()
         return notify('success', 'added success');
       })
       .catch(err => {
         console.log(err)
         return notify('success', err.message);
+      })
+  }
+
+  const handleEdit = () => {
+    // enterLoading(1)
+    return apiProvider.editQuestionBank(user?._id, user)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
+  const handleDelete = (id) => {
+    return apiProvider.editQuestionBank(id, { status: "DELETED" })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
       })
   }
 
@@ -254,20 +332,22 @@ const QuestionBank = ({ notify }) => {
   return (
     <div>
       <Card>
-        <div className='font-bold'> Add Department </div>
+        <div className='font-bold'> Add Question Bank </div>
         <div className='form-parent'>
           <div className="form-child">
             <Select
               label="Department"
               placeholder="Select Department"
+              value={user?.departmentId}
               onChange={handelChangeSelect}
               options={departmentOpt}
-              name="departmentName"
+              name="departmentId"
             />
           </div>
           <div className="form-child">
             <Select
               label="Question Type"
+              value={user?.questionType}
               options={questionType}
               defaultValue={'subjective'}
               name="questionType"
@@ -346,7 +426,7 @@ const QuestionBank = ({ notify }) => {
               <div className="form-child col-span-12">
                 <label htmlFor="" className={`text-base px-2  mb-[10px]`}>Enter Answer</label>
 
-                <ReactQuill className='px-2 min-h-[100px]' label={"description"} theme="snow" value={user?.answer} onChange={(e) => setUser((prev) => ({ ...prev, "answer": e }))} />
+                <ReactQuill className='px-2 min-h-[100px]' label={"description"} theme="snow" value={user?.correctAnswer} onChange={(e) => setUser((prev) => ({ ...prev, "correctAnswer": e }))} />
               </div>
 
           }
@@ -356,7 +436,7 @@ const QuestionBank = ({ notify }) => {
           <Button
             title="Add Question"
             className={'min-w-[100px]'}
-            onClick={handleSubmit}
+            onClick={() => { edit ? handleEdit() : handleSubmit() }}
           />
         </div>
       </Card>

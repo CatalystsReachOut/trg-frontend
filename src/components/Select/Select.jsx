@@ -4,20 +4,21 @@ import { Option } from 'antd/lib/mentions';
 import './Select.scss'
 
 
-const Select = (props) => {
-    const {
-        className,
-        options,
-        labelClassName,
-        selectClassName,
-        label,
-        onChange,
-        name,
-        value,
-        disabled,
-        defaultValue,
-        placeholder
-    } = props;
+const Select = ({
+    className,
+    options,
+    labelClassName,
+    selectClassName,
+    label,
+    onChange,
+    name,
+    value,
+    disabled,
+    defaultValue,
+    placeholder,
+    isMulti
+}) => {
+
 
 
     return (
@@ -34,6 +35,8 @@ const Select = (props) => {
                 isDisabled={disabled}
                 placeholder={placeholder}
                 selelcted={defaultValue}
+                isMulti={isMulti}
+                defaultValue={defaultValue}
             />
         </div>
     )

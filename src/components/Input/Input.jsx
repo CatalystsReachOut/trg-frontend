@@ -1,23 +1,22 @@
 import React from 'react'
 
-const Input = (props) => {
+const Input = ({
+  label,
+  value,
+  onChange,
+  className,
+  placeHolder,
+  labelClassName,
+  inputClassName,
+  type,
+  name,
+  disabled,
+  readOnly,
+  required,
+  onPressEnter,
+  onBlur
+}) => {
 
-  const {
-    label,
-    value,
-    onChange,
-    className,
-    placeHolder,
-    labelClassName,
-    inputClassName,
-    type,
-    name,
-    disabled,
-    readOnly,
-    required,
-    onPressEnter,
-    onBlur
-  } = props;
   return (
     <div className={`flex flex-col gap-2.5 ${className}`}>
       <label htmlFor="" className={`text-base px-2  ${labelClassName}`}>{label}{required ? '*' : null}</label>

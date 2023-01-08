@@ -13,7 +13,7 @@ import { Switch, Dropdown } from 'antd';
 
 const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
-  const [round, setRound] = useState({
+  const [user, setUser] = useState({
     name: ""
   })
 
@@ -25,15 +25,25 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     if (key[0] === "edit") {
       setEdit(true)
-      setRound(data.find(item => item._id === key[1]))
+      setUser(data.find(item => item._id === key[1]))
 
     } else {  // delete
       // setBusiness(data.find(item => item._id === key[1]))
+      handleDelete(key[1])
     }
   };
 
 
   const columns = [
+    {
+      title: "Sl no.",
+      dataIndex: "index",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 2
+      },
+      render: (value, item, index) => index + 1
+    },
     {
       title: "Round",
       dataIndex: "name",
@@ -43,10 +53,15 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
       }
     },
     {
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+    },
+    {
       title: "Action",
       dataIndex: "_id",
       render: (id) => (<Dropdown
-      className='cursor-pointer'
+        className='cursor-pointer'
         menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
         trigger={['click']}
       >
@@ -64,18 +79,51 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setRound(prev => ({
+    setUser(prev => ({
       ...prev,
       [name]: value
     }))
   }
 
-  const handleDelete = (id) => {
-    console.log(id);
+  const handleEdit = () => {
+    // enterLoading(1)
+    return apiProvider.editRound(user?._id, user)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
   }
 
-  const handleEdit = (id) => {
-    console.log(id);
+  const handleDelete = (id) => {
+    return apiProvider.editRound(id, { status: "DELETED" })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
   }
 
 
@@ -87,10 +135,6 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
         if (res.isSuccess) {
           const arr = res?.data?.map((i, key) => ({
             ...i,
-            action: <Action
-              handleClickDelete={handleDelete(i?.id)}
-              handleClickEdit={handleEdit(i)}
-            />
           }))
           setData(arr)
         }
@@ -106,7 +150,7 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
   const handleSubmit = () => {
 
     // enterLoading(1)
-    return apiProvider.createRound(round)
+    return apiProvider.createRound(user)
       .then(res => {
         // exitLoading(1)
         if (res.isSuccess) {
@@ -125,7 +169,7 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
   const clearData = () => {
-    setRound({
+    setUser({
       name: '',
     })
   }
@@ -145,25 +189,18 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
               label={'Round Name'}
               placeHolder={'Enter Round Name'}
               name="name"
-              value={round?.name}
+              value={user?.name}
               onChange={handleChange}
             />
           </div>
         </div>
         <div className="flex justify-end mt-3">
-          {
-            edit ?
-              <Button
-                title="Update Round"
-                className={'min-w-[100px]'}
-                onClick={() => console.log(round)}
-                loading={loadings[1]}
-              /> : <Button
-                title="Add Round"
-                className={'min-w-[100px]'}
-                onClick={() => handleSubmit(round)}
-                loading={loadings[1]}
-              />}
+          <Button
+            title={edit ?"Update Round":'Add Round'}
+            className={'min-w-[100px]'}
+            onClick={() => { edit ? handleEdit() : handleSubmit() }}
+            loading={loadings[1]}
+          />
         </div>
       </Card>
 

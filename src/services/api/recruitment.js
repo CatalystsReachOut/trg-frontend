@@ -85,6 +85,10 @@ export const getInterviewRoundsById = (id) => {
     return apiProvider.get(apiConstant.InterviewRounds, id)
 }
 
+export const editInterviewRound = (id, data) => {
+    return apiProvider.put(apiConstant.InterviewRounds, id, data)
+}
+
 // QuestionBank
 export const getQuestionBank = (e) => {
     return apiProvider.getAll(apiConstant.QuestionBank, e)
@@ -96,6 +100,10 @@ export const createQuestionBank = (data) => {
 
 export const getQuestionBankById = (id) => {
     return apiProvider.get(apiConstant.QuestionBank, id)
+}
+
+export const editQuestionBank= (id,data) => {
+    return apiProvider.put(apiConstant.QuestionBank, id, data)
 }
 
 
@@ -110,6 +118,10 @@ export const createRound = (data) => {
 
 export const getRoundById = (id) => {
     return apiProvider.get(apiConstant.Round, id)
+}
+
+export const editRound = (id, data) => {
+    return apiProvider.put(apiConstant.Round, id, data)
 }
 
 
@@ -174,10 +186,6 @@ export const editProfile = (id, data) => {
     return apiProvider.put(apiConstant.Profile, id, data)
 }
 
-export const updateProfile = (id, data) => {
-    return apiProvider.put(apiConstant.Profile)
-}
-
 //WorkType
 
 export const getWorkType = () => {
@@ -204,4 +212,21 @@ export const createWorkShift = (data) => {
 
 export const updateWorkShift = (id, data) => {
     return apiProvider.put(apiConstant.workShift, id, data)
+}
+
+// Job Description
+export const getJobDescription = (query) => {
+    return apiProvider.getAll(apiConstant.jobDescription, query)
+}
+
+export const createJobDescription = (data) => {
+    return apiProvider.post(apiConstant.jobDescription, data)
+}
+
+export const editJobDescription = (id, data) => {
+    return apiProvider.put(apiConstant.jobDescription, id, data)
+}
+
+export const getJobDescriptionById = (id) => {
+    return apiProvider.get(apiConstant.jobDescription, id)
 }

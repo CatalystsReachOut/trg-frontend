@@ -18,7 +18,8 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     name: "",
     profile: "",
     noOfRound: "",
-    noOfQuestion: ""
+    noOfQuestion: "",
+    rounds: []
   })
 
 
@@ -38,12 +39,10 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
           }
         }))} />)
     },
-    ,
     {
       title: "Question",
       dataIndex: "question",
     },
-
     {
       title: "Question Type",
       dataIndex: "questionType",
@@ -59,16 +58,15 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
       title: "Profile",
       dataIndex: "profile",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 4
-      }
+      },
+      render: data => (
+        <div>{profileData?.find(s => s?.value == data)?.label}</div>
+      )
     },
     {
       title: "No Of Round",
@@ -87,9 +85,21 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
       }
     },
     {
-      title: "Action",
-      dataIndex: "action"
+      title: "Status",
+      dataIndex: "_id",
+      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
     },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
 
 
@@ -97,16 +107,19 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [edit, setEdit] = useState(false)
 
-  const handleMenuClick = (e) => {
+  const handleMenuClick = async (e) => {
     const key = e.key.split("_");
 
     if (key[0] === "edit") {
+      await setEdit(true)
+      await setUser(data.find(item => item._id == key[1]))
+      console.log(data)
+      console.log(key)
+      await setQuestionData(addedRoundData.find(item => item._id === key[1])?.rounds)
       showModal()
-      setEdit(true)
-      setQuestionData(addedRoundData.find(item => item.round === key[1])?.question)
-
-    } else {  // delete
-      // setBusiness(data.find(item => item._id === key[1]))
+    }
+    else {
+      handleDelete(key[1])
     }
   };
 
@@ -160,7 +173,7 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     },
     {
       title: "Total Marks",
-      dataIndex: "marks",
+      dataIndex: "totalMarks",
       render: (marks, data) => {
         return <Input
           label=""
@@ -169,7 +182,27 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
           value={marks}
           onChange={(e) => setAddedRoundData(addedRoundData.map(item => {
             if (item.round == data.round) {
-              item.marks = e.target.value
+              item.totalMarks = e.target.value
+              return { ...item }
+            } else {
+              return { ...item }
+            }
+          }))}
+        />
+      }
+    },
+    {
+      title: "Disclaimer",
+      dataIndex: "disclaimer",
+      render: (disclaimer, data) => {
+        return <Input
+          label=""
+          placeHolder=""
+          type="text"
+          value={disclaimer}
+          onChange={(e) => setAddedRoundData(addedRoundData.map(item => {
+            if (item.round == data.round) {
+              item.disclaimer = e.target.value
               return { ...item }
             } else {
               return { ...item }
@@ -199,6 +232,8 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [questionData, setQuestionData] = useState([])
 
   const [addedRoundData, setAddedRoundData] = useState([])
+
+  console.log(addedRoundData);
 
 
   const handleChange = (e) => {
@@ -275,7 +310,12 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const handleSubmit = () => {
     // enterLoading(1)
-    return apiProvider.createInterviewRounds(user)
+    return apiProvider.createInterviewRounds({
+      profile: user?.profile,
+      rounds: [
+        ...addedRoundData
+      ]
+    })
       .then(res => {
         // exitLoading(1)
         if (res.isSuccess) {
@@ -295,10 +335,33 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const clearData = () => {
     setUser({
+      name: "",
       profile: "",
       noOfRound: "",
-      noOfQuestion: ""
+      noOfQuestion: "",
+      rounds: []
     })
+  }
+
+
+  const handleDelete = (id) => {
+    return apiProvider.editInterviewRound(id, { status: "DELETED" })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
   }
 
   useEffect(() => {
@@ -320,8 +383,8 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
-    if (!user?.round) {
-      return notify('error', 'Please select round first');
+    if (!user?.profile) {
+      return notify('error', 'Please select Profile first');
     }
     setIsModalOpen(true);
   };
@@ -337,7 +400,7 @@ const InterviewRounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
   const getQuestions = (e) => {
-    apiProvider.getQuestionBank(`?departmentName=${e}`).then(res => {
+    apiProvider.getQuestionBank(`?departmentId=${e}`).then(res => {
       console.log(res);
       for (var dat of res.data) {
         dat.checked = false

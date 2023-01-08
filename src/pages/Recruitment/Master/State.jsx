@@ -39,6 +39,15 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const columns = [
     {
+      title: "Sl no.",
+      dataIndex: "index",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 2
+      },
+      render: (value, item, index) => index + 1
+    },
+    {
       title: "State",
       dataIndex: "name",
       sorter: {

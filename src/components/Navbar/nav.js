@@ -1,3 +1,4 @@
+import { BsJournalBookmark } from "react-icons/bs";
 import { FiHome, FiUser } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../routes/RouterConfig";
@@ -78,15 +79,11 @@ export const adminNavbarData = [
                 key: 'profile',
             },
             {
-                label: <Link to={ROUTES?.Recruitment?.CreateJob || "#"} >Create job</Link>,
-                route: ROUTES?.Recruitment.CreateJob,
-                key: 'createjob',
+                label: <Link to={ROUTES?.Recruitment?.Master?.JobDescription || "#"} > Job Description </Link>,
+                route: ROUTES?.Recruitment?.Master?.JobDescription,
+                key: 'jobdescription',
             },
-            {
-                label: <Link to={ROUTES?.Recruitment?.ViewJobs || "#"} > View Jobs </Link>,
-                route: ROUTES?.Recruitment.ViewJobs,
-                key: 'viewjobs',
-            },
+            
 
             {
                 label: <Link to={ROUTES?.Recruitment?.Master?.QuestionBank || "#"} > Question Bank </Link>,
@@ -104,22 +101,46 @@ export const adminNavbarData = [
                 route: ROUTES?.Recruitment?.Master?.InterviewRounds,
                 key: 'interviewrounds',
             },
-            {
-                label: <Link to={ROUTES?.Recruitment?.Master?.JobDescription || "#"} > Job Description </Link>,
-                route: ROUTES?.Recruitment?.Master?.JobDescription,
-                key: 'jobdescription',
-            },
-            {
-                label: <Link to={ROUTES?.Recruitment?.Master?.WorkType || "#"} > Work Shift </Link>,
-                route: ROUTES?.Recruitment?.Master?.WorkType,
-                key: 'worktype',
-            },
-            {
-                label: <Link to={ROUTES?.Recruitment?.Master?.WorkShift || "#"} > Work Shift</Link>,
-                route: ROUTES?.Recruitment?.Master?.WorkShift,
-                key: 'workshift',
-            }
+            
+            // {
+            //     label: <Link to={ROUTES?.Recruitment?.Master?.WorkType || "#"} > Work Shift </Link>,
+            //     route: ROUTES?.Recruitment?.Master?.WorkType,
+            //     key: 'worktype',
+            // },
+            // {
+            //     label: <Link to={ROUTES?.Recruitment?.Master?.WorkShift || "#"} > Work Shift</Link>,
+            //     route: ROUTES?.Recruitment?.Master?.WorkShift,
+            //     key: 'workshift',
+            // }
         ]
-    }
+    },
+    {
+        label: 'Jobs',
+        key: 'jobs',
+        icon: <BsJournalBookmark />,
+        children: [
+            {
+                label: <Link to={ROUTES?.Recruitment?.CreateJob || "#"} >Create job</Link>,
+                route: ROUTES?.Recruitment.CreateJob,
+                key: 'createjob',
+            },
+            {
+                label: <Link to={ROUTES?.Recruitment?.ViewJobs || "#"} > View Jobs </Link>,
+                route: ROUTES?.Recruitment.ViewJobs,
+                key: 'viewjobs',
+            },
+            
+            // {
+            //     label: <Link to={ROUTES?.Recruitment?.Master?.WorkType || "#"} > Work Shift </Link>,
+            //     route: ROUTES?.Recruitment?.Master?.WorkType,
+            //     key: 'worktype',
+            // },
+            // {
+            //     label: <Link to={ROUTES?.Recruitment?.Master?.WorkShift || "#"} > Work Shift</Link>,
+            //     route: ROUTES?.Recruitment?.Master?.WorkShift,
+            //     key: 'workshift',
+            // }
+        ]
+    },
 
 ]

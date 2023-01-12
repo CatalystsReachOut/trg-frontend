@@ -19,4 +19,21 @@ export function storeLocalData(type, name, data) {
 }
 
 
+export function fetchLocalData(type, name) {
+    try {
+        if (type === storageConstants.SESSION) {
+            JSON.parse(sessionStorage.getItem(name))
+        }
+        else if (type === storageConstants.LOCAL) {
+            JSON.parse(localStorage.getItem(name))
+        }
+        return true;
+    } catch (e) {
+        alert('Your web browser does not support storing settings locally. Some settings may not save or some features may not work properly for you.');
+        return false;
+    }
+
+}
+
+
 export const fallBackImage = imgError;

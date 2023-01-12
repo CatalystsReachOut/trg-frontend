@@ -7,28 +7,79 @@ import Input from '../../../components/Input/Input'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+import { BsThreeDots } from "react-icons/bs"
+import { Switch, Dropdown } from 'antd';
+import Select from '../../../components/Select/Select'
+import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '../../../routes/RouterConfig'
 
-const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
+
+const WorkType = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [user, setUser] = useState({
-    title: ""
+    name: ""
   })
+
+
+  const [edit, setEdit] = useState(false)
+
+  const handleMenuClick = (e) => {
+    const key = e.key.split("_");
+
+    if (key[0] === "edit") {
+      setEdit(true)
+      setUser(data.find(item => item._id === key[1]))
+
+    } else {  // delete
+      // setBusiness(data.find(item => item._id === key[1]))
+      handleDelete(key[1], "DELETED")
+    }
+  };
+
+
   const columns = [
     {
-      title: "WorkType",
-      dataIndex: "title",
+      title: "Sl no.",
+      dataIndex: "index",
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 2
+      },
+      render: (value, item, index) => index + 1
+    },
+    {
+      title: "Work Type",
+      dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
         multiple: 4
       }
     },
     {
-      title: "Action",
-      dataIndex: "status"
+      title: "Status",
+      dataIndex: "_id",
+      render: (id,d) => (
+        <Switch 
+        className='bg-[gray]' 
+        checked={d?.status=="ACTIVE"?true:false}
+        onChange={(e) => {
+          if(e) handleDelete(id, "ACTIVE")
+        else handleDelete(id, "INACTIVE")
+        }} />
+        )
     },
+    {
+      title: "Action",
+      dataIndex: "_id",
+      render: (id) => (<Dropdown
+        className='cursor-pointer'
+        menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+        trigger={['click']}
+      >
+        <BsThreeDots />
+      </Dropdown>)
+    }
   ];
-
-
 
 
   const [profileData, setProfileData] = useState([])
@@ -45,6 +96,47 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
     }))
   }
 
+  const handleEdit = () => {
+    // enterLoading(1)
+    return apiProvider.editWorkType(user?._id, user)
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
+  const handleDelete = (id, status) => {
+    return apiProvider.editWorkType(id, { status: status })
+      .then(res => {
+        if (res.isSuccess) {
+          clearData()
+          getData()
+          setEdit(false)
+          return notify('success', 'added success');
+        } else {
+          setEdit(false)
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+
+        return notify('error', err.message);
+      })
+  }
+
 
   const getData = () => {
     // enterLoading(2)
@@ -52,12 +144,10 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
       .then(res => {
 
         if (res.isSuccess) {
-          setData(res.data)
-          const arr = res.data.map(data => ({
-            value: data._id,
-            label: data.title
+          const arr = res?.data?.map((i, key) => ({
+            ...i,
           }))
-          setProfileData(arr)
+          setData(arr)
         }
         // return exitLoading(2)
       })
@@ -91,9 +181,38 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const clearData = () => {
     setUser({
-      title: '',
+      name: '',
     })
   }
+
+  const navigate = useNavigate()
+
+  const changeRoute = (id) => {
+    switch (id?.value) {
+      case 'shift':
+        navigate(ROUTES.Recruitment.Master.WorkShift);
+        break;
+      case 'style':
+        navigate(ROUTES.Recruitment.Master.WorkStyle);
+        break;
+
+    }
+  }
+
+  const selectData = [
+    {
+      label: 'Work Style',
+      value: 'style'
+    },
+    {
+      label: 'Work Shift',
+      value: 'shift'
+    },
+    {
+      label: 'Work Type',
+      value: 'type'
+    }
+  ]
 
   useEffect(() => {
     getData();
@@ -102,24 +221,36 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   return (
     <div>
+      <Card className={'mb-[20px]'}>
+        <Select
+          className="w-[30%]"
+          label="Select"
+          options={selectData}
+          name="Select"
+          value={"type"}
+          onChange={(e) => changeRoute(e)}
+        >
+        </Select>
+
+      </Card>
       <Card>
         <div className='font-bold'> Add Work Type </div>
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
           <div className="col-span-1">
             <Input
-              label={'Work Type'}
-              placeHolder={'Enter Work Type'}
-              name="title"
-              value={user?.title}
+              label={'Work Type Name'}
+              placeHolder={'Enter Work Type Name'}
+              name="name"
+              value={user?.name}
               onChange={handleChange}
             />
           </div>
         </div>
         <div className="flex justify-end mt-3">
           <Button
-            title="Add Work Shift"
+            title={edit ?"Update":'Add Work Type'}
             className={'min-w-[100px]'}
-            onClick={() => handleSubmit(user)}
+            onClick={() => { edit ? handleEdit() : handleSubmit() }}
             loading={loadings[1]}
           />
         </div>
@@ -127,7 +258,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
       <Card className={'mt-3'}>
         <div className="font-bold my-3">
-          Work Type
+        Work Type's
         </div>
         <Table loading={loadings[2]} columns={columns} dataSource={data} />
       </Card>
@@ -135,4 +266,4 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
   )
 }
 
-export default WorkShift
+export default WorkType

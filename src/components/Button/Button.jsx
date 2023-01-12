@@ -1,15 +1,13 @@
 import React from 'react'
 import { Button } from 'antd'
 
-const Btn = (props) => {
-  //props
-  const {
-    title,
-    onClick,
-    className,
-    type,
-    loading
-  } = props;
+const Btn = ({
+  title,
+  onClick,
+  className,
+  type,
+  loading
+}) => {
 
 
   return (

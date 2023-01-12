@@ -43,7 +43,7 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
             setUser(data.find(item => item._id === key[1]))
 
         } else {  // delete
-            handleDelete(key[1])
+            handleDelete(key[1], "DELETED")
         }
     };
 
@@ -80,7 +80,8 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
             sorter: {
                 compare: Sorter.DEFAULT,
                 multiple: 2
-            }
+            },
+            render:(value)=><div>{profileData?.find(s=>s?.value==value)?.label}</div>
         },
         {
             title: "Daily Job",
@@ -121,7 +122,15 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
         {
             title: "Status",
             dataIndex: "_id",
-            render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+            render: (id,d) => (
+                <Switch 
+                className='bg-[gray]' 
+                checked={d?.status=="ACTIVE"?true:false}
+                onChange={(e) => {
+                  if(e) handleDelete(id, "ACTIVE")
+                else handleDelete(id, "INACTIVE")
+                }} />
+                )
         },
         {
             title: "Action",
@@ -216,8 +225,8 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
             })
     }
 
-    const handleDelete = (id) => {
-        return apiProvider.editJobDescription(id, { status: "DELETED" })
+    const handleDelete = (id, status) => {
+        return apiProvider.editJobDescription(id, { status: status })
             .then(res => {
                 if (res.isSuccess) {
                     clearData()
@@ -330,7 +339,7 @@ const JobDescription = ({ notify, loadings, enterLoading, exitLoading }) => {
                 </div>
                 <div className="flex justify-end mt-3">
                     <Button
-                        title="Add Job Description"
+                        title={edit?"Update":"Add Job Description"}
                         className={'min-w-[100px]'}
                         onClick={() => { edit ? handleEdit() : handleSubmit() }}
                     />

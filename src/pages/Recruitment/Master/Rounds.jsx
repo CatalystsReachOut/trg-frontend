@@ -29,7 +29,7 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     } else {  // delete
       // setBusiness(data.find(item => item._id === key[1]))
-      handleDelete(key[1])
+      handleDelete(key[1], "DELETED")
     }
   };
 
@@ -55,7 +55,15 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
     {
       title: "Status",
       dataIndex: "_id",
-      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+      render: (id,d) => (
+        <Switch 
+        className='bg-[gray]' 
+        checked={d?.status=="ACTIVE"?true:false}
+        onChange={(e) => {
+          if(e) handleDelete(id, "ACTIVE")
+        else handleDelete(id, "INACTIVE")
+        }} />
+        )
     },
     {
       title: "Action",
@@ -106,8 +114,8 @@ const Rounds = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
-  const handleDelete = (id) => {
-    return apiProvider.editRound(id, { status: "DELETED" })
+  const handleDelete = (id, status) => {
+    return apiProvider.editRound(id, { status: status })
       .then(res => {
         if (res.isSuccess) {
           clearData()

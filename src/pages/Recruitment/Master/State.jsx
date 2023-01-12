@@ -14,7 +14,7 @@ import {getColumnSearchProps} from './../../../helpers/TableSearch'
 import { BsThreeDots } from 'react-icons/bs'
 import { Dropdown, Switch } from 'antd'
 
-const State = ({ notify, enterLoading, exitLoading, loadings }) => {
+const State = ({ notify, enterLoading, exitLoading, loadings, setLoading }) => {
 
   const [user, setUser] = useState({
     country: '',
@@ -33,7 +33,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
       setUser(data.find(item => item._id === key[1]))
 
     } else {  // delete
-      handleDelete(key[1])
+      handleDelete(key[1], "DELETED")
     }
   };
 
@@ -59,12 +59,30 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
     {
       title: "Country",
       dataIndex: "country",
-      render: (_, { country }) => (<> {countryData.find(item => item.value === country)?.label} </>)
+      sorter: {
+        compare: Sorter.DEFAULT,
+        multiple: 3
+      },
+      filters:countryData?.map((i,key)=>
+      {
+        return{text : i?.label,
+        value : i?.value}
+      }),
+      onFilter: (value, record) => record.country.indexOf(value) === 0,
+      render: (_, { country }) => (<> {countryData?.find(item => item?.value === country)?.label} </>)
     },
     {
       title: "Status",
       dataIndex: "_id",
-      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+      render: (id,d) => (
+        <Switch 
+        className='bg-[gray]' 
+        checked={d?.status=="ACTIVE"?true:false}
+        onChange={(e) => {
+          if(e) handleDelete(id, "ACTIVE")
+        else handleDelete(id, "INACTIVE")
+        }} />
+        )
     },
     {
       title: "Action",
@@ -100,6 +118,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
   const getData = () => {
+    // setLoading(1)
     // enterLoading(2)
     apiProvider.getState()
       .then(res => {
@@ -112,12 +131,14 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
       .catch(err => {
         console.log(err)
         // return exitLoading(2)
+        // setLoading(0)
 
       })
   }
 
   const getAllData = async () => {
     // enterLoading(2)
+    // setLoading(1)
     await apiProvider.getCountry()
       .then(res => {
         const arr = res.data?.map(i => ({
@@ -130,12 +151,12 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
         console.log(err)
       })
     // exitLoading(2)
+    // setLoading(0)
   }
 
-  const handleSubmit = () => {
-
-    enterLoading(1)
-    return apiProvider.createState(user)
+  const handleSubmit = async() => {
+    setLoading(1)
+    await apiProvider.createState(user)
       .then(res => {
         exitLoading(1)
         if (res.isSuccess) {
@@ -151,12 +172,15 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
         exitLoading(1)
         return notify('error', err.message);
       })
+
+      setLoading(0)
   }
 
-  const handleEdit = () => {
+  const handleEdit = async() => {
 
     // enterLoading(1)
-    return apiProvider.editState(user?._id, user)
+    setLoading(1)
+    await apiProvider.editState(user?._id, user)
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -173,10 +197,13 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
 
         return notify('error', err.message);
       })
+
+      setLoading(0)
   }
 
-  const handleDelete = (id) => {
-    return apiProvider.editState(id, { status: "DELETED" })
+  const handleDelete = async(id, status) => {
+    // setLoading(1)
+    await apiProvider.editState(id, { status: status })
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -193,6 +220,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
 
         return notify('error', err.message);
       })
+      // setLoading(0)
   }
 
   const clearData = () => {
@@ -284,7 +312,7 @@ const State = ({ notify, enterLoading, exitLoading, loadings }) => {
         <div className="flex justify-end mt-3">
           <Button
             loading={loadings[1]}
-            title="Add Sate"
+            title={edit?"Update State":"Add Sate"}
             className={'min-w-[100px]'}
             onClick={() => { edit ? handleEdit() : handleSubmit() }}
           />

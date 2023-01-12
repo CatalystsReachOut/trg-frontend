@@ -12,6 +12,7 @@ import ReactQuill from 'react-quill';
 import { Dropdown, Switch, Tag } from 'antd';
 import TextArea from '../../../components/Input/TextArea'
 import { BsThreeDots } from 'react-icons/bs'
+import { AiOutlineClose } from 'react-icons/ai'
 
 const QuestionBank = ({ notify }) => {
 
@@ -31,10 +32,18 @@ const QuestionBank = ({ notify }) => {
 
     if (key[0] === "edit") {
       setEdit(true)
-      setUser(data.find(item => item._id === key[1]))
+      const j = data.find(item => item._id === key[1])?.correctAnswer
+      setUser({
+        ...data.find(item => item._id === key[1]),
+        correctAnswer:j?.split(',')?.length==1?j:j?.split(',')
+      })
+      setKeywords(j?.split(',')?.length==1?j:j?.split(','))
+
+      // console.log(typeof data.find(item => item._id === key[1])?.correctAnswer?.split(','),data.find(item => item._id === key[1])?.correctAnswer?.split(','));
+
 
     } else {  // delete
-      handleDelete(key[1])
+      handleDelete(key[1], "DELETED")
     }
   };
 
@@ -61,8 +70,14 @@ const QuestionBank = ({ notify }) => {
       options: '',
       correctAnswer: ''
     })
+
+    setKeywords([])
   }
   const [allOptions, setAllOptions] = useState([])
+
+  const [subjectiveAns, setSubjectiveAns] = useState()
+
+  const [keyWords, setKeywords] = useState([])
 
   useEffect(() => {
     const arr = []
@@ -203,31 +218,40 @@ const QuestionBank = ({ notify }) => {
       render: (summary, a) => <div className="content max-h-[100px] overflow-y-auto" >
         {
           summary?.length != 0 ? summary?.map((i, key) => (
-            <div className={`${i?.answerBody == a?.correctAnswer ? 'bg-[#78e08f] text-white font-bold' : ''} px-2`}>{i?.answerBody}</div>
+            <div className={`${i?.answerBody == a?.correctAnswer ? 'bg-[#78e08f] text-white font-bold' : ''} px-2`}>Option {key + 1}</div>
           ))
             :
-            <div className='text-center'>
-              ------
+            <div className='text-center flex flex-wrap gap-2'>
+              {a.correctAnswer?.split(',')?.map((i,key)=>(
+              <div className='bg-[#78e08f] p-1 text-xsm text-white rounded-full px-2 flex gap-2 items-center' key={key}>
+                {i}
+              </div>
+              ))}
             </div>
-        }
-        {
-          console.log(a?.correctAnswer)
         }
       </div>
     },
-    {
-      title: "Answer",
-      dataIndex: "correctAnswer",
-      sorter: {
-        compare: Sorter.DEFAULT,
-        multiple: 1
-      },
-      render: (summary) => <div className="content max-h-[100px] overflow-y-auto" dangerouslySetInnerHTML={{ __html: summary }}></div>
-    },
+    // {
+    //   title: "Answer",
+    //   dataIndex: "correctAnswer",
+    //   sorter: {
+    //     compare: Sorter.DEFAULT,
+    //     multiple: 1
+    //   },
+    //   render: (summary) => <div className="content max-h-[100px] overflow-y-auto" dangerouslySetInnerHTML={{ __html: summary }}></div>
+    // },
     {
       title: "Status",
       dataIndex: "_id",
-      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+      render: (id, d) => (
+        <Switch
+          className='bg-[gray]'
+          checked={d?.status == "ACTIVE" ? true : false}
+          onChange={(e) => {
+            if (e) handleDelete(id, "ACTIVE")
+            else handleDelete(id, "INACTIVE")
+          }} />
+      )
     },
     {
       title: "Action",
@@ -274,6 +298,7 @@ const QuestionBank = ({ notify }) => {
     apiProvider.createQuestionBank(user)
       .then(res => {
         console.log(res)
+        clearData()
         getData()
         return notify('success', 'added success');
       })
@@ -281,6 +306,8 @@ const QuestionBank = ({ notify }) => {
         console.log(err)
         return notify('success', err.message);
       })
+
+      
   }
 
   const handleEdit = () => {
@@ -304,8 +331,8 @@ const QuestionBank = ({ notify }) => {
       })
   }
 
-  const handleDelete = (id) => {
-    return apiProvider.editQuestionBank(id, { status: "DELETED" })
+  const handleDelete = (id, status) => {
+    return apiProvider.editQuestionBank(id, { status: status })
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -322,6 +349,21 @@ const QuestionBank = ({ notify }) => {
 
         return notify('error', err.message);
       })
+  }
+
+  const handleKeyWord = () => {
+    if(!subjectiveAns) return notify('error', 'Type atleast a letter')
+    const arr = []
+    for (const i of keyWords) {
+      arr.push(i)
+    }
+    arr.push(subjectiveAns)
+    setSubjectiveAns('')
+    setKeywords(arr)
+    setUser(prev=>({
+      ...prev,
+      correctAnswer:arr.join(',')
+    }))
   }
 
   useEffect(() => {
@@ -423,18 +465,53 @@ const QuestionBank = ({ notify }) => {
                 </div>
               </>
               :
-              <div className="form-child col-span-12">
-                <label htmlFor="" className={`text-base px-2  mb-[10px]`}>Enter Answer</label>
+              <>
+                <div className="col-span-12 sm:col-span-5 flex gap-2 items-end">
 
-                <ReactQuill className='px-2 min-h-[100px]' label={"description"} theme="snow" value={user?.correctAnswer} onChange={(e) => setUser((prev) => ({ ...prev, "correctAnswer": e }))} />
-              </div>
+                  <Input
+                    label={'Enter Answer'}
+                    value={subjectiveAns}
+                    onChange={e => setSubjectiveAns(e.target.value)}
+                    placeHolder="Enter Ans Keywords"
+                    className={'w-full'}
+                    onPressEnter={handleKeyWord}
+                  />
+                  <Button
+                    title="+"
+                    className="mb-2"
+                    onClick={handleKeyWord}
+                  />
+                </div>
+                <div className="col-span-12"></div>
+                <div className="col-span-5 flex gap-2 items-center flex-wrap">
+                  {
+                    keyWords?.map((i, key) => (
+                      <div className='bg-secondary p-1 text-xsm text-white rounded-full px-2 flex gap-2 items-center' key={key}>
+                        {i} <div><AiOutlineClose className='cursor-pointer' onClick={() => {
+                          const arr=[];
+                          for (const i of keyWords) {
+                            arr.push(i)
+                          }
+                          arr.splice(key,1)
+                          setKeywords(arr)
+                          setUser(prev=>({
+                            ...prev,
+                            correctAnswer:arr.join(',')
+                          }))
+                        }} /></div>
+                      </div>
+                    ))
+                  }
+
+                </div>
+              </>
 
           }
 
         </div>
         <div className="flex justify-end mt-3">
           <Button
-            title="Add Question"
+            title={edit ? "Update" : "Add Question"}
             className={'min-w-[100px]'}
             onClick={() => { edit ? handleEdit() : handleSubmit() }}
           />

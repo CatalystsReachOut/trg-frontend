@@ -196,7 +196,7 @@ export const createWorkType = (data) => {
     return apiProvider.post(apiConstant.workType, data)
 }
 
-export const updateWorkType = (id, data) => {
+export const editWorkType = (id, data) => {
     return apiProvider.put(apiConstant.workType, id, data)
 }
 
@@ -210,9 +210,24 @@ export const createWorkShift = (data) => {
     return apiProvider.post(apiConstant.workShift, data)
 }
 
-export const updateWorkShift = (id, data) => {
+export const editWorkShift = (id, data) => {
     return apiProvider.put(apiConstant.workShift, id, data)
 }
+
+
+//WorkStyle
+export const getWorkStyle = () => {
+    return apiProvider.getAll(apiConstant.workStyle)
+}
+
+export const createWorkStyle = (data) => {
+    return apiProvider.post(apiConstant.workStyle, data)
+}
+
+export const editWorkStyle = (id, data) => {
+    return apiProvider.put(apiConstant.workStyle, id, data)
+}
+
 
 // Job Description
 export const getJobDescription = (query) => {

@@ -19,14 +19,7 @@ const Apprver4 = ({ notify }) => {
 
   const { id } = useParams()
 
-  const [user, setUser] = useState({
-    profile: '',
-    bussiness: '',
-    openings: '',
-    country: '',
-    state: '',
-    city: ''
-  })
+  const [user, setUser] = useState()
 
 
 
@@ -67,18 +60,23 @@ const Apprver4 = ({ notify }) => {
         setUser({
           profile: res.data.job.profileId,
           bussiness: res.data.job.businessId,
-          openings: res.data.job.numberOfOpenings,
+          openings: res.data.job.headcount,
           country: res.data.job.countryId,
+          department: res.data.job.departmentId,
           state: res.data.job.stateId,
           city: res.data.job.cityId,
           status: res.data.job.status,
-          remarks1: res.data.job.approver1?.remarks,
-          remarks2: res.data.job.approver2?.remarks,
-          remarks3: res.data.job.approver3?.remarks,
-          remarks4: res.data.job.approver4?.remarks,
+          approver_1: res.data.job.approver_1?.remarks,
+          approver_1: res.data.job.approver_2?.remarks,
+          approver_1: res.data.job.approver_3?.remarks,
+          approver_1: res.data.job.approver_4?.remarks,
           eligibilty: res.data.job.eligibilty,
           workTypeId: res.data.job.workTypeId,
-          workShiftId: res.data.job.workShiftId
+          workShiftId: res.data.job.workShiftId,
+          interviewRoundId: res.data.job.interviewRoundId,
+          questionBankId: res.data.job.questionBankId,
+          roundId: res.data.job.roundId,
+          compensationId: res.data.job.compensationId,
         })
       })
       .catch(err => {

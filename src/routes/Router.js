@@ -26,6 +26,7 @@ import RecMasterCity from './../pages/Recruitment/Master/City'
 import RecMasterBussiness from './../pages/Recruitment/Master/Bussiness'
 import RecMasterWorkType from './../pages/Recruitment/Master/WorkType'
 import RecMasterWorkShift from './../pages/Recruitment/Master/WorkShift'
+import RecMasterWorkStyle from './../pages/Recruitment/Master/WorkStyle'
 
 
 ////Create Job
@@ -74,6 +75,8 @@ import ProfileInitContainer from '../pages/UserProfile/Container'
 import ProfileInitRegistration from './../pages/UserProfile/Register'
 import ProfileInitOTP from './../pages/UserProfile/OTPVerification'
 import ProfileInitBasic from './../pages/UserProfile/Basic'
+import Loader from '../components/Loader/Loader';
+import EditJob from '../pages/Recruitment/JobsCreation/EditJob';
 
 const Router = () => {
 
@@ -85,6 +88,8 @@ const Router = () => {
   };
 
   const [loadings, setLoadings] = useState([]);
+
+  const [loading, setLoading] = useState(0)
 
   const enterLoading = (index) => {
     // setLoadings((prevLoadings) => {
@@ -116,10 +121,11 @@ const Router = () => {
       <>
         {
           auth ? <div className='bg-[#F5F5F5]'>
+            <Loader loading={loading}/>
 
             <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
             <div className='container mx-auto p-[20px]  min-h-screen'>
-              <Element notify={notify} loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading}/>
+              <Element notify={notify} loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} setLoading={setLoading}/>
             </div>
             <Footer />
           </div> : <Navigate replace to={redirect} />
@@ -166,13 +172,15 @@ const Router = () => {
         <Route exact path={ROUTES.Recruitment.Master.State} element={<RouteWithRole Element={RecMasterState} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.WorkType} element={<RouteWithRole Element={RecMasterWorkType} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.WorkShift} element={<RouteWithRole Element={RecMasterWorkShift} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.WorkStyle} element={<RouteWithRole Element={RecMasterWorkStyle} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.JobDescription} element={<RouteWithRole Element={JobDescription} />}></Route>
 
 
 
         //// Create Job /////
         <Route exact path={ROUTES.Recruitment.CreateJob} element={<RouteWithRole Element={RecCreateJob} />}></Route>
-        <Route exact path={`${ROUTES.Recruitment.Job}/:id`} element={<RouteWithRole Element={RecCreateJobApp4} />}></Route>
+        {/* <Route exact path={`${ROUTES.Recruitment.Job}/:id`} element={<RouteWithRole Element={RecCreateJobApp4} />}></Route> */}
+        <Route exact path={`${ROUTES.Recruitment.Job}/:id`} element={<RouteWithRole Element={EditJob} />}></Route>
         <Route exact path='/job/progress/:id' element={<RouteWithRole Element={RecCreateJobProgrss} />}></Route>
 
         // jobs

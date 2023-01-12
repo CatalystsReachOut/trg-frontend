@@ -29,6 +29,8 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [stateOpt, setStateOpt] = useState([])
   const [cityOpt, setCityOpt] = useState([])
 
+  const [profileData, setProfileData] = useState([])
+
   const [user, setUser] = useState({
     profileId: '',
     businessId: '',
@@ -61,6 +63,72 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
     setUser(prev => ({
       ...prev,
       [name]: value
+    }))
+  }
+
+  const handleApprocerSelection = (p) => {
+    console.log(p);
+    const j = profileData?.find(s=>s._id==p.value)
+
+    // Setting approver1 object
+    const approverobj1 = j?.reportProfile
+      ?
+      {
+        profileId:j?.reportProfile,
+        tasks:[],
+        remarks:null,
+        approved_at:null,
+        status:'PENDING'
+      }
+      :
+      null
+
+      // Setting approver1 object
+    const approverobj2 = j?.reportProfile && j?.approvingAuthority[0]?.profile
+      ?
+      {
+        profileId:j?.approvingAuthority[0]?.profile,
+        tasks:j?.approvingAuthority[0]?.tasks,
+        remarks:null,
+        approved_at:null,
+        status:'PENDING'
+      }
+      :
+      null
+      // Setting approver1 object
+    const approverobj3 = j?.reportProfile && j?.approvingAuthority[1]?.profile
+      ?
+      {
+        profileId:j?.approvingAuthority[1]?.profile,
+        tasks:j?.approvingAuthority[1]?.tasks,
+        remarks:null,
+        approved_at:null,
+        status:'PENDING'
+      }
+      :
+      null
+      // Setting approver1 object
+    const approverobj4 = j?.reportProfile && j?.approvingAuthority[2]?.profile
+      ?
+      {
+        profileId:j?.approvingAuthority[2]?.profile,
+        tasks:j?.approvingAuthority[2]?.tasks,
+        remarks:null,
+        approved_at:null,
+        status:'PENDING'
+      }
+      :
+      null
+
+
+      console.log(j,approverobj1,approverobj2,approverobj3,approverobj4);
+
+    setUser(prev=>({
+      ...prev,
+      approver_1:approverobj1,
+      approver_2:approverobj2,
+      approver_3:approverobj3,
+      approver_4:approverobj4,
     }))
   }
 
@@ -162,6 +230,7 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
   const getProfileOpt = async (band, department) => {
     apiProvider.getProfile(`?band=${band}&departmentId=${department}`)
       .then(res => {
+        setProfileData(res.data)
         const arr = res.data?.map(i => ({
           label: i?.title,
           value: i?._id
@@ -216,7 +285,7 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   useEffect(() => {
     if (employee?.departmentId || band) {
-      setUser(prev => ({ ...prev, "businessId": employee.businessId }))
+      setUser(prev => ({ ...prev, "businessId": employee?.businessId }))
       getProfileOpt(band, employee?.departmentId)
     }
   }, [employee?.departmentId, band])
@@ -248,7 +317,15 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
                   label="Profile"
                   name='profileId'
                   options={profileOpt}
-                  onChange={handelChangeSelect}
+                  onChange={(e) => {
+                    const { name, value } = e;
+                    setUser(prev => ({
+                      ...prev,
+                      [name]: value
+                    }))
+
+                    handleApprocerSelection(e)
+                  }}
                 />
               </div>
               <div className="lg:col-span-4 sm:col-span-6 col-span-12">

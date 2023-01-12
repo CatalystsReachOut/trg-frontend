@@ -10,6 +10,7 @@ import Select from '../../../components/Select/Select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
+import { jobfields } from '../../../reference/jobassigning'
 
 const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
@@ -17,23 +18,36 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
         title: '',
         profileType: '',
         level: '',
+        departmentId:'',
         reportProfile: null,
-        approvingAuthority:[]
+        band:'',
+        approvingAuthority: []
     })
+
+    const [newjobfields,setNewjobfields] = useState([])
+    useEffect(()=>{
+        const arr = []
+        for (const iterator of jobfields) {
+            arr.push(iterator)
+        }
+        setNewjobfields(arr)
+    },[])
+
+    console.log(newjobfields);
 
     const [edit, setEdit] = useState(false)
 
-  const handleMenuClick = (e) => {
-    const key = e.key.split("_");
+    const handleMenuClick = (e) => {
+        const key = e.key.split("_");
 
-    if (key[0] === "edit") {
-      setEdit(true)
-      setUser(data.find(item => item._id === key[1]))
+        if (key[0] === "edit") {
+            setEdit(true)
+            setUser(data.find(item => item._id === key[1]))
 
-    } else {  // delete
-      handleDelete(key[1])
-    }
-  };
+        } else {  // delete
+            handleDelete(key[1], "DELETED")
+        }
+    };
 
     const [loading, setLoading] = useState(false)
 
@@ -42,11 +56,11 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
             title: "Sl no.",
             dataIndex: "index",
             sorter: {
-              compare: Sorter.DEFAULT,
-              multiple: 2
+                compare: Sorter.DEFAULT,
+                multiple: 2
             },
             render: (value, item, index) => index + 1
-          },
+        },
         {
             title: "Title",
             dataIndex: "title"
@@ -81,54 +95,66 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
         {
             title: "Status",
             dataIndex: "_id",
-            render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
-          },
-          {
+            render: (id, d) => (
+                <Switch
+                    className='bg-[gray]'
+                    checked={d?.status == "ACTIVE" ? true : false}
+                    onChange={(e) => {
+                        if (e) handleDelete(id, "ACTIVE")
+                        else handleDelete(id, "INACTIVE")
+                    }} />
+            )
+        },
+        {
             title: "Action",
             dataIndex: "_id",
             render: (id) => (<Dropdown
-              className='cursor-pointer'
-              menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
-              trigger={['click']}
+                className='cursor-pointer'
+                menu={{ items: [{ label: 'Edit', key: `edit` + "_" + id }, { label: 'Delete', key: "delete" + "_" + id }], onClick: handleMenuClick }}
+                trigger={['click']}
             >
-              <BsThreeDots />
+                <BsThreeDots />
             </Dropdown>)
-          }
+        }
     ];
 
     const bands = [
         {
-            value:'1A',
-            label:'1A'
+            value: '1A',
+            label: '1A'
         },
         {
-            value:'1B',
-            label:'1B'
+            value: '1B',
+            label: '1B'
         },
         {
-            value:'2',
-            label:'2'
+            value: '2',
+            label: '2'
         },
         {
-            value:'3',
-            label:'3'
+            value: '3',
+            label: '3'
         },
         {
-            value:'4',
-            label:'4'
+            value: '4',
+            label: '4'
         },
         {
-            value:'5',
-            label:'5'
+            value: '5',
+            label: '5'
         },
         {
-            value:'6',
-            label:'6'
+            value: '6',
+            label: '6'
         },
         {
-            value:'7',
-            label:'7'
-        }
+            value: '7',
+            label: '7'
+        },
+        {
+            value: '8',
+            label: '8'
+        },
     ]
 
     const handleChange = (e) => {
@@ -218,6 +244,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
     const handleSubmit = () => {
+        if(!user?.title || !user?.band || !user?.profileType || !user?.departmentId) return notify('error','Mandatory fields are required')
 
         enterLoading(1)
         return apiProvider.createProfile(user)
@@ -241,44 +268,44 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     const handleEdit = () => {
         // enterLoading(1)
-        return apiProvider.editCity(user?._id, user)
-          .then(res => {
-            if (res.isSuccess) {
-              clearData()
-              getData()
-              setEdit(false)
-              return notify('success', 'added success');
-            } else {
-              setEdit(false)
-              return notify('error', res.message);
-            }
-          })
-          .catch(err => {
-            console.log(err)
-    
-            return notify('error', err.message);
-          })
-      }
+        return apiProvider.editProfile(user?._id, user)
+            .then(res => {
+                if (res.isSuccess) {
+                    clearData()
+                    getData()
+                    setEdit(false)
+                    return notify('success', 'added success');
+                } else {
+                    setEdit(false)
+                    return notify('error', res.message);
+                }
+            })
+            .catch(err => {
+                console.log(err)
 
-    const handleDelete = (id) => {
-        return apiProvider.editProfile(id, { status: "DELETED" })
-          .then(res => {
-            if (res.isSuccess) {
-              clearData()
-              getData()
-              setEdit(false)
-              return notify('success', 'added success');
-            } else {
-              setEdit(false)
-              return notify('error', res.message);
-            }
-          })
-          .catch(err => {
-            console.log(err)
-    
-            return notify('error', err.message);
-          })
-      }
+                return notify('error', err.message);
+            })
+    }
+
+    const handleDelete = (id, status) => {
+        return apiProvider.editProfile(id, { status: status })
+            .then(res => {
+                if (res.isSuccess) {
+                    clearData()
+                    getData()
+                    setEdit(false)
+                    return notify('success', 'added success');
+                } else {
+                    setEdit(false)
+                    return notify('error', res.message);
+                }
+            })
+            .catch(err => {
+                console.log(err)
+
+                return notify('error', err.message);
+            })
+    }
 
     const clearData = () => {
         setUser({
@@ -286,7 +313,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
             profileType: '',
             level: '',
             reportProfile: null,
-            approvingAuthority:[]
+            approvingAuthority: []
         })
     }
 
@@ -368,18 +395,18 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     label={""}
                                     placeHolder="Authority"
                                     isMulti
-                                    options={options}
-                                    defaultValue={options?.filter(s=>i?.tasks?.find(p=>p==s?.value))}
-                                    // defaultValue={[options[0]]}
-                                    // onChange={e => {
-                                    //     console.log(e);
-                                    //     const arr = []
-                                    //     for (const i in e) {
-                                    //         if (e[i]?.value)
-                                    //             arr.push(e[i].value)
-                                    //     }
-                                    //     setReportSelected(arr)
-                                    // }}
+                                    options={jobfields}
+                                    defaultValue={jobfields?.filter(s => i?.tasks?.find(p => p == s?.value))}
+                                // defaultValue={[options[0]]}
+                                // onChange={e => {
+                                //     console.log(e);
+                                //     const arr = []
+                                //     for (const i in e) {
+                                //         if (e[i]?.value)
+                                //             arr.push(e[i].value)
+                                //     }
+                                //     setReportSelected(arr)
+                                // }}
 
                                 />
                             </div>
@@ -387,62 +414,71 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                     ))
                 }
 
-                <div className='grid grid-cols-2'>
-                    <div className="col-span-1">
-                        <Select
-                            label=""
-                            options={profileData}
-                            name="reportProfile"
-                            value={reporter}
-                            defaultValue={reporter}
-                            onChange={(e) => { setReporter(e.value) }}
-                        >
-                        </Select>
-                    </div>
-                    <div className="col-span-1">
-                        <Select
-                            label={""}
-                            placeHolder="Authority"
-                            isMulti={true}
-                            defaultValue={reportSelected}
-                            value={reportSelected}
-                            options={options}
-                            onChange={e => {    
-                                console.log(e);
-                                const arr = []
-                                for (const i in e) {
-                                    if (e[i]?.value)
-                                        arr.push(e[i].value)
-                                }
-                                setReportSelected(arr)
-                            }}
-                        // value={reportSelected}
+                {
+                    user?.approvingAuthority.length<3
+                    ?
+                    <>
+                        <div className='grid grid-cols-2'>
+                            <div className="col-span-1">
+                                <Select
+                                    label=""
+                                    options={profileData}
+                                    name="reportProfile"
+                                    value={reporter}
+                                    defaultValue={reporter}
+                                    onChange={(e) => { setReporter(e.value) }}
+                                >
+                                </Select>
+                            </div>
+                            <div className="col-span-1">
+                                <Select
+                                    label={""}
+                                    placeHolder="Authority"
+                                    isMulti={true}
+                                    defaultValue={reportSelected}
+                                    value={reportSelected}
+                                    options={jobfields}
+                                    onChange={e => {
+                                        console.log(e);
+                                        const arr = []
+                                        for (const i in e) {
+                                            if (e[i]?.value)
+                                                arr.push(e[i].value)
+                                        }
+                                        setReportSelected(arr)
+                                    }}
+                                // value={reportSelected}
 
-                        />
-                    </div>
-                </div>
-                <div className='px-2 flex justify-end'>
-                    <Button
-                        title="Add"
-                        className="mt-3"
-                        onClick={() => {
-                            if(!reporter || reportSelected.length==0) return;
-                            setUser(prev=>({
-                                ...prev,
-                                approvingAuthority:[
-                                    ...user?.approvingAuthority,
-                                    {
-                                        profile:reporter,
-                                        tasks:reportSelected
-                                    }
-                                ]
-                            }))
-                            setReporter()
-                            setReportSelected([])
-                            setFlag(prev=>!prev)
-                        }}
-                    />
-                </div>
+                                />
+                            </div>
+                        </div>
+                        <div className='px-2 flex justify-end'>
+                            <Button
+                                title="Add"
+                                className="mt-3"
+                                onClick={() => {
+                                    if (!reporter || reportSelected.length == 0) return;
+                                    setUser(prev => ({
+                                        ...prev,
+                                        approvingAuthority: [
+                                            ...user?.approvingAuthority,
+                                            {
+                                                profile: reporter,
+                                                tasks: reportSelected
+                                            }
+                                        ]
+                                    }))
+                                    setReporter()
+                                    setReportSelected([])
+                                    setFlag(prev => !prev)
+                                }}
+                            />
+                        </div>
+                    </>
+                    :
+                    null
+                }
+
             </Modal>
             <Card>
                 <div className='font-bold'> Add Profile </div>
@@ -455,6 +491,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             name="title"
                             value={user?.title}
                             onChange={handleChange}
+                            required={true}
                         />
                     </div>
                     <div className="col-span-1">
@@ -464,6 +501,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             name="profileType"
                             value={user?.profileType}
                             onChange={handelChangeSelect}
+                            required={true}
                         >
                         </Select>
                     </div>
@@ -475,6 +513,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             name="band"
                             value={user?.band}
                             onChange={handelChangeSelect}
+                            required={true}
                         />
                     </div>
 
@@ -496,6 +535,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             name="departmentId"
                             value={user?.departmentId}
                             onChange={handelChangeSelect}
+                            required={true}
                         >
                         </Select>
                     </div>
@@ -510,7 +550,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
                 <div className="flex justify-end mt-3">
                     <Button
-                        title="Add Profile"
+                        title={edit ? "Update" : "Add Profile"}
                         loading={loadings[1]}
                         className={'min-w-[100px]'}
                         type={1}

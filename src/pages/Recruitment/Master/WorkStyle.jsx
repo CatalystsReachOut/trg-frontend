@@ -9,12 +9,12 @@ import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 import { BsThreeDots } from "react-icons/bs"
 import { Switch, Dropdown } from 'antd';
-import { useNavigate } from 'react-router-dom'
-import { ROUTES } from '../../../routes/RouterConfig'
 import Select from '../../../components/Select/Select'
+import { ROUTES } from '../../../routes/RouterConfig'
+import { useNavigate } from 'react-router-dom'
 
 
-const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
+const WorkStyle = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const [user, setUser] = useState({
     name: ""
@@ -48,7 +48,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
       render: (value, item, index) => index + 1
     },
     {
-      title: "Work Shift",
+      title: "Work Style",
       dataIndex: "name",
       sorter: {
         compare: Sorter.DEFAULT,
@@ -81,35 +81,6 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
     }
   ];
 
-  const navigate = useNavigate()
-
-  const changeRoute = (id) => {
-    switch (id?.value) {
-      case 'style':
-        navigate(ROUTES.Recruitment.Master.WorkStyle);
-        break;
-      case 'type':
-        navigate(ROUTES.Recruitment.Master.WorkType);
-        break;
-
-    }
-  }
-
-  const selectData = [
-    {
-      label: 'Work Style',
-      value: 'style'
-    },
-    {
-      label: 'Work Shift',
-      value: 'shift'
-    },
-    {
-      label: 'Work Type',
-      value: 'type'
-    }
-  ]
-
 
   const [profileData, setProfileData] = useState([])
 
@@ -127,7 +98,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const handleEdit = () => {
     // enterLoading(1)
-    return apiProvider.editWorkShift(user?._id, user)
+    return apiProvider.editWorkStyle(user?._id, user)
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -147,7 +118,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
   const handleDelete = (id, status) => {
-    return apiProvider.editWorkShift(id, { status: status })
+    return apiProvider.editWorkStyle(id, { status: status })
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -169,7 +140,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const getData = () => {
     // enterLoading(2)
-    apiProvider.getWorkShift()
+    apiProvider.getWorkStyle()
       .then(res => {
 
         if (res.isSuccess) {
@@ -190,7 +161,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
   const handleSubmit = () => {
 
     // enterLoading(1)
-    return apiProvider.createWorkShift(user)
+    return apiProvider.createWorkStyle(user)
       .then(res => {
         // exitLoading(1)
         if (res.isSuccess) {
@@ -214,6 +185,35 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
     })
   }
 
+  const navigate = useNavigate()
+
+  const changeRoute = (id) => {
+    switch (id?.value) {
+      case 'shift':
+        navigate(ROUTES.Recruitment.Master.WorkShift);
+        break;
+      case 'type':
+        navigate(ROUTES.Recruitment.Master.WorkType);
+        break;
+
+    }
+  }
+
+  const selectData = [
+    {
+      label: 'Work Style',
+      value: 'style'
+    },
+    {
+      label: 'Work Shift',
+      value: 'shift'
+    },
+    {
+      label: 'Work Type',
+      value: 'type'
+    }
+  ]
+
   useEffect(() => {
     getData();
   }, [])
@@ -227,19 +227,19 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
           label="Select"
           options={selectData}
           name="Select"
-          value={"shift"}
+          value={"style"}
           onChange={(e) => changeRoute(e)}
         >
         </Select>
 
       </Card>
       <Card>
-        <div className='font-bold'> Add Work Shift </div>
+        <div className='font-bold'> Add Work Style </div>
         <div className='grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 mt-4'>
           <div className="col-span-1">
             <Input
-              label={'Work Shift Name'}
-              placeHolder={'Enter Work Shift Name'}
+              label={'Work Style Name'}
+              placeHolder={'Enter Work Style Name'}
               name="name"
               value={user?.name}
               onChange={handleChange}
@@ -248,7 +248,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
         </div>
         <div className="flex justify-end mt-3">
           <Button
-            title={edit ?"Update":'Add Work Shift'}
+            title={edit ?"Update":'Add Work Style'}
             className={'min-w-[100px]'}
             onClick={() => { edit ? handleEdit() : handleSubmit() }}
             loading={loadings[1]}
@@ -258,7 +258,7 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
 
       <Card className={'mt-3'}>
         <div className="font-bold my-3">
-        Work Shift's
+        Work Style's
         </div>
         <Table loading={loadings[2]} columns={columns} dataSource={data} />
       </Card>
@@ -266,4 +266,4 @@ const WorkShift = ({ notify, enterLoading, exitLoading, loadings }) => {
   )
 }
 
-export default WorkShift
+export default WorkStyle

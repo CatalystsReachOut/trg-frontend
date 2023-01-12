@@ -11,7 +11,7 @@ import { Sorter } from '../../../helpers/Sorter'
 import { ROUTES } from '../../../routes/RouterConfig'
 import * as apiProvider from '../../../services/api/recruitment'
 // import Button from '../../../components/Button/Button'
-import {getColumnSearchProps} from '../../../helpers/TableSearch'
+import { getColumnSearchProps } from '../../../helpers/TableSearch'
 import { Dropdown, Switch } from 'antd'
 import { BsThreeDots } from 'react-icons/bs'
 
@@ -34,7 +34,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
       setUser(data.find(item => item._id === key[1]))
 
     } else {  // delete
-      handleDelete(key[1])
+      handleDelete(key[1], "DELETED")
     }
   };
 
@@ -81,19 +81,41 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
     {
       title: "State",
       dataIndex: "state",
+      filters: stateOptions?.map((i, key) => {
+        return {
+          text: i?.label,
+          value: i?.value
+        }
+      }),
+      onFilter: (value, record) => record.state.indexOf(value) === 0,
       render: (_, { state }) => (<> {stateOptions.find(item => item.value === state)?.label} </>)
 
     },
     {
       title: "Country",
       dataIndex: "country",
+      filters: countryOptions?.map((i, key) => {
+        return {
+          text: i?.label,
+          value: i?.value
+        }
+      }),
+      onFilter: (value, record) => record.country.indexOf(value) === 0,
       render: (_, { country }) => (<> {countryOptions.find(item => item.value === country)?.label} </>)
 
     },
     {
       title: "Status",
       dataIndex: "_id",
-      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+      render: (id, d) => (
+        <Switch
+          className='bg-[gray]'
+          checked={d?.status == "ACTIVE" ? true : false}
+          onChange={(e) => {
+            if (e) handleDelete(id, "ACTIVE")
+            else handleDelete(id, "INACTIVE")
+          }} />
+      )
     },
     {
       title: "Action",
@@ -125,7 +147,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
   const getAllData = async () => {
-    const [data1] = await Promise.all([
+    const [data1, data2] = await Promise.all([
       apiProvider.getCountry()
         .then(res => {
           const arr = res.data?.map(data => ({
@@ -136,25 +158,24 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         })
         .catch(err => {
           console.log(err)
+        }),
+      apiProvider.getState()
+        .then(res => {
+          const arr = res.data?.map(data => ({
+            value: data._id,
+            label: data.name
+          }))
+          return arr
         })
+        .catch(err => {
+          console.log(err)
+        })
+
     ])
 
     setCountryOptions(data1);
+    setStateOptions(data2)
 
-  }
-
-  const getStateOpt = async (id) => {
-    apiProvider.getState(`?country=${id}`)
-      .then(res => {
-        const arr = res.data?.map(data => ({
-          value: data._id,
-          label: data.name
-        }))
-        setStateOptions(arr)
-      })
-      .catch(err => {
-        console.log(err)
-      })
   }
 
   const handleSubmit = () => {
@@ -199,8 +220,8 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
-  const handleDelete = (id) => {
-    return apiProvider.editCity(id, { status: "DELETED" })
+  const handleDelete = (id, status) => {
+    return apiProvider.editCity(id, { status: status })
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -224,8 +245,8 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
 
   const clearData = () => {
     setUser({
-      country: '',
-      state: '',
+      country: null,
+      state: null,
       name: ''
     })
   }
@@ -235,18 +256,12 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
     getData();
   }, [])
 
-  useEffect(() => {
-    if (user?.country) {
-      getStateOpt(user?.country)
-    }
-  }, [user?.country])
-  
 
 
 
   const navigate = useNavigate();
 
-  
+
   const changeRoute = (id) => {
     switch (id?.value) {
       case 'country':
@@ -325,7 +340,7 @@ const City = ({ notify, enterLoading, exitLoading, loadings }) => {
         <div className="flex justify-end mt-3">
           <Button
             loading={loadings[1]}
-            title="Add City"
+            title={edit ? "Update City" : "Add City"}
             className={'min-w-[100px]'}
             onClick={() => { edit ? handleEdit() : handleSubmit() }}
           />

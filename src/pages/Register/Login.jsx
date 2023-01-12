@@ -37,8 +37,9 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.AUTH, res.token);
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.USER_ROLE, res.role);
                     commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.USER_ID, res._id);
-                    commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.BAND, res.level);
-                    commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.EMPLOYEE, res.employee);
+                    commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.BAND, res.band);
+                    commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.ROLE, res.role);
+                    commonServices.storeLocalData(storageConstants.LOCAL, storageConstants.PROFILE_ID, res.profileId);
 
                     navigate(ROUTES.Recruitment.Master.Bussiness)
                     exitLoading(1)

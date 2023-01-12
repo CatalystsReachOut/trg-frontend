@@ -31,6 +31,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
 
 
 
+
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
@@ -150,7 +151,7 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       setBusiness(data.find(item => item._id === key[1]))
 
     } else if (key[0] === "delete") {  // delete
-      handleDelete(data.find(item => item._id === key[1])?._id)
+      handleDelete(key[1], "DELETED")
     }
   };
 
@@ -236,7 +237,20 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
     {
       title: "Status",
       dataIndex: "_id",
-      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+      render: (id, d, d1, d2) => (
+        <>
+        {
+          // console.log(d)
+        }
+      <Switch 
+      className='bg-[gray]' 
+      checked={d.status=='ACTIVE'?true:false}
+      onChange={(e) => {
+        if(e) handleDelete(id, 'ACTIVE');
+        else handleDelete(id, 'INACTIVE');
+        console.log(d,d1,d2);
+      }} />
+      </>)
     },
     {
       title: "Action",
@@ -271,10 +285,11 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       .then(res => {
 
         if (res.isSuccess) {
+          console.log(res.data);
           setData(res.data)
           const arr = res.data.map(data => ({
             value: data._id,
-            label: data.businessName
+            label: data.name
           }))
           setProfileData(arr)
         }
@@ -331,8 +346,8 @@ const Bussiness = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
-  const handleDelete = (id) => {
-    return apiProvider.editBusiness(id, { status: "DELETED" })
+  const handleDelete = (id,  status) => {
+    return apiProvider.editBusiness(id, { status: status })
       .then(res => {
         if (res.isSuccess) {
           clearData()

@@ -30,7 +30,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
       setUser(data.find(item => item._id === key[1]))
 
     } else {  // delete
-      handleDelete(key[1])
+      handleDelete(key[1], "DELETED")
     }
   };
 
@@ -62,7 +62,15 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
     {
       title: "Status",
       dataIndex: "_id",
-      render: (id) => (<Switch className='bg-[gray]' defaultChecked onChange={() => console.log(id)} />)
+      render: (id,d) => (
+        <Switch 
+        className='bg-[gray]' 
+        checked={d?.status=="ACTIVE"?true:false}
+        onChange={(e) => {
+          if(e) handleDelete(id, "ACTIVE")
+        else handleDelete(id, "INACTIVE")
+        }} />
+        )
     },
     {
       title: "Action",
@@ -157,8 +165,8 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
       })
   }
 
-  const handleDelete = (id) => {
-    return apiProvider.editDepartment(id, { status: "DELETED" })
+  const handleDelete = (id , status) => {
+    return apiProvider.editDepartment(id, { status:status })
       .then(res => {
         if (res.isSuccess) {
           clearData()
@@ -213,7 +221,7 @@ const Department = ({ notify, enterLoading, exitLoading, loadings }) => {
         </div>
         <div className="flex justify-end mt-3">
           <Button
-            title="Add Department"
+            title={edit?"Update":"Add Department"}
             className={'min-w-[100px]'}
             onClick={() => { edit ? handleEdit() : handleSubmit() }}
             loading={loadings[1]}

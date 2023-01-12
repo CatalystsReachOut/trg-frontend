@@ -16,14 +16,16 @@ const Select = ({
     disabled,
     defaultValue,
     placeholder,
-    isMulti
+    isMulti,
+    isSearchable,
+    required
 }) => {
 
 
 
     return (
         <div className={`custom-select w-full flex flex-col gap-2.5 ${className}`}>
-            <label className={`text-base px-2 ${labelClassName}`} htmlFor="">{label}</label>
+            <label className={`text-base px-2 ${labelClassName}`} htmlFor="">{label} {required?<span style={{color:'red'}}>*</span>:null}</label>
             <Sel
                 className={`text-sm px-2 outline-0 ${selectClassName}`}
                 options={options}
@@ -37,6 +39,7 @@ const Select = ({
                 selelcted={defaultValue}
                 isMulti={isMulti}
                 defaultValue={defaultValue}
+                isSearchable={isSearchable?isSearchable:false}
             />
         </div>
     )

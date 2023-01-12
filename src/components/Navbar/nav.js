@@ -64,7 +64,8 @@ export const adminNavbarData = [
                 label: <Link to={ROUTES?.Recruitment?.Master?.Department || "#"} > Department </Link>,
                 route: ROUTES?.Recruitment?.Master?.Department,
                 key: 'department',
-            }
+            },
+            
 
         ]
     },
@@ -77,6 +78,11 @@ export const adminNavbarData = [
                 label: <Link to={ROUTES?.Recruitment?.Profile || "#"} > Profile </Link>,
                 route: ROUTES?.Recruitment.Profile,
                 key: 'profile',
+            },
+            {
+                label: <Link to={ROUTES?.Recruitment?.Master?.WorkShift || "#"} > Work Mode </Link>,
+                route: ROUTES?.Recruitment?.Master?.WorkShift,
+                key: 'work',
             },
             {
                 label: <Link to={ROUTES?.Recruitment?.Master?.JobDescription || "#"} > Job Description </Link>,

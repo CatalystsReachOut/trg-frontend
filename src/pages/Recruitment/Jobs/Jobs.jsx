@@ -22,6 +22,8 @@ const Jobs = () => {
 
   const [step, setStep] = useState(1)
 
+  const [profileData, setProfileData] = useState([])
+
   const columns = [
     {
       title: "Business",
@@ -52,7 +54,9 @@ const Jobs = () => {
     {
       title: "Action",
       dataIndex: "",
-      render: (_, { _id }) => (<> <Button title="view" onClick={() => { showModal(); setJobId(_id) }} /> </>)
+      render: (_, { _id }) => (<> 
+        <Button title="view" onClick={() => { showModal(); setJobId(_id) }} /> </>
+      )
     },
 
   ];
@@ -88,10 +92,23 @@ const Jobs = () => {
       })
   }
 
+  const getBasicData= async() => {
+    await apiProvider.getProfile()
+    .then(res=>{
+      if (res.isSuccess) {
+        setProfileData(res.data)
+      }
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
   const band = localStorage.getItem(storageConstant.BAND)
 
 
   useEffect(() => {
+    getBasicData()
     getData();
   }, [])
 
@@ -131,6 +148,9 @@ const Jobs = () => {
 
           </> : <>
             <h6 className='text-center font-semibold text-[20px]'>Job Status</h6>
+            {/* <button className="btn-primary">
+              Back
+            </button> */}
 
             <p className='text-[18px] mt-[20px]'>Job ID : <span className='font-semibold'>{jobData?.jobId}</ span> </p>
 
@@ -142,7 +162,7 @@ const Jobs = () => {
                       <DownOutlined />
                     </a>
                   </Dropdown>
-                  <h6 className=' ml-[5px] font-semibold text-[17px]'>Reporting Manager</h6>
+                  <h6 className=' ml-[5px] font-semibold text-[17px]'>Reporting Manager ({profileData?.find(s=>s._id==jobData?.profileId).reportProfile?profileData?.find(s=>s._id==profileData?.find(s=>s._id==jobData?.profileId).reportProfile).title:'not assigned any' })</h6>
                 </div>
                 <p className='text-[14px] ml-[15px] text-[red]'>Pending</p>
               </div>
@@ -153,7 +173,7 @@ const Jobs = () => {
                       <DownOutlined />
                     </a>
                   </Dropdown>
-                  <h6 className='font-semibold ml-[5px] text-[18px]'>HR Manager</h6>
+                  <h6 className='font-semibold ml-[5px] text-[18px]'>HR Manager   ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[0]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[0]?.profile)?.title:'not assigned any' })</h6>
                 </div>
                 <p className='text-[14px] text-[red] ml-[15px]'>Pending at Level 1</p>
               </div><div className=" items-center justify-center">
@@ -163,7 +183,7 @@ const Jobs = () => {
                       <DownOutlined />
                     </a>
                   </Dropdown>
-                  <h6 className='font-semibold ml-[5px] text-[18px]'>Country Head</h6>
+                  <h6 className='font-semibold ml-[5px] text-[18px]'>Country Head  ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[1]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[1]?.profile)?.title:'not assigned any' })</h6>
                 </div>
                 <p className='text-[14px] ml-[15px] text-[red]'>Pending at Level 2</p>
 
@@ -174,7 +194,7 @@ const Jobs = () => {
                       <DownOutlined />
                     </a>
                   </Dropdown>
-                  <h6 className='font-semibold ml-[5px] text-[17px] whitespace-none'>HR Head</h6>
+                  <h6 className='font-semibold ml-[5px] text-[17px] whitespace-none'>HR Head  ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[2]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[2]?.profile)?.title:'not assigned any' })</h6>
                 </div>
                 <p className='text-[14px] ml-[15px] text-[red]'>Pending at Level 3</p>
 

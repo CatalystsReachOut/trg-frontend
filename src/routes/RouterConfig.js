@@ -18,6 +18,7 @@ export const ROUTES = {
             Bussiness: '/recruitment/master/bussiness',
             WorkType: '/recruitment/master/work-type',
             WorkShift: '/recruitment/master/work-shift',
+            WorkStyle: '/recruitment/master/work-style',
             JobDescription: '/recruitment/master/job-description'
         },
         CreateJob: '/recruitment/create-job',

@@ -1,6 +1,6 @@
 // export const BASE_URL = 'https://trg-portal.herokuapp.com/api/v1/'
-export const BASE_URL = 'https://trg-portal.vercel.app/api/v1/'
-// export const BASE_URL = 'http://localhost:8000/api/v1/'
+// export const BASE_URL = 'https://trg-portal.vercel.app/api/v1/'
+export const BASE_URL = 'http://localhost:8000/api/v1/' 
 
 
 
@@ -17,6 +17,8 @@ export const UserSignUp = 'signup'
 export const UserLogin = 'login'
 export const Job = 'job'
 export const Profile = 'profile'
-export const workShift = 'workShift'
-export const workType = 'workType'
+export const workShift = 'workshift'
+export const workStyle = 'workstyle'
+export const workType = 'worktype'
+export const workmode = 'work'
 export const jobDescription = 'jobDescription'

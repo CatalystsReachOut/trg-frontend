@@ -22,7 +22,7 @@ const EditJob = ({ notify }) => {
 
     const [user, setUser] = useState()
 
-    const userProfile = fetchLocalData(sessionStorage.PROFILE_ID)
+    const userProfile = fetchLocalData(sessionStorage.LOCAL,sessionStorage.PROFILE_ID)
 
 
 
@@ -199,55 +199,108 @@ const EditJob = ({ notify }) => {
     }
 
 
-    const updateJob = async (status) => {
+    const updateJob = async () => {
 
-        let obj = {}
+        // let obj = {}
 
-        switch (status) {
-            case "PENDING":
-                obj = {
-                    status: "APPROVED1", approver_1: {
-                        id: userId,
-                        status: "APPROVED",
-                        approved_at: new Date(),
-                        remarks: user?.remarks1
-                    }
-                }
-                break;
-            case "APPROVED1":
+        // switch (status) {
+        //     case "PENDING":
+        //         obj = {
+        //             status: "APPROVED1", approver_1: {
+        //                 id: userId,
+        //                 status: "APPROVED",
+        //                 approved_at: new Date(),
+        //                 remarks: user?.remarks1
+        //             }
+        //         }
+        //         break;
+        //     case "APPROVED1":
 
-                obj = {
-                    status: "APPROVED2", approver_2: {
-                        id: userId,
-                        status: "APPROVED",
+        //         obj = {
+        //             status: "APPROVED2", approver_2: {
+        //                 id: userId,
+        //                 status: "APPROVED",
+        //                 approved_at: new Date(),
+        //                 remarks: user?.remarks2
+        //             }
+        //         }
+        //         break;
+        //     case "APPROVED2":
+        //         obj = {
+        //             status: "APPROVED3", approver_3: {
+        //                 id: userId,
+        //                 status: "APPROVED",
+        //                 approved_at: new Date(),
+        //                 remarks: user?.remarks3
+        //             }
+        //         }
+        //         break;
+        //     case "APPROVED3":
+        //         obj = {
+        //             status: "APPROVED", approver_4: {
+        //                 id: userId,
+        //                 status: "APPROVED",
+        //                 approved_at: new Date(),
+        //                 remarks: user?.remarks4
+        //             }
+        //         }
+        //         break;
+        // }
+
+        switch (userProfile) {
+            case data?.approver_1?.profileId:
+                await setUser(prev=>({
+                    ...prev,
+                    approver_1:{
+                        ...user?.approver_1,
                         approved_at: new Date(),
-                        remarks: user?.remarks2
+                        status:"APPROVED"
                     }
-                }
+                }))
+                console.log('you are 1');
                 break;
-            case "APPROVED2":
-                obj = {
-                    status: "APPROVED3", approver_3: {
-                        id: userId,
-                        status: "APPROVED",
+            case data?.approver_2?.profileId:
+                await setUser(prev=>({
+                    ...prev,
+                    approver_2:{
+                        ...user?.approver_2,
                         approved_at: new Date(),
-                        remarks: user?.remarks3
+                        status:"APPROVED"
                     }
-                }
+                }))
+                console.log('you are 2');
                 break;
-            case "APPROVED3":
-                obj = {
-                    status: "APPROVED", approver_4: {
-                        id: userId,
-                        status: "APPROVED",
+            case data?.approver_3?.profileId:
+                await setUser(prev=>({
+                    ...prev,
+                    approver_3:{
+                        ...user?.approver_3,
                         approved_at: new Date(),
-                        remarks: user?.remarks4
+                        status:"APPROVED"
                     }
-                }
+                }))
+                console.log('you are 3');
                 break;
+            case data?.approver_4?.profileId:
+                await setUser(prev=>({
+                    ...prev,
+                    approver_4:{
+                        ...user?.approver_4,
+                        approved_at: new Date(),
+                        status:"APPROVED"
+                    },
+                    status:"APPROVED"
+                }))
+                console.log('you are fourth',user);
+                break;
+        
+            default:
+                return;
         }
 
-        apiProvider.updateJobById(id, { ...user, ...obj })
+        console.log(user);
+
+        apiProvider.updateJobById(id, user)
             .then(res => {
                 if (res.isSuccess) {
                     console.log(res.data);
@@ -256,7 +309,7 @@ const EditJob = ({ notify }) => {
                 }
             })
             .catch(err => {
-                console.log(err);
+                console.log(err); 
             })
     }
 
@@ -271,7 +324,7 @@ const EditJob = ({ notify }) => {
         ["eligibility"]: <div className="form-child">
             <TextArea
                 label="Eligibility Criteria"
-                name="eligibility"
+                name="eligibilty"
                 value={user?.eligibilty}
                 placeHolder="Enter Eligibility Criteria"
                 onChange={handleChange}
@@ -351,8 +404,10 @@ const EditJob = ({ notify }) => {
 
         ["band"]: <div className="form-child">
             <Input
-                placeHolder="Enter Hierarchy and"
+                placeHolder="Enter Hierarchy"
                 onChange={handleChange}
+                value={user?.band}
+                name="band"
                 label="Hierarachy Band"
             />
         </div>,
@@ -361,6 +416,8 @@ const EditJob = ({ notify }) => {
             <Select
                 placeholder={'Select InterView Rounds'}
                 label={"Round"}
+                name="roundId"
+                value={user?.roundId}
                 onChange={handleChange}
                 options={interViewRounds}
             />
@@ -445,8 +502,16 @@ const EditJob = ({ notify }) => {
                                 label="Remarks"
                                 name="remarks1"
                                 placeHolder="Enter Remarks"
-                                value={user?.remarks1}
-                                onChange={handleChange}
+                                value={user?.approver_1?.remark}
+                                onChange={(e)=>{
+                                    setUser(prev=>({
+                                        ...prev,
+                                        approver_1:{
+                                            ...user?.approver_1,
+                                            remark:e.target.value
+                                        }
+                                    }))
+                                }}
                                 disabled={user?.status == "PENDING" ? false : true}
                             />
                         </div>
@@ -467,9 +532,17 @@ const EditJob = ({ notify }) => {
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
-                                            value={user?.remark2}
                                             placeHolder="Enter Remark"
-                                            onChange={handleChange}
+                                            value={user?.approver_2?.remark}
+                                            onChange={(e)=>{
+                                                setUser(prev=>({
+                                                    ...prev,
+                                                    approver_2:{
+                                                        ...user?.approver_2,
+                                                        remark:e.target.value
+                                                    }
+                                                }))
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -494,9 +567,17 @@ const EditJob = ({ notify }) => {
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
-                                            value={user?.remark2}
                                             placeHolder="Enter Remark"
-                                            onChange={handleChange}
+                                            value={user?.approver_3?.remark}
+                                            onChange={(e)=>{
+                                                setUser(prev=>({
+                                                    ...prev,
+                                                    approver_3:{
+                                                        ...user?.approver_3,
+                                                        remark:e.target.value
+                                                    }
+                                                }))
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -523,9 +604,17 @@ const EditJob = ({ notify }) => {
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
-                                            value={user?.remark2}
                                             placeHolder="Enter Remark"
-                                            onChange={handleChange}
+                                            value={user?.approver_4?.remark}
+                                            onChange={(e)=>{
+                                                setUser(prev=>({
+                                                    ...prev,
+                                                    approver_4:{
+                                                        ...user?.approver_4,
+                                                        remark:e.target.value
+                                                    }
+                                                }))
+                                            }}
                                         />
                                     </div>
 
@@ -542,7 +631,19 @@ const EditJob = ({ notify }) => {
 
                 </div>
                 <div className='mt-[60px] flex gap-3 py-3'>
+                {
+                    (userProfile == data?.approver_1?.profileId&&data?.approver_1?.status=="PENDING")
+                    ||
+                    (userProfile == data?.approver_2?.profileId&&data?.approver_2?.status=="PENDING")
+                    ||
+                    (userProfile == data?.approver_3?.profileId&&data?.approver_3?.status=="PENDING")
+                    ||
+                    (userProfile == data?.approver_4?.profileId&&data?.approver_4?.status=="PENDING")
+                    ?
                     <Button title="Approve" className='' onClick={() => updateJob(user?.status)} />
+                    :
+                    null
+                }
                     <Button type='2' title="Reject" className='' />
                 </div>
 

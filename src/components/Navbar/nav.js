@@ -9,29 +9,35 @@ const drop = 'd'
 
 export const defaultNavbarData = [
     {
-        title: 'Home',
         route: ROUTES?.Home,
-        type: stat,
+        label: "Home",
+        key: 'home',
+        children: [],
         icon: <FiHome />
     },
-
     {
-        title: 'Recruitment',
-        type: drop,
-        icon: <FiUser />,
-        data: [
+        label: 'Jobs',
+        key: 'jobs',
+        icon: <BsJournalBookmark />,
+        children: [
             {
-                title: 'Create Job',
-                route: ROUTES?.Recruitment?.CreateJob,
-                type: stat
+                label: <Link to={ROUTES?.Recruitment?.ViewJobs || "#"} > View Jobs </Link>,
+                route: ROUTES?.Recruitment.ViewJobs,
+                key: 'viewjobs',
             },
-            {
-                title: 'View Jobs',
-                route: ROUTES?.Recruitment?.ViewJobs,
-                type: stat
-            }
+            
+            // {
+            //     label: <Link to={ROUTES?.Recruitment?.Master?.WorkType || "#"} > Work Shift </Link>,
+            //     route: ROUTES?.Recruitment?.Master?.WorkType,
+            //     key: 'worktype',
+            // },
+            // {
+            //     label: <Link to={ROUTES?.Recruitment?.Master?.WorkShift || "#"} > Work Shift</Link>,
+            //     route: ROUTES?.Recruitment?.Master?.WorkShift,
+            //     key: 'workshift',
+            // }
         ]
-    }
+    },
 
 ]
 

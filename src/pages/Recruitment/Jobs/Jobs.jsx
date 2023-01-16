@@ -12,6 +12,8 @@ import { Modal } from 'antd'
 import Button from '../../../components/Button/Button'
 import { DownOutlined, PhoneOutlined, MailOutlined   } from '@ant-design/icons';
 import { Dropdown, Menu, Space } from 'antd';
+import { fetchLocalData } from '../../../services/common'
+import * as sessionStorage from '../../../utils/storageConstants'
 
 
 
@@ -24,6 +26,10 @@ const Jobs = () => {
 
   const [profileData, setProfileData] = useState([])
 
+  const userProfile = fetchLocalData(sessionStorage.LOCAL,sessionStorage.PROFILE_ID)
+
+  const userRole = fetchLocalData(sessionStorage.LOCAL,sessionStorage.ROLE)
+
   const columns = [
     {
       title: "Business",
@@ -35,6 +41,12 @@ const Jobs = () => {
       title: "Job ID",
       dataIndex: "jobId",
       // render: (_, { state }) => (<> {stateOptions.find(item => item.value === state)?.label} </>)
+
+    },
+    {
+      title: "Opportunity ID",
+      dataIndex: "opportunityId",
+      render: (_, { opportunityId }) => (<> {opportunityId?opportunityId:'Not Created'} </>)
 
     },
     {
@@ -54,8 +66,16 @@ const Jobs = () => {
     {
       title: "Action",
       dataIndex: "",
-      render: (_, { _id }) => (<> 
-        <Button title="view" onClick={() => { showModal(); setJobId(_id) }} /> </>
+      render: (_, { _id , approver_1,approver_2,approver_3,approver_4}) => (<div className='flex items-center gap-2'> 
+        <Button title="view" onClick={() => { showModal(); setJobId(_id) }} /> 
+        {
+          userProfile==approver_1?.profileId||userProfile==approver_2?.profileId||userProfile==approver_3?.profileId||userProfile==approver_4?.profileId||userRole=="ADMIN"
+          ?
+          <Button title="Edit" onClick={() => { navigate(ROUTES.Recruitment.Job+'/'+_id) }} /> 
+          :
+          null
+        }
+        </div>
       )
     },
 

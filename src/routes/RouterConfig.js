@@ -43,3 +43,11 @@ export const ROUTES = {
         }
     }
 }
+
+
+export const USER_ROUTES = {
+    Home:'/user/home',
+    ViewJobs:'user/view-jobs',
+    EidtJob:'user/job',
+
+}

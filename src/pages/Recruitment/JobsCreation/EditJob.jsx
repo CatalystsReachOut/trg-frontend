@@ -39,6 +39,36 @@ const EditJob = ({ notify }) => {
     const [data, setData] = useState()
     const [userId, setUserId] = useState(JSON.parse(localStorage.getItem(sessionStorage.USER_ID)))
 
+    const compensationOpt = [
+        {
+            label:'compensation 1',
+            value:'63b74f5277eef7cc4c5f1535',
+        },
+        {
+            label:'compensation 2',
+            value:'63b74f5277eef7cc4c5f1536',
+        },
+        {
+            label:'compensation 3',
+            value:'63b74f5277eef7cc4c5f1537',
+        },
+    ]
+
+    const InterViewRoundsOpt = [
+        {
+            label:'round 1',
+            value:'63b74f5277eef7cc4c5f1535',
+        },
+        {
+            label:'round 2',
+            value:'63b74f5277eef7cc4c5f1536',
+        },
+        {
+            label:'round 3',
+            value:'63b74f5277eef7cc4c5f1537',
+        },
+    ]
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser(prev => ({
@@ -48,6 +78,7 @@ const EditJob = ({ notify }) => {
     }
 
     const handelChangeSelect = (e) => {
+        console.log(e);
         const { name, value } = e;
         setUser(prev => ({
             ...prev,
@@ -143,7 +174,7 @@ const EditJob = ({ notify }) => {
             apiProvider.getWorkShift()
                 .then(res => {
                     const arr = res.data?.map(i => ({
-                        label: i?.title,
+                        label: i?.name,
                         value: i?._id
                     }))
                     return arr;
@@ -153,7 +184,7 @@ const EditJob = ({ notify }) => {
             apiProvider.getWorkType()
                 .then(res => {
                     const arr = res.data?.map(i => ({
-                        label: i?.title,
+                        label: i?.name,
                         value: i?._id
                     }))
                     return arr;
@@ -324,8 +355,8 @@ const EditJob = ({ notify }) => {
         ["eligibility"]: <div className="form-child">
             <TextArea
                 label="Eligibility Criteria"
-                name="eligibilty"
-                value={user?.eligibilty}
+                name="eligibility"
+                value={user?.eligibility}
                 placeHolder="Enter Eligibility Criteria"
                 onChange={handleChange}
             />
@@ -354,7 +385,7 @@ const EditJob = ({ notify }) => {
                 </div>
                 <div className="form-child">
                     <Select
-                        label="Work Type"
+                        label="Work Style"
                         name="workStyleId"
                         value={user?.workStyleId}
                         options={workStyleOpt}
@@ -399,6 +430,7 @@ const EditJob = ({ notify }) => {
                 onChange={handelChangeSelect}
                 name="compensationId"
                 value={user?.compensationId}
+                options={compensationOpt}
             />
         </div>,
 
@@ -415,11 +447,11 @@ const EditJob = ({ notify }) => {
         ["interview-rounds"]: <div className="form-child">
             <Select
                 placeholder={'Select InterView Rounds'}
-                label={"Round"}
-                name="roundId"
-                value={user?.roundId}
-                onChange={handleChange}
-                options={interViewRounds}
+                label={"Interview Round"}
+                name={"interviewRoundId"}
+                value={user?.interviewRoundId}
+                onChange={handelChangeSelect}
+                options={InterViewRoundsOpt}
             />
         </div>
     }
@@ -502,17 +534,16 @@ const EditJob = ({ notify }) => {
                                 label="Remarks"
                                 name="remarks1"
                                 placeHolder="Enter Remarks"
-                                value={user?.approver_1?.remark}
+                                value={user?.approver_1?.remarks}
                                 onChange={(e)=>{
                                     setUser(prev=>({
                                         ...prev,
                                         approver_1:{
                                             ...user?.approver_1,
-                                            remark:e.target.value
+                                            remarks:e.target.value
                                         }
                                     }))
                                 }}
-                                disabled={user?.status == "PENDING" ? false : true}
                             />
                         </div>
                     </div>
@@ -533,13 +564,13 @@ const EditJob = ({ notify }) => {
                                             label="Remark"
                                             name="remark2"
                                             placeHolder="Enter Remark"
-                                            value={user?.approver_2?.remark}
+                                            value={user?.approver_2?.remarks}
                                             onChange={(e)=>{
                                                 setUser(prev=>({
                                                     ...prev,
                                                     approver_2:{
                                                         ...user?.approver_2,
-                                                        remark:e.target.value
+                                                        remarks:e.target.value
                                                     }
                                                 }))
                                             }}
@@ -568,13 +599,13 @@ const EditJob = ({ notify }) => {
                                             label="Remark"
                                             name="remark2"
                                             placeHolder="Enter Remark"
-                                            value={user?.approver_3?.remark}
+                                            value={user?.approver_3?.remarks}
                                             onChange={(e)=>{
                                                 setUser(prev=>({
                                                     ...prev,
                                                     approver_3:{
                                                         ...user?.approver_3,
-                                                        remark:e.target.value
+                                                        remarks:e.target.value
                                                     }
                                                 }))
                                             }}
@@ -605,13 +636,13 @@ const EditJob = ({ notify }) => {
                                             label="Remark"
                                             name="remark2"
                                             placeHolder="Enter Remark"
-                                            value={user?.approver_4?.remark}
+                                            value={user?.approver_4?.remarks}
                                             onChange={(e)=>{
                                                 setUser(prev=>({
                                                     ...prev,
                                                     approver_4:{
                                                         ...user?.approver_4,
-                                                        remark:e.target.value
+                                                        remarks:e.target.value
                                                     }
                                                 }))
                                             }}

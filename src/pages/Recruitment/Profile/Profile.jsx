@@ -312,7 +312,8 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
             title: '',
             profileType: '',
             level: '',
-            reportProfile: null,
+            reportProfile: '',
+            departmentId:'',
             approvingAuthority: []
         })
     }
@@ -364,7 +365,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             label=""
                             options={profileData}
                             name="reportProfile"
-                            value={user.reportProfile}
+                            value={user.reportProfile || ''}
                             disabled={true}
                         >
                         </Select>
@@ -386,7 +387,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     label=""
                                     options={profileData}
                                     name="reportProfile"
-                                    value={i?.profile}
+                                    value={i?.profile || ""}
                                 >
                                 </Select>
                             </div>
@@ -396,7 +397,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     placeHolder="Authority"
                                     isMulti
                                     options={jobfields}
-                                    defaultValue={jobfields?.filter(s => i?.tasks?.find(p => p == s?.value))}
+                                    value={jobfields?.filter(s => i?.tasks?.find(p => p == s?.value)) || ''}
                                 // defaultValue={[options[0]]}
                                 // onChange={e => {
                                 //     console.log(e);
@@ -424,8 +425,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     label=""
                                     options={profileData}
                                     name="reportProfile"
-                                    value={reporter}
-                                    defaultValue={reporter}
+                                    value={reporter || ''}
                                     onChange={(e) => { setReporter(e.value) }}
                                 >
                                 </Select>
@@ -435,8 +435,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     label={""}
                                     placeHolder="Authority"
                                     isMulti={true}
-                                    defaultValue={reportSelected}
-                                    value={reportSelected}
+                                    value={reportSelected || ''}
                                     options={jobfields}
                                     onChange={e => {
                                         console.log(e);
@@ -499,7 +498,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             label="Profile Type"
                             options={profileType}
                             name="profileType"
-                            value={user?.profileType}
+                            value={user?.profileType || ''}
                             onChange={handelChangeSelect}
                             required={true}
                         >
@@ -511,7 +510,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             placeHolder={'Enter Band'}
                             options={bands}
                             name="band"
-                            value={user?.band}
+                            value={user?.band || ''}
                             onChange={handelChangeSelect}
                             required={true}
                         />
@@ -522,7 +521,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             label="Reports to"
                             options={profileData}
                             name="reportProfile"
-                            value={user?.reportProfile}
+                            value={user?.reportProfile || ''}
                             onChange={handelChangeSelect}
                         >
                         </Select>
@@ -533,7 +532,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             label="Department"
                             options={departmentData}
                             name="departmentId"
-                            value={user?.departmentId}
+                            value={user?.departmentId || ''}
                             onChange={handelChangeSelect}
                             required={true}
                         >

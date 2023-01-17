@@ -397,7 +397,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     placeHolder="Authority"
                                     isMulti
                                     options={jobfields}
-                                    value={jobfields?.filter(s => i?.tasks?.find(p => p == s?.value)) || ''}
+                                    defaultValue={jobfields?.filter(s => i?.tasks?.find(p => p == s?.value))}
                                 // defaultValue={[options[0]]}
                                 // onChange={e => {
                                 //     console.log(e);
@@ -435,7 +435,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     label={""}
                                     placeHolder="Authority"
                                     isMulti={true}
-                                    value={reportSelected || ''}
+                                    value={reportSelected}
                                     options={jobfields}
                                     onChange={e => {
                                         console.log(e);
@@ -468,7 +468,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                         ]
                                     }))
                                     setReporter()
-                                    setReportSelected([])
+                                    setReportSelected(null)
                                     setFlag(prev => !prev)
                                 }}
                             />

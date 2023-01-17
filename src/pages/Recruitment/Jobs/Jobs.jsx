@@ -184,7 +184,7 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className=' ml-[5px] font-semibold text-[17px]'>Reporting Manager ({profileData?.find(s=>s._id==jobData?.profileId).reportProfile?profileData?.find(s=>s._id==profileData?.find(s=>s._id==jobData?.profileId).reportProfile).title:'not assigned any' })</h6>
                 </div>
-                <p className='text-[14px] ml-[15px] text-[red]'>Pending</p>
+                <p className={`text-[14px] text-${jobData?.approver_1?.status || 'PENDING'} ml-[15px]`}>{jobData?.approver_1?.status}</p>
               </div>
               <div className="items-center justify-center">
                 <div className='flex'>
@@ -195,7 +195,7 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className='font-semibold ml-[5px] text-[18px]'>HR Manager   ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[0]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[0]?.profile)?.title:'not assigned any' })</h6>
                 </div>
-                <p className='text-[14px] text-[red] ml-[15px]'>Pending at Level 1</p>
+                <p className={`text-[14px] text-${jobData?.approver_2?.status || 'PENDING'} ml-[15px]`}>{jobData?.approver_2?.status}</p>
               </div><div className=" items-center justify-center">
                 <div className='flex '>
                   <Dropdown overlay={menu}>
@@ -205,7 +205,7 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className='font-semibold ml-[5px] text-[18px]'>Country Head  ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[1]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[1]?.profile)?.title:'not assigned any' })</h6>
                 </div>
-                <p className='text-[14px] ml-[15px] text-[red]'>Pending at Level 2</p>
+                <p className={`text-[14px] text-${jobData?.approver_3?.status || 'PENDING'} ml-[15px]`}>{jobData?.approver_3?.status}</p>
 
               </div><div className=" items-center justify-center">
                 <div className='flex'>
@@ -216,7 +216,7 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className='font-semibold ml-[5px] text-[17px] whitespace-none'>HR Head  ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[2]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[2]?.profile)?.title:'not assigned any' })</h6>
                 </div>
-                <p className='text-[14px] ml-[15px] text-[red]'>Pending at Level 3</p>
+                <p className={`text-[14px] text-${jobData?.approver_4?.status} ml-[15px]`}>{jobData?.approver_4?.status}</p>
 
               </div>
             </div>

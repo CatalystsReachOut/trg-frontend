@@ -18,6 +18,9 @@ module.exports = {
         ternary:"#19435d",
         fourth:'var(--grey-black)',
         white10:'#F5F5F5',
+        PENDING:'#FFFF00',
+        DECLINED:'#e74c3c',
+        APPROVED:'#2ecc71'
       },
       fontSize: {
         'Medium+/Display/Large': ['64px', {

@@ -24,6 +24,7 @@ const EditJob = ({ notify }) => {
 
     const userProfile = fetchLocalData(sessionStorage.LOCAL,sessionStorage.PROFILE_ID)
 
+    const userRole = fetchLocalData(sessionStorage.LOCAL,sessionStorage.ROLE)
 
 
     const [profileOpt, setProfileOpt] = useState([])
@@ -278,50 +279,53 @@ const EditJob = ({ notify }) => {
         //         break;
         // }
 
+        var obj
+
         switch (userProfile) {
             case data?.approver_1?.profileId:
-                await setUser(prev=>({
-                    ...prev,
+                obj = {
+                    ...user,
                     approver_1:{
                         ...user?.approver_1,
                         approved_at: new Date(),
                         status:"APPROVED"
                     }
-                }))
+                }
                 console.log('you are 1');
                 break;
             case data?.approver_2?.profileId:
-                await setUser(prev=>({
-                    ...prev,
+                obj = {
+                    ...user,
                     approver_2:{
                         ...user?.approver_2,
                         approved_at: new Date(),
                         status:"APPROVED"
                     }
-                }))
+                }
                 console.log('you are 2');
                 break;
             case data?.approver_3?.profileId:
-                await setUser(prev=>({
-                    ...prev,
+
+                obj = {
+                    ...user,
                     approver_3:{
                         ...user?.approver_3,
                         approved_at: new Date(),
                         status:"APPROVED"
-                    }
-                }))
+                    },
+                }
                 console.log('you are 3');
                 break;
             case data?.approver_4?.profileId:
-                await setUser(prev=>({
-                    ...prev,
+                obj = {
+                    ...user,
                     approver_4:{
                         ...user?.approver_4,
                         approved_at: new Date(),
                         status:"APPROVED"
                     },
                     status:"APPROVED"
-                }))
+                }
                 console.log('you are fourth',user);
                 break;
         
@@ -329,9 +333,9 @@ const EditJob = ({ notify }) => {
                 return;
         }
 
-        console.log(user);
+        console.log(obj);
 
-        apiProvider.updateJobById(id, user)
+        apiProvider.updateJobById(id, obj)
             .then(res => {
                 if (res.isSuccess) {
                     console.log(res.data);
@@ -549,7 +553,7 @@ const EditJob = ({ notify }) => {
                     </div>
 
                     {
-                        userProfile == data?.approver_2?.profileId || userProfile == data?.approver_3?.profileId || userProfile == data?.approver_4?.profileId ?
+                        userProfile == data?.approver_2?.profileId || userProfile == data?.approver_3?.profileId || userProfile == data?.approver_4?.profileId || userRole == "ADMIN"?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR Manager</h6>
 
@@ -583,7 +587,7 @@ const EditJob = ({ notify }) => {
                     }
 
                     {
-                        userProfile == data?.approver_3?.profileId || userProfile == data?.approver_4?.profileId ?
+                        userProfile == data?.approver_3?.profileId || userProfile == data?.approver_4?.profileId || userRole == "ADMIN" ?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
 
@@ -620,7 +624,7 @@ const EditJob = ({ notify }) => {
 
 
                     {
-                        userProfile == data?.approver_3?.profileId || userProfile == data?.approver_4?.profileId ?
+                        userProfile == data?.approver_4?.profileId || userRole == "ADMIN" ?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR HEAD</h6>
 

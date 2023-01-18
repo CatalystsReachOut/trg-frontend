@@ -407,9 +407,17 @@ const EditJob = ({ notify }) => {
                         className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
                         type="number"
                         placeholder='From'
-                        value={user?.pay_from}
+                        value={user?.payRange?.from}
                         name="pay_from"
-                        onChange={handleChange}
+                        onChange={(e)=>{
+                            setUser(prev=>({
+                                ...prev,
+                                payRange:{
+                                    ...user?.payRange,
+                                    from:e.target.value
+                                }
+                            }))
+                        }}
                     />
                 </div>
                 <div className="col-span-1">
@@ -417,9 +425,17 @@ const EditJob = ({ notify }) => {
                         className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
                         type="number"
                         placeholder='To'
-                        value={user?.pay_to}
+                        value={user?.payRange?.to}
                         name="pay_to"
-                        onChange={handleChange}
+                        onChange={(e)=>{
+                            setUser(prev=>({
+                                ...prev,
+                                payRange:{
+                                    ...user?.payRange,
+                                    to:e.target.value
+                                }
+                            }))
+                        }}
                     />
                 </div>
 

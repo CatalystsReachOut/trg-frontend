@@ -689,7 +689,9 @@ const EditJob = ({ notify }) => {
                     ||
                     (userProfile == data?.approver_3?.profileId&&data?.approver_3?.status=="PENDING")
                     ||
-                    (userProfile == data?.approver_4?.profileId&&data?.approver_4?.status=="PENDING")
+                    (userProfile == data?.approver_4?.profileId)
+                    ||
+                    (userRole== "ADMIN")
                     ?
                     <Button title="Approve" className='' onClick={() => updateJob(user?.status)} />
                     :

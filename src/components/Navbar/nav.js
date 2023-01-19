@@ -71,6 +71,21 @@ export const adminNavbarData = [
                 route: ROUTES?.Recruitment?.Master?.Department,
                 key: 'department',
             },
+            {
+                label: <Link to={ROUTES?.Recruitment?.Master?.band || "#"} > Band </Link>,
+                route: ROUTES?.Recruitment?.Master?.band,
+                key: 'band',
+            },
+            {
+                label: <Link to={ROUTES?.Recruitment?.Master?.compensation || "#"} > Compensation </Link>,
+                route: ROUTES?.Recruitment?.Master?.compensation,
+                key: 'compensation',
+            },
+            {
+                label: <Link to={ROUTES?.Recruitment?.Master?.currency || "#"} > Currency </Link>,
+                route: ROUTES?.Recruitment?.Master?.currency,
+                key: 'currency',
+            },
             
 
         ]

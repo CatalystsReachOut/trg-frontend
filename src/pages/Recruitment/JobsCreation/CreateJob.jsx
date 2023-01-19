@@ -228,7 +228,7 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
   }
 
   const getProfileOpt = async (band, department) => {
-    apiProvider.getProfile(`?band=${band}&departmentId=${department}`)
+    apiProvider.getProfile()
       .then(res => {
         setProfileData(res.data)
         const arr = res.data?.map(i => ({

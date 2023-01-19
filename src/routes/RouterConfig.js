@@ -19,7 +19,10 @@ export const ROUTES = {
             WorkType: '/recruitment/master/work-type',
             WorkShift: '/recruitment/master/work-shift',
             WorkStyle: '/recruitment/master/work-style',
-            JobDescription: '/recruitment/master/job-description'
+            JobDescription: '/recruitment/master/job-description',
+            band: '/recruitment/master/band',
+            compensation: '/recruitment/master/compensation',
+            currency: '/recruitment/master/currency',
         },
         CreateJob: '/recruitment/create-job',
         Job: '/recruitment/job',

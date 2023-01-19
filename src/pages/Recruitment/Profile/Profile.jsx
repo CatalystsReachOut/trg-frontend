@@ -11,6 +11,7 @@ import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 import { jobfields } from '../../../reference/jobassigning'
+import { useRef } from 'react'
 
 const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
@@ -51,6 +52,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     const [loading, setLoading] = useState(false)
 
+    const multiRef = useRef()
     const columns = [
         {
             title: "Sl no.",
@@ -118,44 +120,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
         }
     ];
 
-    const bands = [
-        {
-            value: '1A',
-            label: '1A'
-        },
-        {
-            value: '1B',
-            label: '1B'
-        },
-        {
-            value: '2',
-            label: '2'
-        },
-        {
-            value: '3',
-            label: '3'
-        },
-        {
-            value: '4',
-            label: '4'
-        },
-        {
-            value: '5',
-            label: '5'
-        },
-        {
-            value: '6',
-            label: '6'
-        },
-        {
-            value: '7',
-            label: '7'
-        },
-        {
-            value: '8',
-            label: '8'
-        },
-    ]
+    const [bands, setBands] = useState([])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -239,6 +204,22 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
         ])
         setProfileData(data1)
         setDepartmentData(data2)
+    }
+
+    const getBasicData = async () => {
+        apiProvider.getBands()
+        .then(res=>{
+            if (res.isSuccess) {
+                const arr = res.data.map(data => ({
+                    value: data._id,
+                    label: data.name
+                }))
+                setBands(arr)
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 
 
@@ -345,6 +326,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     useEffect(() => {
         getData();
+        getBasicData()
     }, [])
 
 
@@ -425,13 +407,15 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                     label=""
                                     options={profileData}
                                     name="reportProfile"
-                                    value={reporter || ''}
+                                    value={reporter}
                                     onChange={(e) => { setReporter(e.value) }}
+                                    ref={multiRef}
                                 >
                                 </Select>
                             </div>
                             <div className="col-span-1">
                                 <Select
+                                    
                                     label={""}
                                     placeHolder="Authority"
                                     isMulti={true}
@@ -455,9 +439,9 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                             <Button
                                 title="Add"
                                 className="mt-3"
-                                onClick={() => {
+                                onClick={async() => {
                                     if (!reporter || reportSelected.length == 0) return;
-                                    setUser(prev => ({
+                                    await setUser(prev => ({
                                         ...prev,
                                         approvingAuthority: [
                                             ...user?.approvingAuthority,
@@ -467,8 +451,9 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                             }
                                         ]
                                     }))
-                                    setReporter()
-                                    setReportSelected(null)
+                                    await setReporter()
+                                    await setReportSelected(null)
+                                    await multiRef.current.select.setValue(null)
                                     setFlag(prev => !prev)
                                 }}
                             />

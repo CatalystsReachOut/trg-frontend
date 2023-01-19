@@ -245,3 +245,45 @@ export const editJobDescription = (id, data) => {
 export const getJobDescriptionById = (id) => {
     return apiProvider.get(apiConstant.jobDescription, id)
 }
+
+
+//Bands
+export const getBands = () => {
+    return apiProvider.getAll(apiConstant.band)
+}
+
+export const createBand = (data) => {
+    return apiProvider.post(apiConstant.band, data)
+}
+
+export const editBand = (id, data) => {
+    return apiProvider.put(apiConstant.band, id, data)
+}
+
+
+//Compensation
+export const getCompensationModes = () => {
+    return apiProvider.getAll(apiConstant.compensation)
+}
+
+export const createCompensationMode = (data) => {
+    return apiProvider.post(apiConstant.compensation, data)
+}
+
+export const editCompensationMode = (id, data) => {
+    return apiProvider.put(apiConstant.compensation, id, data)
+}
+
+
+//Currency
+export const getCurrencies = () => {
+    return apiProvider.getAll(apiConstant.currency)
+}
+
+export const createCurrency = (data) => {
+    return apiProvider.post(apiConstant.currency, data)
+}
+
+export const editCurrency = (id, data) => {
+    return apiProvider.put(apiConstant.currency, id, data)
+}

@@ -14,6 +14,7 @@ import { DownOutlined, PhoneOutlined, MailOutlined   } from '@ant-design/icons';
 import { Dropdown, Menu, Space } from 'antd';
 import { fetchLocalData } from '../../../services/common'
 import * as sessionStorage from '../../../utils/storageConstants'
+import EditJob from '../JobsCreation/EditJob'
 
 
 
@@ -29,6 +30,8 @@ const Jobs = () => {
   const userProfile = fetchLocalData(sessionStorage.LOCAL,sessionStorage.PROFILE_ID)
 
   const userRole = fetchLocalData(sessionStorage.LOCAL,sessionStorage.ROLE)
+
+  const userId = fetchLocalData(sessionStorage.LOCAL,sessionStorage.USER_ID)
 
   const columns = [
     {
@@ -52,7 +55,7 @@ const Jobs = () => {
     {
       title: "Created By",
       dataIndex: "createdBy",
-      // render: (_, { country }) => (<> {countryOptions.find(item => item.value === country)?.label} </>)
+      render: (_, { createdBy }) => (<> {createdBy?.email} </>)
     },
     {
       title: "Created Date",
@@ -66,12 +69,23 @@ const Jobs = () => {
     {
       title: "Action",
       dataIndex: "",
-      render: (_, { _id , approver_1,approver_2,approver_3,approver_4}) => (<div className='flex items-center gap-2'> 
+      render: (_, { _id , approver_1,approver_2,approver_3,approver_4,createdBy}) => (
+      <div className='flex items-center gap-2'> 
+      {
+        createdBy?.id == userId || userRole == "ADMIN"
+        ?
         <Button title="view" onClick={() => { showModal(); setJobId(_id) }} /> 
+        :
+        null
+
+      }
         {
           userProfile==approver_1?.profileId||userProfile==approver_2?.profileId||userProfile==approver_3?.profileId||userProfile==approver_4?.profileId||userRole=="ADMIN"
           ?
-          <Button title="Edit" onClick={() => { navigate(ROUTES.Recruitment.Job+'/'+_id) }} /> 
+          <Button 
+          title="Edit" 
+          onClick={() => { showModal2(); setJobId(_id) }} 
+          /> 
           :
           null
         }
@@ -95,6 +109,20 @@ const Jobs = () => {
     setIsModalOpen(false);
   };
 
+  const [isModal2Open, setIsModal2Open] = useState(false);
+
+  const showModal2 = () => {
+    setIsModal2Open(true);
+  };
+
+  const handleOk2 = () => {
+    setIsModal2Open(false);
+  };
+
+  const handleCancel2 = () => {
+    setIsModal2Open(false);
+  };
+
 
   const navigate = useNavigate()
 
@@ -104,7 +132,31 @@ const Jobs = () => {
     apiProvider.getJob()
       .then(res => {
         if (res.isSuccess) {
-          setData(res.data)
+          {
+            const arr = []
+            res.data?.forEach(el=>{
+              if(userRole=='ADMIN'){
+                arr.push(el)
+              }
+              else if(el?.approver_1?.profileId==userProfile){
+                arr.push(el)
+              }
+              else if(el?.approver_2?.profileId==userProfile && el?.approver_1?.status=="APPROVED"){
+                arr.push(el)
+              }
+              else if(el?.approver_3?.profileId==userProfile && el?.approver_2?.status=="APPROVED"){
+                arr.push(el)
+              }
+              else if(el?.approver_4?.profileId==userProfile && el?.approver_3?.status=="APPROVED"){
+                arr.push(el)
+              }
+              else if(el?.createdBy?.id==userId){
+                arr.push(el)
+              }
+            })
+            console.log(arr);
+            setData(arr)
+          }
         }
       })
       .catch(err => {
@@ -184,7 +236,32 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className=' ml-[5px] font-semibold text-[17px]'>Reporting Manager ({profileData?.find(s=>s._id==jobData?.profileId).reportProfile?profileData?.find(s=>s._id==profileData?.find(s=>s._id==jobData?.profileId).reportProfile).title:'not assigned any' })</h6>
                 </div>
-                <p className={`text-[14px] text-${jobData?.approver_1?.status || 'PENDING'} ml-[15px]`}>{jobData?.approver_1?.status}</p>
+                <Dropdown overlay={
+                  <div className='bg-white z-auto shadow p-3'>
+                  {
+                      jobData?.approver_1?.status=="APPROVED" || jobData?.approver_1?.status=="DECLINED" 
+                      ?
+                      <>
+                        <div>
+                          Date : {jobData?.approver_1?.status=="APPROVED" || jobData?.approver_1?.status=="DECLINED"  ? jobData?.approver_1?.approved_at?.split("T")[0] : null}
+                        </div>
+                        <div>
+                          Remark : { jobData?.approver_1?.remarks}
+                        </div>
+                      </>
+                      :
+                      jobData?.approver_1?.status=="PENDING"
+                      ?
+                      <div>
+                        Pending from past 10 days
+                      </div>
+                      :
+                      null
+                  }
+                </div>
+                }>
+                  <p className={`text-[14px] text-${jobData?.approver_1?.status || 'PENDING'} ml-[15px] cursor-pointer`}><DownOutlined /> {jobData?.approver_1?.status}</p>
+                </Dropdown>
               </div>
               <div className="items-center justify-center">
                 <div className='flex'>
@@ -195,7 +272,33 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className='font-semibold ml-[5px] text-[18px]'>HR Manager   ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[0]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[0]?.profile)?.title:'not assigned any' })</h6>
                 </div>
-                <p className={`text-[14px] text-${jobData?.approver_2?.status || 'PENDING'} ml-[15px]`}>{jobData?.approver_2?.status}</p>
+                
+                <Dropdown overlay={
+                  <div className='bg-white z-auto shadow p-3'>
+                  {
+                      jobData?.approver_2?.status=="APPROVED" || jobData?.approver_2?.status=="DECLINED" 
+                      ?
+                      <>
+                        <div>
+                          Date : {jobData?.approver_2?.status=="APPROVED" || jobData?.approver_2?.status=="DECLINED"  ? jobData?.approver_2?.approved_at?.split("T")[0] : null}
+                        </div>
+                        <div>
+                          Remark : { jobData?.approver_2?.remarks}
+                        </div>
+                      </>
+                      :
+                      jobData?.approver_2?.status=="PENDING"
+                      ?
+                      <div>
+                        Pending from past 10 days
+                      </div>
+                      :
+                      null
+                  }
+                </div>
+                }>
+                  <p className={`text-[14px] text-${jobData?.approver_2?.status || 'PENDING'} ml-[15px] cursor-pointer`}><DownOutlined /> {jobData?.approver_2?.status}</p>
+                </Dropdown>
               </div><div className=" items-center justify-center">
                 <div className='flex '>
                   <Dropdown overlay={menu}>
@@ -205,7 +308,32 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className='font-semibold ml-[5px] text-[18px]'>Country Head  ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[1]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[1]?.profile)?.title:'not assigned any' })</h6>
                 </div>
-                <p className={`text-[14px] text-${jobData?.approver_3?.status || 'PENDING'} ml-[15px]`}>{jobData?.approver_3?.status}</p>
+                <Dropdown overlay={
+                  <div className='bg-white z-auto shadow p-3'>
+                  {
+                      jobData?.approver_3?.status=="APPROVED" || jobData?.approver_3?.status=="DECLINED" 
+                      ?
+                      <>
+                        <div>
+                          Date : {jobData?.approver_3?.status=="APPROVED" || jobData?.approver_3?.status=="DECLINED"  ? jobData?.approver_3?.approved_at?.split("T")[0] : null}
+                        </div>
+                        <div>
+                          Remark : { jobData?.approver_3?.remarks}
+                        </div>
+                      </>
+                      :
+                      jobData?.approver_3?.status=="PENDING"
+                      ?
+                      <div>
+                        Pending from past 10 days
+                      </div>
+                      :
+                      null
+                  }
+                </div>
+                }>
+                  <p className={`text-[14px] text-${jobData?.approver_3?.status || 'PENDING'} ml-[15px] cursor-pointer`}><DownOutlined /> {jobData?.approver_3?.status}</p>
+                </Dropdown>
 
               </div><div className=" items-center justify-center">
                 <div className='flex'>
@@ -216,7 +344,32 @@ const Jobs = () => {
                   </Dropdown>
                   <h6 className='font-semibold ml-[5px] text-[17px] whitespace-none'>HR Head  ({profileData?.find(s=>s._id==jobData?.profileId).approvingAuthority[2]?.profile?profileData?.find(s=>s?._id==profileData?.find(s=>s?._id==jobData?.profileId)?.approvingAuthority[2]?.profile)?.title:'not assigned any' })</h6>
                 </div>
-                <p className={`text-[14px] text-${jobData?.approver_4?.status} ml-[15px]`}>{jobData?.approver_4?.status}</p>
+                <Dropdown overlay={
+                  <div className='bg-white z-auto shadow p-3'>
+                  {
+                      jobData?.approver_4?.status=="APPROVED" || jobData?.approver_4?.status=="DECLINED" 
+                      ?
+                      <>
+                        <div>
+                          Date : {jobData?.approver_4?.status=="APPROVED" || jobData?.approver_4?.status=="DECLINED"  ? jobData?.approver_4?.approved_at?.split("T")[0] : null}
+                        </div>
+                        <div>
+                          Remark : { jobData?.approver_4?.remarks}
+                        </div>
+                      </>
+                      :
+                      jobData?.approver_4?.status=="PENDING"
+                      ?
+                      <div>
+                        Pending from past 10 days
+                      </div>
+                      :
+                      null
+                  }
+                </div>
+                }>
+                  <p className={`text-[14px] text-${jobData?.approver_4?.status || 'PENDING'} ml-[15px] cursor-pointer`}><DownOutlined /> {jobData?.approver_4?.status}</p>
+                </Dropdown>
 
               </div>
             </div>
@@ -230,6 +383,12 @@ const Jobs = () => {
 
           </>
         }
+      </Modal>
+      <Modal width={800} title="Edit Job" footer={null} open={isModal2Open} onCancel={handleCancel2}>
+        <EditJob
+         propId={jobId}
+         isModal={true}
+        />
       </Modal>
       <Card className=' flex items-center justify-between px-3 flex-wrap gap-3'>
         <div className='flex items-center gap-3 flex-wrap'>

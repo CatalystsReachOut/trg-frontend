@@ -13,18 +13,27 @@ import * as apiProvider from '../../../services/api/recruitment'
 import { useEffect } from 'react'
 import * as sessionStorage from '../../../utils/storageConstants'
 import { fetchLocalData } from '../../../services/common'
+import { ROUTES } from '../../../routes/RouterConfig'
 
-const EditJob = ({ notify }) => {
+
+const EditJob = ({ notify, propId, isModal }) => {
 
     const navigate = useNavigate()
 
     const { id } = useParams()
 
+    const [mainId, setManiId] = useState(propId || id)
+
+    useEffect(() => {
+        if (propId) setManiId(propId)
+    }, [propId])
+
     const [user, setUser] = useState()
 
-    const userProfile = fetchLocalData(sessionStorage.LOCAL,sessionStorage.PROFILE_ID)
+    const userProfile = fetchLocalData(sessionStorage.LOCAL, sessionStorage.PROFILE_ID)
 
-    const userRole = fetchLocalData(sessionStorage.LOCAL,sessionStorage.ROLE)
+    const userRole = fetchLocalData(sessionStorage.LOCAL, sessionStorage.ROLE)
+
 
 
     const [profileOpt, setProfileOpt] = useState([])
@@ -36,37 +45,48 @@ const EditJob = ({ notify }) => {
     const [workStyleOpt, setWorkStyleOpt] = useState([])
     const [workShiftOpt, setWorkShiftOpt] = useState([])
     const [interViewRounds, setInterviewRounds] = useState([])
+    const [bandsOpt, setBandsOpt] = useState([])
+    const [compensationOpt, setCompensationOpt] = useState([])
+    const [currencyOpt, setCurrencyOpt] = useState([])
 
     const [data, setData] = useState()
     const [userId, setUserId] = useState(JSON.parse(localStorage.getItem(sessionStorage.USER_ID)))
 
-    const compensationOpt = [
-        {
-            label:'compensation 1',
-            value:'63b74f5277eef7cc4c5f1535',
-        },
-        {
-            label:'compensation 2',
-            value:'63b74f5277eef7cc4c5f1536',
-        },
-        {
-            label:'compensation 3',
-            value:'63b74f5277eef7cc4c5f1537',
-        },
-    ]
+
+    const flag = userProfile == data?.approver_1?.profileId && data?.approver_1?.tasks?.includes('eligibility') && data?.approver_4?.staus == "PENDING"
+                                        ?
+                                        false
+                                        :
+                                        userProfile == data?.approver_2?.profileId && data?.approver_2?.tasks?.includes('eligibility') && data?.approver_1?.staus == "APPROVED" && data?.approver_2?.staus == "PENDING"
+                                            ?
+                                            false
+                                            :
+                                            userProfile == data?.approver_3?.profileId && data?.approver_3?.tasks?.includes('eligibility') && data?.approver_1?.staus == "APPROVED" && data?.approver_2?.staus == "APPROVED" && data?.approver_3?.staus == "PENDING"
+                                                ?
+                                                false
+                                                :
+                                                userProfile == data?.approver_4?.profileId && data?.approver_4?.tasks?.includes('eligibility') && data?.approver_1?.staus == "APPROVED" && data?.approver_2?.staus == "APPROVED" && data?.approver_3?.staus == "APPROVED" && data?.approver_4?.staus == "PENDING"
+                                                    ?
+                                                    false
+                                                    :
+                                                    userRole == "ADMIN"
+                                                        ?
+                                                        false
+                                                        :
+                                                        true
 
     const InterViewRoundsOpt = [
         {
-            label:'round 1',
-            value:'63b74f5277eef7cc4c5f1535',
+            label: 'round 1',
+            value: '63b74f5277eef7cc4c5f1535',
         },
         {
-            label:'round 2',
-            value:'63b74f5277eef7cc4c5f1536',
+            label: 'round 2',
+            value: '63b74f5277eef7cc4c5f1536',
         },
         {
-            label:'round 3',
-            value:'63b74f5277eef7cc4c5f1537',
+            label: 'round 3',
+            value: '63b74f5277eef7cc4c5f1537',
         },
     ]
 
@@ -89,7 +109,7 @@ const EditJob = ({ notify }) => {
 
 
     const getData = () => {
-        apiProvider.getJobById(id)
+        apiProvider.getJobById(mainId)
             .then(res => {
                 console.log(res.data.job);
                 setData(res.data.job)
@@ -117,6 +137,7 @@ const EditJob = ({ notify }) => {
                     questionBankId: res.data.job.questionBankId,
                     roundId: res.data.job.roundId,
                     compensationId: res.data.job.compensationId,
+                    currency: res.data.job.currency,
                 })
             })
             .catch(err => {
@@ -125,7 +146,7 @@ const EditJob = ({ notify }) => {
     }
 
     const getBasicData = async () => {
-        const [data1, data2, data3, data4, data5, data6, data7, data8, data9] = await Promise.all([
+        const [data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12] = await Promise.all([
             apiProvider.getProfile()
                 .then(res => {
                     const arr = res.data?.map(i => ({
@@ -218,6 +239,39 @@ const EditJob = ({ notify }) => {
                 })
                 .catch(err => (console.log(err)))
             ,
+            apiProvider.getBands()
+                .then(res => {
+                    console.log(res);
+                    const arr = res.data?.map(i => ({
+                        label: i?.name,
+                        value: i?._id
+                    }))
+                    return arr;
+                })
+                .catch(err => (console.log(err)))
+            ,
+            apiProvider.getCompensationModes()
+                .then(res => {
+                    console.log(res);
+                    const arr = res.data?.map(i => ({
+                        label: i?.name,
+                        value: i?._id
+                    }))
+                    return arr;
+                })
+                .catch(err => (console.log(err)))
+            ,
+            apiProvider.getCurrencies()
+                .then(res => {
+                    console.log(res);
+                    const arr = res.data?.map(i => ({
+                        label: i?.name,
+                        value: i?._id
+                    }))
+                    return arr;
+                })
+                .catch(err => (console.log(err)))
+            ,
         ])
 
         setProfileOpt(data1);
@@ -229,9 +283,9 @@ const EditJob = ({ notify }) => {
         setWorkTypeOpt(data7)
         setInterviewRounds(data8)
         setWorkStyleOpt(data9)
-
-        getData()
-
+        setBandsOpt(data10)
+        setCompensationOpt(data11)
+        setCurrencyOpt(data12)
     }
 
 
@@ -289,10 +343,10 @@ const EditJob = ({ notify }) => {
             case data?.approver_1?.profileId:
                 obj = {
                     ...user,
-                    approver_1:{
+                    approver_1: {
                         ...user?.approver_1,
                         approved_at: new Date(),
-                        status:"APPROVED"
+                        status: "APPROVED"
                     }
                 }
                 console.log('you are 1');
@@ -300,10 +354,10 @@ const EditJob = ({ notify }) => {
             case data?.approver_2?.profileId:
                 obj = {
                     ...user,
-                    approver_2:{
+                    approver_2: {
                         ...user?.approver_2,
                         approved_at: new Date(),
-                        status:"APPROVED"
+                        status: "APPROVED"
                     }
                 }
                 console.log('you are 2');
@@ -312,10 +366,10 @@ const EditJob = ({ notify }) => {
 
                 obj = {
                     ...user,
-                    approver_3:{
+                    approver_3: {
                         ...user?.approver_3,
                         approved_at: new Date(),
-                        status:"APPROVED"
+                        status: "APPROVED"
                     },
                 }
                 console.log('you are 3');
@@ -323,23 +377,23 @@ const EditJob = ({ notify }) => {
             case data?.approver_4?.profileId:
                 obj = {
                     ...user,
-                    approver_4:{
+                    approver_4: {
                         ...user?.approver_4,
                         approved_at: new Date(),
-                        status:"APPROVED"
+                        status: "APPROVED"
                     },
-                    status:"APPROVED"
+                    status: "APPROVED"
                 }
-                console.log('you are fourth',user);
+                console.log('you are fourth', user);
                 break;
-        
+
             default:
                 return;
         }
 
         console.log(obj);
 
-        apiProvider.updateJobById(id, obj)
+        apiProvider.updateJobById(mainId, obj)
             .then(res => {
                 if (res.isSuccess) {
                     console.log(res.data);
@@ -348,7 +402,84 @@ const EditJob = ({ notify }) => {
                 }
             })
             .catch(err => {
-                console.log(err); 
+                console.log(err);
+            })
+    }
+
+
+    const rejectJob = async () => {
+
+        var obj
+
+        console.log('here');
+
+        switch (userProfile) {
+            case data?.approver_1?.profileId:
+                obj = {
+                    ...user,
+                    approver_1: {
+                        ...user?.approver_1,
+                        approved_at: new Date(),
+                        status: "DECLINED"
+                    },
+                    status: "DECLINED"
+                }
+                console.log('you are 1');
+                break;
+            case data?.approver_2?.profileId:
+                obj = {
+                    ...user,
+                    approver_2: {
+                        ...user?.approver_2,
+                        approved_at: new Date(),
+                        status: "DECLINED"
+                    },
+                    status: "DECLINED"
+                }
+                console.log('you are 2');
+                break;
+            case data?.approver_3?.profileId:
+
+                obj = {
+                    ...user,
+                    approver_3: {
+                        ...user?.approver_3,
+                        approved_at: new Date(),
+                        status: "DECLINED"
+                    },
+                    status: "DECLINED"
+                }
+                console.log('you are 3');
+                break;
+            case data?.approver_4?.profileId:
+                obj = {
+                    ...user,
+                    approver_4: {
+                        ...user?.approver_4,
+                        approved_at: new Date(),
+                        status: "DECLINED"
+                    },
+                    status: "DECLINED"
+                }
+                console.log('you are fourth', user);
+                break;
+
+            default:
+                return;
+        }
+
+        console.log(obj);
+
+        apiProvider.updateJobById(mainId, obj)
+            .then(res => {
+                if (res.isSuccess) {
+                    console.log(res.data);
+                    getData()
+                    return notify('success', 'Update Success');
+                }
+            })
+            .catch(err => {
+                console.log(err);
             })
     }
 
@@ -357,6 +488,30 @@ const EditJob = ({ notify }) => {
         getBasicData()
     }, [])
 
+
+    useEffect(() => {
+        getData()
+    }, [mainId])
+
+    const checkDisability = () => {
+        return userProfile == data?.approver_1?.profileId && data?.approver_1?.status == 'APPROVED'
+            ?
+            true
+            :
+            userProfile == data?.approver_2?.profileId && data?.approver_2?.status == 'APPROVED'
+                ?
+                true
+                :
+                userProfile == data?.approver_3?.profileId && data?.approver_3?.status == 'APPROVED'
+                    ?
+                    true
+                    :
+                    userProfile == data?.approver_4?.profileId && data?.approver_4?.status == 'APPROVED'
+                        ?
+                        true
+                        :
+                        false
+    }
 
     const InputFileds = {
 
@@ -367,6 +522,7 @@ const EditJob = ({ notify }) => {
                 value={user?.eligibility}
                 placeHolder="Enter Eligibility Criteria"
                 onChange={handleChange}
+                disabled={checkDisability()}
             />
         </div>,
 
@@ -377,6 +533,7 @@ const EditJob = ({ notify }) => {
                     <Select
                         label="Work Shift"
                         name="workShiftId"
+                        disabled={checkDisability()}
                         value={user?.workShiftId}
                         options={workShiftOpt}
                         onChange={handelChangeSelect}
@@ -387,6 +544,7 @@ const EditJob = ({ notify }) => {
                         label="Work Type"
                         name="workTypeId"
                         value={user?.workTypeId}
+                        disabled={checkDisability()}
                         options={workTypeOpt}
                         onChange={handelChangeSelect}
                     />
@@ -396,6 +554,7 @@ const EditJob = ({ notify }) => {
                         label="Work Style"
                         name="workStyleId"
                         value={user?.workStyleId}
+                        disabled={checkDisability()}
                         options={workStyleOpt}
                         onChange={handelChangeSelect}
                     />
@@ -403,22 +562,25 @@ const EditJob = ({ notify }) => {
             </>,
 
 
-        ["pay-range"]: <div className="form-child grid grid-cols-2">
-            <label htmlFor="" className='px-2 col-span-2'>Pay Range</label>
-            <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-2'>
+        ["pay-range"]: 
+        <>
+        <div className="form-child flex flex-col gap-2.5">
+            <label htmlFor="" className='px-2'>Pay Range</label>
+            <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-1'>
                 <div className="col-span-1">
                     <input
-                        className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                        className='text-sm p-1 px-2 min-w-full  border-[1px] border-[#ccc] h-[40px] rounded-sm focus:outline-[#F1C40F]'
                         type="number"
                         placeholder='From'
                         value={user?.payRange?.from}
+                        disabled={checkDisability()}
                         name="pay_from"
-                        onChange={(e)=>{
-                            setUser(prev=>({
+                        onChange={(e) => {
+                            setUser(prev => ({
                                 ...prev,
-                                payRange:{
+                                payRange: {
                                     ...user?.payRange,
-                                    from:e.target.value
+                                    from: e.target.value
                                 }
                             }))
                         }}
@@ -426,17 +588,18 @@ const EditJob = ({ notify }) => {
                 </div>
                 <div className="col-span-1">
                     <input
-                        className='text-sm p-1 px-2 min-w-full border-[2px] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                        className='text-sm p-1 px-2 min-w-full  border-[1px] border-[#ccc] h-[40px] rounded-sm focus:outline-[#F1C40F]'
                         type="number"
                         placeholder='To'
                         value={user?.payRange?.to}
+                        disabled={checkDisability()}
                         name="pay_to"
-                        onChange={(e)=>{
-                            setUser(prev=>({
+                        onChange={(e) => {
+                            setUser(prev => ({
                                 ...prev,
-                                payRange:{
+                                payRange: {
                                     ...user?.payRange,
-                                    to:e.target.value
+                                    to: e.target.value
                                 }
                             }))
                         }}
@@ -444,7 +607,20 @@ const EditJob = ({ notify }) => {
                 </div>
 
             </div>
-        </div>,
+        </div>
+        <div className="form-child">
+            <Select
+                label="Currency"
+                onChange={handelChangeSelect}
+                name="currency"
+                value={user?.currency}
+                disabled={checkDisability()}
+                options={currencyOpt}
+            />
+        </div>
+
+        </>
+        ,
 
 
 
@@ -454,14 +630,17 @@ const EditJob = ({ notify }) => {
                 onChange={handelChangeSelect}
                 name="compensationId"
                 value={user?.compensationId}
+                disabled={checkDisability()}
                 options={compensationOpt}
             />
         </div>,
 
         ["band"]: <div className="form-child">
-            <Input
+            <Select
                 placeHolder="Enter Hierarchy"
-                onChange={handleChange}
+                onChange={handelChangeSelect}
+                options={bandsOpt}
+                disabled={checkDisability()}
                 value={user?.band}
                 name="band"
                 label="Hierarachy Band"
@@ -473,9 +652,11 @@ const EditJob = ({ notify }) => {
                 placeholder={'Select InterView Rounds'}
                 label={"Interview Round"}
                 name={"interviewRoundId"}
+                disabled={checkDisability()}
                 value={user?.interviewRoundId}
                 onChange={handelChangeSelect}
                 options={InterViewRoundsOpt}
+                isMulti
             />
         </div>
     }
@@ -484,96 +665,125 @@ const EditJob = ({ notify }) => {
     return (
         <div className=' h-auto w-full flex'>
             <Card className='min-h-full h-full w-full relative px-6 flex flex-col'>
-                <BackButton onClick={() => { navigate(-1) }} />
-                <div className=''>
-                    <h3 className='text-Medium+/Title/Small mt-2'> Create New Job</h3>
-                    <hr className='my-3 h-3' />
-                    <div className='form-parent'>
-                        <div className="form-child">
-                            <Select
-                                label="Profile"
-                                name='profile'
-                                options={profileOpt}
-                                defaultValue={user?.profile}
-                                value={user?.profile}
-                                disabled
-                                onChange={handelChangeSelect}
-                            />
-                        </div>
-                        <div className="form-child">
-                            <Select
-                                label="Bussiness"
-                                name="bussiness"
-                                options={bussinessOpt}
-                                value={user?.bussiness}
-                                onChange={handelChangeSelect}
-                                disabled
-                            />
-                        </div>
-                        <div className="form-child">
-                            <Input
-                                label="Number of Openings"
-                                name="openings"
-                                value={user?.openings}
-                                onChange={handleChange}
-                                disabled
-                            />
-                        </div>
-                        <div className="form-child">
-                            <Select
-                                label="Country"
-                                name="country"
-                                options={countryOpt}
-                                value={user?.country}
-                                onChange={handelChangeSelect}
-                                disabled
-                            />
-                        </div>
-                        <div className="form-child">
-                            <Select
-                                label="State"
-                                name="state"
-                                options={stateOpt}
-                                value={user?.state}
-                                onChange={handelChangeSelect}
-                                disabled
-                            />
-                        </div>
-                        <div className="form-child">
-                            <Select
-                                label="City"
-                                name="city"
-                                options={cityOpt}
-                                value={user?.city}
-                                onChange={handelChangeSelect}
-                                disabled
-                            />
-                        </div>
-                    </div>
 
-                    <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Reporting Manager </h6>
-                    <div className="form-parent">
-                        <div className="form-child">
-                            <TextArea
-                                label="Remarks"
-                                name="remarks1"
-                                placeHolder="Enter Remarks"
-                                value={user?.approver_1?.remarks}
-                                onChange={(e)=>{
-                                    setUser(prev=>({
-                                        ...prev,
-                                        approver_1:{
-                                            ...user?.approver_1,
-                                            remarks:e.target.value
-                                        }
-                                    }))
-                                }}
-                            />
-                        </div>
-                    </div>
+                {
+                    isModal
+                        ?
+                        null
+                        :
+                        <BackButton onClick={() => { navigate(-1) }} />
+                }
+                <div className=''>
+                    {
+                        isModal
+                            ?
+                            null
+                            :
+
+                            <>
+                                <h3 className='text-Medium+/Title/Small mt-2'>Edit Job</h3>
+                                <hr className='my-3 h-3' />
+                                <div className='form-parent'>
+                                    <div className="form-child">
+                                        <Select
+                                            label="Profile"
+                                            name='profile'
+                                            options={profileOpt}
+                                            defaultValue={user?.profile}
+                                            value={user?.profile}
+                                            disabled={flag}
+                                            onChange={handelChangeSelect}
+                                        />
+                                    </div>
+                                    <div className="form-child">
+                                        <Select
+                                            label="Bussiness"
+                                            name="bussiness"
+                                            options={bussinessOpt}
+                                            value={user?.bussiness}
+                                            onChange={handelChangeSelect}
+                                            disabled={flag}
+                                        />
+                                    </div>
+                                    <div className="form-child">
+                                        <Input
+                                            label="Number of Openings"
+                                            name="openings"
+                                            value={user?.openings}
+                                            onChange={handleChange}
+                                            disabled={flag}
+                                        />
+                                    </div>
+                                    <div className="form-child">
+                                        <Select
+                                            label="Country"
+                                            name="country"
+                                            options={countryOpt}
+                                            value={user?.country}
+                                            onChange={handelChangeSelect}
+                                            disabled={flag}
+                                        />
+                                    </div>
+                                    <div className="form-child">
+                                        <Select
+                                            label="State"
+                                            name="state"
+                                            options={stateOpt}
+                                            value={user?.state}
+                                            onChange={handelChangeSelect}
+                                            disabled={flag}
+                                        />
+                                    </div>
+                                    <div className="form-child">
+                                        <Select
+                                            label="City"
+                                            name="city"
+                                            options={cityOpt}
+                                            value={user?.city}
+                                            onChange={handelChangeSelect}
+                                            disabled={flag}
+                                        />
+                                    </div>
+                                </div>
+
+                            </>
+                    }
 
                     {
-                        userProfile == data?.approver_2?.profileId || userProfile == data?.approver_3?.profileId || userProfile == data?.approver_4?.profileId || userRole == "ADMIN"?
+                        userProfile == data?.approver_1?.profileId || userRole == "ADMIN" ?
+                            <>
+                                <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Reporting Manager </h6>
+                                <div className="form-parent">
+                                    <div className="form-child">
+                                        <TextArea
+                                            label="Remarks"
+                                            name="remarks1"
+                                            disabled={checkDisability()}
+                                            placeHolder="Enter Remarks"
+                                            value={user?.approver_1?.remarks}
+                                            onChange={(e) => {
+                                                setUser(prev => ({
+                                                    ...prev,
+                                                    approver_1: {
+                                                        ...user?.approver_1,
+                                                        remarks: e.target.value
+                                                    }
+                                                }))
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+                            </>
+
+                            :
+                            null
+                    }
+
+
+
+                    {
+                        userProfile == data?.approver_2?.profileId || userRole == "ADMIN" ?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR Manager</h6>
 
@@ -587,14 +797,15 @@ const EditJob = ({ notify }) => {
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
+                                            disabled={checkDisability()}
                                             placeHolder="Enter Remark"
                                             value={user?.approver_2?.remarks}
-                                            onChange={(e)=>{
-                                                setUser(prev=>({
+                                            onChange={(e) => {
+                                                setUser(prev => ({
                                                     ...prev,
-                                                    approver_2:{
+                                                    approver_2: {
                                                         ...user?.approver_2,
-                                                        remarks:e.target.value
+                                                        remarks: e.target.value
                                                     }
                                                 }))
                                             }}
@@ -607,7 +818,7 @@ const EditJob = ({ notify }) => {
                     }
 
                     {
-                        userProfile == data?.approver_3?.profileId || userProfile == data?.approver_4?.profileId || userRole == "ADMIN" ?
+                        userProfile == data?.approver_3?.profileId || userRole == "ADMIN" ?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
 
@@ -622,14 +833,15 @@ const EditJob = ({ notify }) => {
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
+                                            disabled={checkDisability()}
                                             placeHolder="Enter Remark"
                                             value={user?.approver_3?.remarks}
-                                            onChange={(e)=>{
-                                                setUser(prev=>({
+                                            onChange={(e) => {
+                                                setUser(prev => ({
                                                     ...prev,
-                                                    approver_3:{
+                                                    approver_3: {
                                                         ...user?.approver_3,
-                                                        remarks:e.target.value
+                                                        remarks: e.target.value
                                                     }
                                                 }))
                                             }}
@@ -659,14 +871,15 @@ const EditJob = ({ notify }) => {
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
+                                            disabled={checkDisability()}
                                             placeHolder="Enter Remark"
                                             value={user?.approver_4?.remarks}
-                                            onChange={(e)=>{
-                                                setUser(prev=>({
+                                            onChange={(e) => {
+                                                setUser(prev => ({
                                                     ...prev,
-                                                    approver_4:{
+                                                    approver_4: {
                                                         ...user?.approver_4,
-                                                        remarks:e.target.value
+                                                        remarks: e.target.value
                                                     }
                                                 }))
                                             }}
@@ -685,29 +898,52 @@ const EditJob = ({ notify }) => {
 
 
                 </div>
+
                 <div className='mt-[60px] flex gap-3 py-3'>
-                {
-                    (userProfile == data?.approver_1?.profileId&&data?.approver_1?.status=="PENDING")
-                    ||
-                    (userProfile == data?.approver_2?.profileId&&data?.approver_2?.status=="PENDING")
-                    ||
-                    (userProfile == data?.approver_3?.profileId&&data?.approver_3?.status=="PENDING")
-                    ||
-                    (userProfile == data?.approver_4?.profileId)
-                    ||
-                    (userRole== "ADMIN")
-                    ?
-                    <Button title="Approve" className='' onClick={() => updateJob(user?.status)} />
-                    :
-                    null
-                }
-                    <Button type='2' title="Reject" className='' />
+                    {
+                        (userProfile == data?.approver_1?.profileId && data?.approver_1?.status == "PENDING")
+                            ||
+                            (userProfile == data?.approver_2?.profileId && data?.approver_2?.status == "PENDING")
+                            ||
+                            (userProfile == data?.approver_3?.profileId && data?.approver_3?.status == "PENDING")
+                            ||
+                            (userProfile == data?.approver_4?.profileId)
+                            ||
+                            (userRole == "ADMIN")
+                            ?
+                            <Button title="Approve" className='' onClick={() => updateJob(user?.status)} />
+                            :
+                            null
+                    }
+                    <Button
+                        type='2'
+                        title="Reject"
+                        className=''
+                        onClick={() => rejectJob(user?.status)}
+                    />
+                    {
+                        isModal
+                            ?
+                            <Button
+                                type='2'
+                                title="Full View"
+                                className=''
+                                onClick={() => { navigate(ROUTES.Recruitment.Job + '/' + mainId) }}
+                            />
+                            :
+                            null
+
+                    }
                 </div>
 
             </Card>
 
         </div>
     )
+}
+
+EditJob.defaultProps = {
+    isModal: false
 }
 
 export default EditJob

@@ -27,6 +27,9 @@ import RecMasterBussiness from './../pages/Recruitment/Master/Bussiness'
 import RecMasterWorkType from './../pages/Recruitment/Master/WorkType'
 import RecMasterWorkShift from './../pages/Recruitment/Master/WorkShift'
 import RecMasterWorkStyle from './../pages/Recruitment/Master/WorkStyle'
+import RecMasterBand from './../pages/Recruitment/Master/Bands'
+import RecMasterCompensation from './../pages/Recruitment/Master/Compensation'
+import RecMasterCurrency from './../pages/Recruitment/Master/Currency'
 
 
 ////Create Job
@@ -173,6 +176,10 @@ const Router = () => {
         <Route exact path={ROUTES.Recruitment.Master.WorkType} element={<RouteWithRole Element={RecMasterWorkType} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.WorkShift} element={<RouteWithRole Element={RecMasterWorkShift} />}></Route>
         <Route exact path={ROUTES.Recruitment.Master.WorkStyle} element={<RouteWithRole Element={RecMasterWorkStyle} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.band} element={<RouteWithRole Element={RecMasterBand} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.compensation} element={<RouteWithRole Element={RecMasterCompensation} />}></Route>
+        <Route exact path={ROUTES.Recruitment.Master.currency} element={<RouteWithRole Element={RecMasterCurrency} />}></Route>
+
         <Route exact path={ROUTES.Recruitment.Master.JobDescription} element={<RouteWithRole Element={JobDescription} />}></Route>
 
 

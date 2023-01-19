@@ -1,6 +1,7 @@
 // export const BASE_URL = 'https://trg-portal.herokuapp.com/api/v1/'
-export const BASE_URL = 'https://trg-portal.vercel.app/api/v1/'
+// export const BASE_URL = 'https://trg-portal.vercel.app/api/v1/'
 // export const BASE_URL = 'http://localhost:8000/api/v1/' 
+export const BASE_URL = 'https://trg-portal.onrender.com/api/v1/' 
 
 
 

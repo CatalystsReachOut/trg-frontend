@@ -7,7 +7,6 @@ export function handleResponse(response) {
     } else {
         response.data.isSuccess = false;
     }
-
     return response.data;
 }
 

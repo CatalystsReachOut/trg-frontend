@@ -43,6 +43,8 @@ export const ROUTES = {
             Registration:'registration',
             VerifyOTP:'verify-otp',
             Basic:'basic',
+            Registration1:'registration1',
+            Education:'education'
         }
     }
 }
@@ -52,5 +54,4 @@ export const USER_ROUTES = {
     Home:'/user/home',
     ViewJobs:'user/view-jobs',
     EidtJob:'user/job',
-
 }

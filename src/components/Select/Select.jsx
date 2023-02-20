@@ -48,5 +48,4 @@ const Select = ({
 Select.defaultProps = {
     label: 'Default Label',
 }
-
 export default Select

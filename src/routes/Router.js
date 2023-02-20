@@ -78,11 +78,11 @@ import ProfileInitContainer from '../pages/UserProfile/Container'
 import ProfileInitRegistration from './../pages/UserProfile/Register'
 import ProfileInitOTP from './../pages/UserProfile/OTPVerification'
 import ProfileInitBasic from './../pages/UserProfile/Basic'
+import ProfileInitEducation from "./../pages/UserProfile/Education"
+import ProfileInitRegister from "./../pages/UserProfile/Registering"
 import Loader from '../components/Loader/Loader';
 import EditJob from '../pages/Recruitment/JobsCreation/EditJob';
-
 const Router = () => {
-
   const notify = (type, message, description) => {
     notification[type]({
       message: message,
@@ -125,7 +125,6 @@ const Router = () => {
         {
           auth ? <div className='bg-[#F5F5F5]'>
             <Loader loading={loading}/>
-
             <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
             <div className='container mx-auto p-[20px]  min-h-screen'>
               <Element notify={notify} loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} setLoading={setLoading}/>
@@ -140,8 +139,6 @@ const Router = () => {
   return (
     <div>
       <Routes>
-
-
         //Register Routing
         <Route element={<Container/>}>
           <Route index exact path={ROUTES.User.Login} element={<Login loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} notify={notify} />}></Route>
@@ -158,7 +155,9 @@ const Router = () => {
           <Route exact index path={ROUTES.Profile.Initial.Registration} element={<ProfileInitRegistration/>}/>
           <Route exact path={ROUTES.Profile.Initial.VerifyOTP} element={<ProfileInitOTP/>}/>
         </Route>
+        <Route exact path={ROUTES.Profile.Initial.Education} element={<ProfileInitEducation/>}/>
         <Route exact path={ROUTES.Profile.Initial.Basic} element={<ProfileInitBasic/>}/>
+        <Route exact path={ROUTES.Profile.Initial.Registration1} element={<ProfileInitRegister/>}/>
         
         {/* <Route exact path={ROUTES.Home} element={<RouteWithRole Element={Home} />}></Route> */}
         <Route exact path={ROUTES.About} element={<RouteWithRole Element={About} />}></Route>
@@ -182,8 +181,6 @@ const Router = () => {
 
         <Route exact path={ROUTES.Recruitment.Master.JobDescription} element={<RouteWithRole Element={JobDescription} />}></Route>
 
-
-
         //// Create Job /////
         <Route exact path={ROUTES.Recruitment.CreateJob} element={<RouteWithRole Element={RecCreateJob} />}></Route>
         {/* <Route exact path={`${ROUTES.Recruitment.Job}/:id`} element={<RouteWithRole Element={RecCreateJobApp4} />}></Route> */}
@@ -195,7 +192,6 @@ const Router = () => {
 
       //profile
         <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>
-
 
       //JobSeeker
         <Route exact path={'/aa'} element={<RouteWithRole Element={JobSeekerProfile} />}></Route>

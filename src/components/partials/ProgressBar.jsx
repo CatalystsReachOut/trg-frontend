@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { TiTick } from 'react-icons/ti'
 
 const ProgressBar = () => {
+    let c= localStorage.getItem('employment');
+    let d=localStorage.getItem('Education');
+    console.log(c);
     const [arr, setArr] = useState([
         {
             title: 'Basic',
@@ -10,11 +13,11 @@ const ProgressBar = () => {
         },
         {
             title: 'Employment',
-            selected: false,
+            selected: c ? true:false,
         },
         {
             title: 'Education',
-            selected: false,
+            selected: d ? true:false
         },
     ])
 
@@ -35,7 +38,7 @@ const ProgressBar = () => {
                                 {
                                     i?.selected
                                     ?
-                                    <TiTick className={`bg-[${colors.three}] rounded-full text-white h-[30px] w-[30px]`} />
+                                    <TiTick className={`bg-[#4CD137] rounded-full text-white h-[30px] w-[30px]`} />
                                     :
                                     key==0
                                     ?
@@ -44,7 +47,7 @@ const ProgressBar = () => {
                                     <div className={`bg-[${!i?.selected&&arr[parseInt(key)-1].selected?colors.two:colors.first}] rounded-full text-white h-[30px] w-[30px]`}></div>
                                 }
                                 {
-                                    key +1 !== arr.length
+                                    key +1 !== arr.length 
                                     &&
                                     <div className={`w-[150px] bg-[${i?.selected?colors.three:colors.first}] h-[5px]`}></div>
                                 }

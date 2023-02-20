@@ -28,7 +28,6 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
   const [countryOpt, setCountryOpt] = useState([])
   const [stateOpt, setStateOpt] = useState([])
   const [cityOpt, setCityOpt] = useState([])
-
   const [profileData, setProfileData] = useState([])
 
   const [user, setUser] = useState({
@@ -139,6 +138,7 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
       ...prev,
       [name]: value
     }))
+    console.log(user);
   }
 
 
@@ -323,7 +323,6 @@ const Create = ({ notify, enterLoading, exitLoading, loadings }) => {
                       ...prev,
                       [name]: value
                     }))
-
                     handleApprocerSelection(e)
                   }}
                 />

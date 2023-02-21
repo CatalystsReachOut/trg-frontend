@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaUserAlt } from 'react-icons/fa'
 import Inputfield from '../../components/RegisterInputs/Inputfield'
 import { GrMail } from 'react-icons/gr'
@@ -12,11 +12,67 @@ import { useState } from 'react'
 import {TiTick} from 'react-icons/ti'
 import { useNavigate } from 'react-router'
 import { ROUTES } from '../../routes/RouterConfig'
+import * as apiProvider from './../../services/api/jobseeker'
 
 const Register = () => {
 
     const [flag, setFlag] = useState(0)
     const navigate = useNavigate()
+    const [user, setUser] = useState({
+        name:'',
+        email:'',
+        mobile:'',
+        workStatus:'',
+        resume:'',
+        city:'',
+        terms:false
+    })
+
+    const handleChange = (e) => {
+        const {name, value} = e.target
+        setUser(prev=>({
+            ...prev,
+            [name]:value
+        }))
+    }
+
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        await apiProvider.SignUp(user)
+        .then(res=>{
+            if (res.isSuccess) {
+                alert('added success');
+            } else {
+                  alert('added fail');
+                // return notify('error', res.message);
+              }
+            alert('Registered Successfully')
+            console.log(res);
+        })
+        .catch(err=>{
+            alert('Registered failed')
+            console.log(err);
+        })
+    }
+
+
+    useEffect(() => {
+        if(flag==1){
+            console.log(flag)
+            setUser(prev=>({
+                ...prev,
+                workStatus:'Experienced',
+                city:''
+            }))
+        }
+        else if(flag==2){
+            setUser(prev=>({
+                ...prev,
+                workStatus:'Fresher'
+            }))
+        }
+    }, [flag])
+
 
     return (
         <div className='p-[30px] mt-10'>
@@ -29,18 +85,29 @@ const Register = () => {
                     prefix={<FaUserAlt />}
                     className="max-w-[500px]"
                     placeholder={'How shall we call you ?'}
+                    name="name"
+                    value={user.name}
+                    onChange={handleChange}
                 />
                 <Inputfield
                     label={"Email"}
                     prefix={<GrMail />}
                     className="max-w-[500px]"
                     placeholder={"Where we can officially communicate?"}
+                    name="email"
+                    type={'email'}
+                    value={user.email}
+                    onChange={handleChange}
                 />
                 <Inputfield
                     label={"Mobile"}
                     prefix={<MdPhone />}
                     className="max-w-[500px]"
                     placeholder={"Incase we want to connect with you on call"}
+                    name="mobile"
+                    type={'number'}
+                    value={user.mobile}
+                    onChange={handleChange}
                 />
                 <div className='mt-8'>
                     <div className='text-xl '>Tell us your work status</div>
@@ -106,14 +173,18 @@ const Register = () => {
                 </div>
                 <div className="mt-8 text-[#B4BAC3]">
                     <Checkbox 
-                    checked={true}
+                    checked={user.terms}
+                    onChange={(e)=>{setUser(prev=>({
+                        ...prev,
+                        terms:e.target.checked
+                    }))}}
                     >
                         I agree the <strong className='text-[black]'>Terms and Condition</strong> and <strong className='text-[black]'>Privacy Policy</strong>*
                     </Checkbox>
                 </div>
                 <button 
                 className='mt-5 text-center w-full bg-[#F1C40F] text-white p-2 rounded-[10px] font-semibold'
-                onClick={()=>{navigate(ROUTES.Profile.Initial.Root + '/' + ROUTES.Profile.Initial.VerifyOTP)}}
+                onClick={handleSubmit}
                 >
                     Register Now
                 </button>

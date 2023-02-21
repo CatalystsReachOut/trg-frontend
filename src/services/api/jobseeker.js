@@ -1,0 +1,32 @@
+import * as apiProvider from './../provider'
+import * as apiConstant from '../../utils/apiConstants'
+
+
+// Business
+export const getBusiness = () => {
+    return apiProvider.getAll(apiConstant.Business)
+}
+
+export const createBusiness = (data) => {
+    return apiProvider.post(apiConstant.Business, data)
+}
+
+export const editBusiness = (id, data) => {
+    return apiProvider.put(apiConstant.Business, id, data)
+}
+
+export const getBusinessById = (id) => {
+    return apiProvider.get(apiConstant.Business, id)
+}
+
+
+// Auth
+//login
+export const login = (data) => {
+    return apiProvider.post(apiConstant.Login, data)
+}
+//signup
+export const SignUp = (data) => {
+    return apiProvider.post(apiConstant.SignUp, data)
+}
+

@@ -30,5 +30,8 @@ export const currency = 'currency'
 
 
 //Jobseeker
-export const Login = 'loginJobSeeker'
-export const SignUp = 'signupJobSeeker'
+export const Login = 'jobSeeker/login'
+export const SignUp = 'jobSeeker/register'
+export const logout = 'jobSeeker/logout'
+export const VerifyOTP = 'jobSeeker/otp-verify'
+export const updateProfile = 'jobSeeker/update'

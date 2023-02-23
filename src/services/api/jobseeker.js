@@ -29,4 +29,13 @@ export const login = (data) => {
 export const SignUp = (data) => {
     return apiProvider.post(apiConstant.SignUp, data)
 }
+//verfiyOTP
+export const VerifyOTP = (data) => {
+    return apiProvider.post(apiConstant.VerifyOTP, data)
+}
+
+//verfiyOTP
+export const UpdateProfile = (data) => {
+    return apiProvider.put(apiConstant.updateProfile,'',data)
+}
 

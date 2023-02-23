@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-import { Input } from 'antd';
+import { Input } from "antd";
 
 const Inputfield = ({prefix,type,placeholder,label,value,onChange, className, classNameInput, name}) => {
     return (

@@ -482,7 +482,7 @@ const EditJob = ({ notify, propId, isModal }) => {
                 console.log(err);
             })
     }
-
+    
     useEffect(() => {
         // getData()
         getBasicData()

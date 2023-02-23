@@ -10,21 +10,23 @@ import { IoDocumentAttachSharp } from 'react-icons/io5'
 import { Checkbox } from 'antd'
 import { useState } from 'react'
 import {TiTick} from 'react-icons/ti'
+import {BiLockAlt} from 'react-icons/bi'
 import { useNavigate } from 'react-router'
 import { ROUTES } from '../../routes/RouterConfig'
 import * as apiProvider from './../../services/api/jobseeker'
 
-const Register = () => {
+const Register = ({notify}) => {
 
     const [flag, setFlag] = useState(0)
     const navigate = useNavigate()
     const [user, setUser] = useState({
-        name:'',
+        fullName:'',
         email:'',
         mobile:'',
         workStatus:'',
         resume:'',
         city:'',
+        password:'',
         terms:false
     })
 
@@ -40,14 +42,7 @@ const Register = () => {
         e.preventDefault()
         await apiProvider.SignUp(user)
         .then(res=>{
-            if (res.isSuccess) {
-                alert('added success');
-            } else {
-                  alert('added fail');
-                // return notify('error', res.message);
-              }
-            alert('Registered Successfully')
-            console.log(res);
+            navigate(ROUTES.Profile.Initial.Root+'/'+ROUTES.Profile.Initial.VerifyOTP, {state:{email:user.email}})
         })
         .catch(err=>{
             alert('Registered failed')
@@ -85,8 +80,8 @@ const Register = () => {
                     prefix={<FaUserAlt />}
                     className="max-w-[500px]"
                     placeholder={'How shall we call you ?'}
-                    name="name"
-                    value={user.name}
+                    name="fullName"
+                    value={user.fullName}
                     onChange={handleChange}
                 />
                 <Inputfield
@@ -107,6 +102,16 @@ const Register = () => {
                     name="mobile"
                     type={'number'}
                     value={user.mobile}
+                    onChange={handleChange}
+                />
+                <Inputfield
+                    label={"Password"}
+                    prefix={<BiLockAlt />}
+                    className="max-w-[500px]"
+                    placeholder={"Secure Yourself"}
+                    name="password"
+                    type={'password'}
+                    value={user.password}
                     onChange={handleChange}
                 />
                 <div className='mt-8'>

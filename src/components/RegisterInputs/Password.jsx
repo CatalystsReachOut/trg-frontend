@@ -13,6 +13,7 @@ const Password = ({value,handleState, className}) => {
             
             <Input.Password size='large'
                 placeholder="Enter Password"
+                type="password"
                 value={value}
                 onChange={handleState}
                 prefix={<HiLockClosed className='text-lg mr-[0.75rem]' />}

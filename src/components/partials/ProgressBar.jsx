@@ -1,8 +1,18 @@
 import React from 'react'
 import { useState } from 'react'
 import { TiTick } from 'react-icons/ti'
+import { useLocation } from 'react-router-dom';
+import { ROUTES } from '../../routes/RouterConfig';
 
-const ProgressBar = () => {
+const ProgressBar = ({
+    verifyPath
+}) => {
+    const location = useLocation()
+    let c= localStorage.getItem('employment');
+    let d=localStorage.getItem('Education');
+    const currentPath = location.pathname;
+    console.log(currentPath);
+    console.log(c);
     const [arr, setArr] = useState([
         {
             title: 'Basic',
@@ -10,13 +20,15 @@ const ProgressBar = () => {
         },
         {
             title: 'Employment',
-            selected: false,
+            selected: currentPath===ROUTES.Profile.Initial.Education?true:false,
         },
         {
             title: 'Education',
             selected: false,
         },
     ])
+
+    console.log(arr);
 
 
     const colors = {
@@ -35,18 +47,18 @@ const ProgressBar = () => {
                                 {
                                     i?.selected
                                     ?
-                                    <TiTick className={`bg-[${colors.three}] rounded-full text-white h-[30px] w-[30px]`} />
+                                    <TiTick className={`bg-[#4CD137] rounded-full text-white h-[30px] w-[30px]`} />
                                     :
                                     key==0
                                     ?
-                                    <div className={`bg-[${!i?.selected?colors.two:colors.three}] rounded-full text-white h-[30px] w-[30px]`}></div>
+                                    <div className={`rounded-full text-white h-[30px] w-[30px]`} style={{background:!i?.selected?colors.two:colors.three}}></div>
                                     :
-                                    <div className={`bg-[${!i?.selected&&arr[parseInt(key)-1].selected?colors.two:colors.first}] rounded-full text-white h-[30px] w-[30px]`}></div>
+                                    <div className={` rounded-full text-white h-[30px] w-[30px]`} style={{background:!i?.selected&&arr[parseInt(key)-1].selected?colors.two:colors.first}}></div>
                                 }
                                 {
-                                    key +1 !== arr.length
+                                    key +1 !== arr.length 
                                     &&
-                                    <div className={`w-[150px] bg-[${i?.selected?colors.three:colors.first}] h-[5px]`}></div>
+                                    <div className={`w-[150px] h-[5px]`} style={{background:i?.selected?colors.three:colors.first}}></div>
                                 }
                             </div>
 

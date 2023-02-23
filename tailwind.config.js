@@ -20,7 +20,8 @@ module.exports = {
         white10:'#F5F5F5',
         PENDING:'#FFFF00',
         DECLINED:'#e74c3c',
-        APPROVED:'#2ecc71'
+        APPROVED:'#2ecc71',
+        blue:'#0E223D'
       },
       fontSize: {
         'Medium+/Display/Large': ['64px', {

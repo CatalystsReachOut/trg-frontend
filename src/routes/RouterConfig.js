@@ -42,8 +42,13 @@ export const ROUTES = {
             Root:'/new-user',
             Registration:'registration',
             VerifyOTP:'verify-otp',
-            Basic:'basic',
+            Basic:'/employment',
+            Registration1:'registration1',
+            Education:'/education'
         }
+    },
+    JobSeeker:{
+        Job:'/seeker/job',
     }
 }
 
@@ -52,5 +57,4 @@ export const USER_ROUTES = {
     Home:'/user/home',
     ViewJobs:'user/view-jobs',
     EidtJob:'user/job',
-
 }

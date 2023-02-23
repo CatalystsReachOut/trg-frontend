@@ -45,7 +45,7 @@ const Jobs = () => {
         <div className="mt-3">
             <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-6">
                 {
-                    jobs.map((i, key) => {
+                    jobs?.map((i, key) => {
                         return (
                             <div key={key} className="col-span-1">
                                 <JobCard job={i}/>

@@ -78,6 +78,7 @@ import Container from '../pages/Register/Container';
 //Initial Profile setup
 import ProfileInitContainer from '../pages/UserProfile/Container'
 import ProfileInitRegistration from './../pages/UserProfile/Register'
+import ProfileInitLogin from './../pages/UserProfile/Login'
 import ProfileInitOTP from './../pages/UserProfile/OTPVerification'
 import ProfileInitBasic from './../pages/UserProfile/Basic'
 import ProfileInitEducation from "./../pages/UserProfile/Education"
@@ -157,6 +158,7 @@ const Router = () => {
         ///User Profile Initial Completion Routing for job seeker
         <Route path={ROUTES.Profile.Initial.Root} element={<ProfileInitContainer/>}>
           <Route exact index path={ROUTES.Profile.Initial.Registration} element={<ProfileInitRegistration/>}/>
+          <Route exact index path={ROUTES.Profile.Initial.Login} element={<ProfileInitLogin/>}/>
           <Route exact path={ROUTES.Profile.Initial.VerifyOTP} element={<ProfileInitOTP/>}/>
         </Route>
         <Route exact path={ROUTES.Profile.Initial.Education} element={<ProfileInitEducation/>}/>

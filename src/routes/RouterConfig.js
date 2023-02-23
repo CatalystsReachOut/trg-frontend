@@ -41,6 +41,7 @@ export const ROUTES = {
         Initial:{
             Root:'/new-user',
             Registration:'registration',
+            Login:'login',
             VerifyOTP:'verify-otp',
             Basic:'/employment',
             Registration1:'registration1',

@@ -50,6 +50,7 @@ import Profile from '../pages/Recruitment/Profile/Profile';
 import JobSeekerCreate from './../pages/Recruitment/Jobseeker/Add'
 import JobSeekerProfile from './../pages/Recruitment/Jobseeker/Profile'
 import JobSeekerJobs from './../pages/Recruitment/Jobseeker/Jobs'
+import JobSeekerExam from './../pages/Recruitment/Jobseeker/Exam'
 import JobSeekerViewJob from './../pages/Recruitment/Jobseeker/ViewJob'
 
 import { notification } from 'antd';
@@ -203,6 +204,7 @@ const Router = () => {
         <Route exact path={'/aa'} element={<RouteWithRole Element={JobSeekerProfile} />}></Route>
         <Route exact path={'/ab'} element={<RouteWithRole Element={JobSeekerCreate} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Job} element={<RouteWithRole Element={JobSeekerJobs} />}></Route>
+        <Route exact path={ROUTES.JobSeeker.Exam} element={<RouteWithRole Element={JobSeekerExam} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Job+'/:id'} element={<RouteWithRole Element={JobSeekerViewJob} layout={false} />}></Route>
 
 

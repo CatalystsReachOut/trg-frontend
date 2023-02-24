@@ -39,3 +39,9 @@ export const UpdateProfile = (data) => {
     return apiProvider.put(apiConstant.updateProfile,'',data)
 }
 
+//verfiyOTP
+export const ApplyJob = (id) => {
+    console.log(id);
+    return apiProvider.post(apiConstant.applyJob+'/'+id)
+}
+

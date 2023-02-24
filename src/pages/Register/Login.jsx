@@ -95,7 +95,7 @@ const Login = ({ notify, enterLoading, exitLoading, loadings }) => {
         placeholder="Enter Email"
         type="email"
         value={email}
-        handleState={handleEmailState}
+        onChange={handleEmailState}
         label="email"
       />
       <Password value={password} handleState={handlePasswordState} />

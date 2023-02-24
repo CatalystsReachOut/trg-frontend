@@ -14,6 +14,7 @@ import {BiLockAlt} from 'react-icons/bi'
 import { useNavigate } from 'react-router'
 import { ROUTES } from '../../routes/RouterConfig'
 import * as apiProvider from './../../services/api/jobseeker'
+import * as storageConstants from './../../utils/storageConstants'
 
 const Login = ({notify}) => {
 
@@ -36,6 +37,9 @@ const Login = ({notify}) => {
         await apiProvider.login(user)
         .then(res=>{
             if(res.isSuccess){
+            console.log(res.token);
+            localStorage.setItem(storageConstants.AUTH, res.token)
+            localStorage.setItem(storageConstants.USER_ID, res.data._id)
             navigate(ROUTES.JobSeeker.Job)
             }
         })

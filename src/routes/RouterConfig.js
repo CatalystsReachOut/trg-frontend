@@ -45,7 +45,8 @@ export const ROUTES = {
             VerifyOTP:'verify-otp',
             Basic:'/employment',
             Registration1:'registration1',
-            Education:'/education'
+            Education:'/education',
+            Exam:'/seeker/exam',
         }
     },
     JobSeeker:{

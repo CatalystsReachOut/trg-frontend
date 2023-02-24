@@ -5,18 +5,38 @@ import { FiBriefcase, FiDollarSign, FiMapPin, FiPaperclip } from 'react-icons/fi
 import { useParams } from 'react-router-dom'
 import BackButton from '../../../components/Button/BackButton'
 import * as apiProvider from './../../../services/api/recruitment'
+import * as apiProviderSeeker from './../../../services/api/jobseeker'
+import * as storageConstants from './../../../utils/storageConstants'
 
 const ViewJob = () => {
 
   const [job, setJob] = useState()
 
+  const getUserId = () => {
+    return localStorage.getItem(storageConstants.USER_ID)?localStorage.getItem(storageConstants.USER_ID):null
+  }
+
+  const [userId, setUserId] = useState(getUserId())
+
   const {id} = useParams()
+
+  console.log(userId);
 
   const getJobsDetials = async() => {
     await apiProvider.getJobById(id)
     .then(res=>{
       console.log(res);
       setJob(res.data)
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
+  const handleSubmit = () => {
+    apiProviderSeeker.ApplyJob(id)
+    .then(res=>{
+      console.log(res);
     })
     .catch(err=>{
       console.log(err);
@@ -97,7 +117,7 @@ const ViewJob = () => {
                 </div>
               </div>
               <div className='flex justify-end'>
-                <button className="bg-primary text-[black] p-2 px-4 btn-primary rounded-lg">
+                <button onClick={handleSubmit} className="bg-primary text-[black] p-2 px-4 btn-primary rounded-lg">
                   Apply Now
                 </button>
               </div>

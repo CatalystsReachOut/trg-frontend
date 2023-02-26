@@ -51,6 +51,7 @@ import JobSeekerCreate from './../pages/Recruitment/Jobseeker/Add'
 import JobSeekerProfile from './../pages/Recruitment/Jobseeker/Profile'
 import JobSeekerJobs from './../pages/Recruitment/Jobseeker/Jobs'
 import JobSeekerExam from './../pages/Recruitment/Jobseeker/Exam'
+import JobSeekerExamRoundCompletion from './../pages/Recruitment/Jobseeker/Exam/RoundCompletion'
 import JobSeekerViewJob from './../pages/Recruitment/Jobseeker/ViewJob'
 
 import { notification } from 'antd';
@@ -115,7 +116,7 @@ const Router = () => {
   }
 
 
-  const RouteWithRole = ({ Element, layout = true }) => {
+  const RouteWithRole = ({ Element, layout = true, showNavbar = true, showFooter = true }) => {
 
 
     // const [auth, setAuth] = useState(JSON.parse(localStorage.getItem(storageConstants.AUTH)))
@@ -130,11 +131,23 @@ const Router = () => {
           // auth ? 
           <div className='bg-[#F5F5F5]'>
             <Loader loading={loading}/>
-            <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
+            {
+              showNavbar
+              ?
+              <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
+              :
+              null
+            }
             <div className={`${layout?'container mx-auto p-[20px]  min-h-screen':''}`}>
               <Element notify={notify} loadings={loadings} enterLoading={enterLoading} exitLoading={exitLoading} setLoading={setLoading}/>
             </div>
-            <Footer />
+            {
+              showFooter
+              ?
+              <Footer />
+              :
+              null
+            }
           </div> 
           // : <Navigate replace to={redirect} />
         }
@@ -204,7 +217,8 @@ const Router = () => {
         <Route exact path={'/aa'} element={<RouteWithRole Element={JobSeekerProfile} />}></Route>
         <Route exact path={'/ab'} element={<RouteWithRole Element={JobSeekerCreate} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Job} element={<RouteWithRole Element={JobSeekerJobs} />}></Route>
-        <Route exact path={ROUTES.JobSeeker.Exam} element={<RouteWithRole Element={JobSeekerExam} />}></Route>
+        <Route exact path={ROUTES.JobSeeker.Exam+'/:jobId/:step'} element={<RouteWithRole Element={JobSeekerExam} />}></Route>
+        <Route exact path={ROUTES.JobSeeker.Exam+'/:jobId/:step/:stepcompletion'} element={<RouteWithRole Element={JobSeekerExamRoundCompletion} showFooter={false} showNavbar={false} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Job+'/:id'} element={<RouteWithRole Element={JobSeekerViewJob} layout={false} />}></Route>
 
 

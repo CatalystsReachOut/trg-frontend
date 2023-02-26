@@ -45,3 +45,10 @@ export const ApplyJob = (id) => {
     return apiProvider.post(apiConstant.applyJob+'/'+id)
 }
 
+
+//verfiyOTP
+export const getInterViewQuestions = (id) => {
+    console.log(id);
+    return apiProvider.get(apiConstant.getInterviewQuestions,id)
+}
+

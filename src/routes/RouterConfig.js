@@ -46,10 +46,10 @@ export const ROUTES = {
             Basic:'/employment',
             Registration1:'registration1',
             Education:'/education',
-            Exam:'/seeker/exam',
         }
     },
     JobSeeker:{
+        Exam:'/seeker/exam',
         Job:'/seeker/job',
     }
 }

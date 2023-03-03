@@ -1,7 +1,7 @@
 // export const BASE_URL = 'https://trg-portal.herokuapp.com/api/v1/'
 // export const BASE_URL = 'https://trg-portal.vercel.app/api/v1/'
-// export const BASE_URL = 'http://localhost:8000/api/v1/' 
-export const BASE_URL = 'https://trg-portal.onrender.com/api/v1/' 
+export const BASE_URL = 'http://localhost:8000/api/v1/' 
+// export const BASE_URL = 'https://trg-portal.onrender.com/api/v1/' 
 
 
 
@@ -35,5 +35,7 @@ export const SignUp = 'jobSeeker/register'
 export const logout = 'jobSeeker/logout'
 export const VerifyOTP = 'jobSeeker/otp-verify'
 export const updateProfile = 'jobSeeker/update'
+export const JobApplicationUpdate = 'jobSeeker/evaluate'
 export const applyJob = 'jobApplication'
 export const getInterviewQuestions = 'jobApplication/questions'
+export const EvaluateInterviewQuestions = 'jobSeeker/evaluate'

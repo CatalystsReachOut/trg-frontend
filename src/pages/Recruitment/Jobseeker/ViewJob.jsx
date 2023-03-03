@@ -36,8 +36,8 @@ const ViewJob = ({notify}) => {
     })
   }
 
-  const handleSubmit = () => {
-    apiProviderSeeker.ApplyJob(id)
+  const handleSubmit = async() => {
+    await  apiProviderSeeker.ApplyJob(id)
     .then(res=>{
       console.log(res);
       notify('success', "SuccessFully Applied For this job")

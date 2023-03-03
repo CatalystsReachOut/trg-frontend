@@ -1,23 +1,74 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Card from '../../../components/Card/Card'
+import { ROUTES } from '../../../routes/RouterConfig'
 import * as apiProveder from './../../../services/api/jobseeker'
 import Objective from './Exam/Objective'
 import Subjective from './Exam/Subjective'
 
-const Exam = () => {
+const Exam = ({notify}) => {
   const { jobId, step } = useParams();
 
+  const navigate = useNavigate()
+
+  const [jobDetails, setJobDetails] = useState()
+
   const [data, setData] = useState({})
+  const [answers, setAnswers] = useState({})
 
   const getData = async () => {
     apiProveder.getInterViewQuestions(jobId)
       .then(res => {
         console.log(res);
+        setJobDetails(res.data)
         setData(res.data[step])
+        setAnswers(
+          res.data[step]?.questions?.map(s=>{
+            return{
+              questionId:s?._id,
+              selectedOption:''
+            }
+          })
+        )
       })
       .catch(err => {
+        console.log(err);
+      })
+  }
+
+  const handleSubmit = async() => {
+    const obj = {
+      totalMarks:data.totalMarks,
+      roundName:data.round.name,
+      roundId:data.round._id,
+      answers:answers
+    }
+    await apiProveder.UpdateJobApplication(data.applicationId, obj)
+      .then(res=>{
+        console.log(res);
+        if(res.data.status=="PASSED"&&Number(step)+1<jobDetails?.length){
+          const obj = {
+            percentage:res?.data?.percentage,
+            result:res?.data?.status,
+            nextStep:true
+          }
+          navigate(ROUTES.JobSeeker.Exam+'/'+jobId+'/'+Number(step)+'/'+Number(step),{state:obj})
+        }
+        if(res?.data?.status=="PASSED"&&Number(step)+1==jobDetails?.length){
+          const obj = {
+            percentage:res?.data?.percentage,
+            result:res?.data?.status,
+            nextStep:false
+          }
+          navigate(ROUTES.JobSeeker.Exam+'/'+jobId+'/'+Number(step)+'/'+Number(step),{state:obj})
+        }
+        if(res?.data?.status!="PASSED"){
+          // notify("danger",res.result)
+        }
+        notify("success",res?.data?.status)
+      })
+      .catch(err=>{
         console.log(err);
       })
   }
@@ -65,6 +116,14 @@ const Exam = () => {
               </div>
 
             </div>
+
+            <div className="mt-6 flex">
+              <button 
+              onClick={handleSubmit}
+              className="m-auto btn-primary p-3 px-4">
+                Submit Exam
+              </button>
+            </div>
           </Card>
         </div>
         <div className="sm:col-span-4 col-span-5">
@@ -79,11 +138,11 @@ const Exam = () => {
                     i?.questionType=='Subjective'
                     ?
                     <div className='w-[95%]'>
-                      <Subjective data={i} />
+                      <Subjective data={i} answers={answers} setAnswers={setAnswers}/>
                     </div>
                     :
                     <div className='w-[95%]'>
-                      <Objective data={i} />
+                      <Objective data={i} answers={answers} setAnswers={setAnswers}   />
                     </div>
                   }
                 </div>

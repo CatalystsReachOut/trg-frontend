@@ -34,21 +34,33 @@ export const VerifyOTP = (data) => {
     return apiProvider.post(apiConstant.VerifyOTP, data)
 }
 
-//verfiyOTP
+//Update Profile
 export const UpdateProfile = (data) => {
     return apiProvider.put(apiConstant.updateProfile,'',data)
 }
 
-//verfiyOTP
+//Apply Job
 export const ApplyJob = (id) => {
     console.log(id);
     return apiProvider.post(apiConstant.applyJob+'/'+id)
 }
 
+//Update Job Application includes examination
+export const UpdateJobApplication = (id,data) => {
+    console.log(id);
+    return apiProvider.put(apiConstant.JobApplicationUpdate,id,data)
+}
 
-//verfiyOTP
+
+//Interview Exam
+
+// get Questions
 export const getInterViewQuestions = (id) => {
     console.log(id);
     return apiProvider.get(apiConstant.getInterviewQuestions,id)
 }
 
+//Submit Exam
+export const EvaluateExam = (data) => {
+    return apiProvider.post(apiConstant.EvaluateInterviewQuestions, data)
+}

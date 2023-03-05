@@ -1,5 +1,5 @@
 import { BsJournalBookmark } from "react-icons/bs";
-import { FiHome, FiUser } from "react-icons/fi";
+import { FiHome, FiUser, FiBriefcase, FiCheckCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../routes/RouterConfig";
 
@@ -170,4 +170,28 @@ export const adminNavbarData = [
         ]
     },
 
+]
+
+export const seekerNavbarData = [
+    {
+        route: ROUTES?.Home,
+        label: "Home",
+        key: 'home',
+        children: [],
+        icon: <FiHome />
+    },
+    {
+        route: ROUTES?.JobSeeker.Job,
+        label: "Jobs",
+        key: 'jobs',
+        children: [],
+        icon: <FiBriefcase />
+    },
+    {
+        route: ROUTES?.JobSeeker.AppliedJobs,
+        label: "Applied Jobs",
+        key: 'applied',
+        children: [],
+        icon: <FiCheckCircle />
+    },
 ]

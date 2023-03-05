@@ -39,6 +39,7 @@ const Login = ({notify}) => {
             if(res.isSuccess){
             console.log(res.token);
             localStorage.setItem(storageConstants.AUTH, res.token)
+            localStorage.setItem(storageConstants.USER_ROLE, JSON.stringify("SEEKER"))
             localStorage.setItem(storageConstants.USER_ID, res.data._id)
             navigate(ROUTES.JobSeeker.Job)
             }

@@ -50,6 +50,7 @@ import Profile from '../pages/Recruitment/Profile/Profile';
 import JobSeekerCreate from './../pages/Recruitment/Jobseeker/Add'
 import JobSeekerProfile from './../pages/Recruitment/Jobseeker/Profile'
 import JobSeekerJobs from './../pages/Recruitment/Jobseeker/Jobs'
+import JobSeekerAppliedJobs from './../pages/Recruitment/Jobseeker/AppliedJobs'
 import JobSeekerExam from './../pages/Recruitment/Jobseeker/Exam'
 import JobSeekerExamRoundCompletion from './../pages/Recruitment/Jobseeker/Exam/RoundCompletion'
 import JobSeekerViewJob from './../pages/Recruitment/Jobseeker/ViewJob'
@@ -65,7 +66,7 @@ import * as storageConstants from "../utils/storageConstants"
 
 // NavData
 
-import { defaultNavbarData, adminNavbarData } from "../../src/components/Navbar/nav.js"
+import { defaultNavbarData, adminNavbarData, seekerNavbarData } from "../../src/components/Navbar/nav.js"
 import JobDescription from '../pages/Recruitment/Master/JobDescription';
 
 
@@ -87,6 +88,7 @@ import ProfileInitEducation from "./../pages/UserProfile/Education"
 import ProfileInitRegister from "./../pages/UserProfile/Registering"
 import Loader from '../components/Loader/Loader';
 import EditJob from '../pages/Recruitment/JobsCreation/EditJob';
+import Notfound from '../components/partials/Notfound';
 const Router = () => {
   const notify = (type, message, description) => {
     notification[type]({
@@ -134,7 +136,7 @@ const Router = () => {
             {
               showNavbar
               ?
-              <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : defaultNavbarData} />
+              <Navbar navbarData={role == 'ADMIN' ? adminNavbarData : role=="SEEKER"?seekerNavbarData: defaultNavbarData} />
               :
               null
             }
@@ -217,10 +219,16 @@ const Router = () => {
         <Route exact path={'/aa'} element={<RouteWithRole Element={JobSeekerProfile} />}></Route>
         <Route exact path={'/ab'} element={<RouteWithRole Element={JobSeekerCreate} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Job} element={<RouteWithRole Element={JobSeekerJobs} />}></Route>
+        <Route exact path={ROUTES.JobSeeker.AppliedJobs} element={<RouteWithRole Element={JobSeekerAppliedJobs} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Exam+'/:jobId/:step'} element={<RouteWithRole Element={JobSeekerExam} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Exam+'/:jobId/:step/:stepcompletion'} element={<RouteWithRole Element={JobSeekerExamRoundCompletion} showFooter={false} showNavbar={false} />}></Route>
         <Route exact path={ROUTES.JobSeeker.Job+'/:id'} element={<RouteWithRole Element={JobSeekerViewJob} layout={false} />}></Route>
 
+
+
+        <Route path='*' exact={true} element={<Notfound/>}>
+
+        </Route>
 
 
       </Routes>

@@ -51,6 +51,10 @@ export const UpdateJobApplication = (id,data) => {
     return apiProvider.put(apiConstant.JobApplicationUpdate,id,data)
 }
 
+export const getJobApplications = () => {
+    return apiProvider.getAll(apiConstant.GetMyApplications)
+}
+
 
 //Interview Exam
 

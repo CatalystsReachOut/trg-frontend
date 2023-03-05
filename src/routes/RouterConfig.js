@@ -51,6 +51,7 @@ export const ROUTES = {
     JobSeeker:{
         Exam:'/seeker/exam',
         Job:'/seeker/job',
+        AppliedJobs:'/seeker/applied-jobs',
     }
 }
 

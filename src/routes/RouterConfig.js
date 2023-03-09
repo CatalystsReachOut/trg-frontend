@@ -26,6 +26,8 @@ export const ROUTES = {
         },
         CreateJob: '/recruitment/create-job',
         Job: '/recruitment/job',
+        JobApplication: '/recruitment/job-applications',
+        ViewApplications: '/recruitment/view-applicants',
         ViewJobs: '/recruitment/view-job',
         TrackJobProgrees: '/recruitment/track-job',
         Profile: '/recruitment/profile',

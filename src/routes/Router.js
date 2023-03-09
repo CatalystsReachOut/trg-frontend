@@ -89,6 +89,8 @@ import ProfileInitRegister from "./../pages/UserProfile/Registering"
 import Loader from '../components/Loader/Loader';
 import EditJob from '../pages/Recruitment/JobsCreation/EditJob';
 import Notfound from '../components/partials/Notfound';
+import JobApplications from '../pages/Recruitment/Jobs/JobApplications';
+import ViewApplicants from '../pages/Recruitment/Jobs/ViewApplicants';
 const Router = () => {
   const notify = (type, message, description) => {
     notification[type]({
@@ -211,6 +213,8 @@ const Router = () => {
 
         // jobs
         <Route exact path={ROUTES.Recruitment.ViewJobs} element={<RouteWithRole Element={Jobs} />}></Route>
+        <Route exact path={ROUTES.Recruitment.JobApplication} element={<RouteWithRole Element={JobApplications} />}></Route>
+        <Route exact path={ROUTES.Recruitment.ViewApplications+'/:jobId'} element={<RouteWithRole Element={ViewApplicants} />}></Route>
 
       //profile
         <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>

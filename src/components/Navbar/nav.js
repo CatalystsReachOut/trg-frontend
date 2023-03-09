@@ -156,6 +156,11 @@ export const adminNavbarData = [
                 route: ROUTES?.Recruitment.ViewJobs,
                 key: 'viewjobs',
             },
+            {
+                label: <Link to={ROUTES?.Recruitment?.JobApplication || "#"} > Job Applications </Link>,
+                route: ROUTES?.Recruitment.JobApplication,
+                key: 'job-application',
+            },
             
             // {
             //     label: <Link to={ROUTES?.Recruitment?.Master?.WorkType || "#"} > Work Shift </Link>,
@@ -182,16 +187,13 @@ export const seekerNavbarData = [
     },
     {
         route: ROUTES?.JobSeeker.Job,
-        label: "Jobs",
+        label: <Link className="flex items-center gap-2" to={ROUTES?.JobSeeker.Job}><FiBriefcase />Jobs</Link>,
         key: 'jobs',
         children: [],
-        icon: <FiBriefcase />
     },
     {
-        route: ROUTES?.JobSeeker.AppliedJobs,
-        label: "Applied Jobs",
+        label: <Link className="flex items-center gap-2" to={ROUTES?.JobSeeker.AppliedJobs}><FiCheckCircle /> Applied Jobs</Link>,
         key: 'applied',
         children: [],
-        icon: <FiCheckCircle />
     },
 ]

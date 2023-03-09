@@ -55,6 +55,10 @@ export const getJobApplications = () => {
     return apiProvider.getAll(apiConstant.GetMyApplications)
 }
 
+export const getJobApplicationsbyJobId = (jobId) => {
+    return apiProvider.getAll(apiConstant.AllApplications+'?jobId='+jobId)
+}
+
 
 //Interview Exam
 

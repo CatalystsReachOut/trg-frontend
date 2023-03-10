@@ -9,7 +9,7 @@ import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
 import * as apiProviderJobSeeker from '../../../services/api/jobseeker'
 import { BsThreeDots } from "react-icons/bs"
-import { Switch, Dropdown } from 'antd';
+import { Switch, Dropdown, Select } from 'antd';
 import { useParams } from 'react-router-dom'
 
 
@@ -20,7 +20,27 @@ const ViewApplicants = ({ notify, enterLoading, exitLoading, loadings }) => {
   })
 
 
-  const {jobId} = useParams()
+  const options1 = [
+    {
+      label: 'Admin',
+      value: 'ADMIN',
+    },
+    {
+      label: 'HR Manager',
+      value: 'HR_MANAGER',
+    },
+    {
+      label: 'HR Manager Head',
+      value: 'HR_MANAGER_HEAD',
+    },
+    {
+      label: 'Contry Head',
+      value: 'COUNTRY_HEAD',
+    },
+  ]
+
+
+  const { jobId } = useParams()
 
   const [edit, setEdit] = useState(false)
 
@@ -71,8 +91,30 @@ const ViewApplicants = ({ notify, enterLoading, exitLoading, loadings }) => {
         compare: Sorter.DEFAULT,
         multiple: 4
       },
-      render:(date) => (
+      render: (date) => (
         <div>{date?.split("T")[0]}</div>
+      )
+    },
+    {
+      title: "Assign Interviewer",
+      dataIndex: "interviewer",
+      render: (data, job) => (
+        <Select className='mr-[2.13rem]'
+          // defaultValue={data?.status}
+          value={data}
+          style={{
+            width: 120,
+          }}
+          onChange={(value) => {
+
+            updateApplicantInterviewer(job.id, {
+              jobId: job.jobId,
+              jobSeekerId: job.jobSeekerId,
+              interviewer: value
+            })
+          }}
+          options={options1}
+        />
       )
     },
     {
@@ -188,6 +230,24 @@ const ViewApplicants = ({ notify, enterLoading, exitLoading, loadings }) => {
       name: '',
     })
   }
+
+
+  const updateApplicantInterviewer = (id, data) => {
+    return apiProviderJobSeeker.updateJobApplicant(id, data)
+      .then(res => {
+        if (res.isSuccess) {
+          getData()
+          return notify('success', 'Update success');
+        } else {
+          return notify('error', res.message);
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        return notify('error', err.message);
+      })
+  }
+
 
   useEffect(() => {
     getData();

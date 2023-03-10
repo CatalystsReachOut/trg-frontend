@@ -287,3 +287,11 @@ export const createCurrency = (data) => {
 export const editCurrency = (id, data) => {
     return apiProvider.put(apiConstant.currency, id, data)
 }
+
+
+
+// JOBSEEKERS
+export const getJobseekers = () => {
+    return apiProvider.getAll(apiConstant.jobseeker)
+}
+

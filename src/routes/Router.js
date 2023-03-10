@@ -91,6 +91,7 @@ import EditJob from '../pages/Recruitment/JobsCreation/EditJob';
 import Notfound from '../components/partials/Notfound';
 import JobApplications from '../pages/Recruitment/Jobs/JobApplications';
 import ViewApplicants from '../pages/Recruitment/Jobs/ViewApplicants';
+import Jobseeker from '../pages/Admin/Jobseeker';
 const Router = () => {
   const notify = (type, message, description) => {
     notification[type]({
@@ -215,6 +216,9 @@ const Router = () => {
         <Route exact path={ROUTES.Recruitment.ViewJobs} element={<RouteWithRole Element={Jobs} />}></Route>
         <Route exact path={ROUTES.Recruitment.JobApplication} element={<RouteWithRole Element={JobApplications} />}></Route>
         <Route exact path={ROUTES.Recruitment.ViewApplications+'/:jobId'} element={<RouteWithRole Element={ViewApplicants} />}></Route>
+
+      // JobSeekerJobs
+        <Route exact path={ROUTES.Admin.JobSeeker} element={<RouteWithRole Element={Jobseeker} />}></Route>
 
       //profile
         <Route exact path={ROUTES.Recruitment.Profile} element={<RouteWithRole Element={Profile} />}></Route>

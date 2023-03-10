@@ -50,6 +50,9 @@ export const ROUTES = {
             Education:'/education',
         }
     },
+    Admin: {
+        JobSeeker: '/admin/job-seeker',
+    },
     JobSeeker:{
         Exam:'/seeker/exam',
         Job:'/seeker/job',

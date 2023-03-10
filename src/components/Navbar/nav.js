@@ -174,6 +174,13 @@ export const adminNavbarData = [
             // }
         ]
     },
+    {
+        route: ROUTES?.Admin?.JobSeeker,
+        label:<Link to={ROUTES?.Admin?.JobSeeker|| "#"} > Job Seekers </Link>,
+        key: 'jobseeker',
+        children: [],
+        icon: <FiUser />
+    },
 
 ]
 

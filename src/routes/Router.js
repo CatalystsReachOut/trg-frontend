@@ -233,7 +233,6 @@ const Router = () => {
         <Route exact path={ROUTES.JobSeeker.Job+'/:id'} element={<RouteWithRole Element={JobSeekerViewJob} layout={false} />}></Route>
 
 
-
         <Route path='*' exact={true} element={<Notfound/>}>
 
         </Route>

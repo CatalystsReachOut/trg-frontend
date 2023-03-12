@@ -6,11 +6,11 @@ import * as apiConstant from './../utils/apiConstants'
 // Define your api url from any source.
 // Pulling from your .env file when on the server or from localhost when locally
 const BASE_URL = apiConstant.BASE_URL;
-const auth = JSON.parse(localStorage.getItem(storageConstants.AUTH));
+const auth = localStorage.getItem(storageConstants.AUTH);
 
 const headers = {
   'Accept': 'application/json',
-  'Authorization': `Bearer ${auth}`,
+  'Authorization': `Bearer ${localStorage.getItem(storageConstants.AUTH)}`,
   'Content-Type': 'application/json',
 };
 

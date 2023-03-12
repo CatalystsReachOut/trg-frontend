@@ -102,7 +102,7 @@ export const getQuestionBankById = (id) => {
     return apiProvider.get(apiConstant.QuestionBank, id)
 }
 
-export const editQuestionBank= (id,data) => {
+export const editQuestionBank = (id, data) => {
     return apiProvider.put(apiConstant.QuestionBank, id, data)
 }
 
@@ -167,6 +167,10 @@ export const createJob = (data) => {
 
 export const getJobById = (id) => {
     return apiProvider.get(apiConstant.Job, id)
+}
+
+export const getJobByJobseeker = (id) => {
+    return apiProvider.get(apiConstant.getJobSeekerJob, id)
 }
 
 export const updateJobById = (id, data) => {

@@ -9,55 +9,55 @@ import * as apiProviderSeeker from './../../../services/api/jobseeker'
 import * as storageConstants from './../../../utils/storageConstants'
 import { ROUTES } from '../../../routes/RouterConfig'
 
-const ViewJob = ({notify}) => {
+const ViewJob = ({ notify }) => {
 
   const [job, setJob] = useState()
 
   const getUserId = () => {
-    return localStorage.getItem(storageConstants.USER_ID)?localStorage.getItem(storageConstants.USER_ID):null
+    return localStorage.getItem(storageConstants.USER_ID) ? localStorage.getItem(storageConstants.USER_ID) : null
   }
 
   const [userId, setUserId] = useState(getUserId())
 
   const navigate = useNavigate()
 
-  const {id} = useParams()
+  const { id } = useParams()
 
-  console.log(userId);
 
-  const getJobsDetials = async() => {
-    await apiProvider.getJobById(id)
-    .then(res=>{
-      console.log(res);
-      setJob(res.data)
-    })
-    .catch(err=>{
-      console.log(err);
-    })
+  const getJobsDetials = async () => {
+    await apiProvider.getJobByJobseeker(id)
+      .then(res => {
+        console.log(res);
+        setJob(res.data)
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
-  const handleSubmit = async() => {
-    await  apiProviderSeeker.ApplyJob(id)
-    .then(res=>{
-      console.log(res);
-      notify('success', "SuccessFully Applied For this job")
-      navigate(ROUTES.JobSeeker.Exam+'/'+id+'/'+0)
-    })
-    .catch(err=>{
-      console.log(err);
-    })
+  const handleSubmit = async () => {
+    await apiProviderSeeker.ApplyJob(id)
+      .then(res => {
+        console.log(res);
+        notify('success', "SuccessFully Applied For this job")
+        getJobsDetials()
+        // navigate(ROUTES.JobSeeker.Exam + '/' + id + '/' + 0)
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
 
-  useEffect(()=>{
-    if(id){
+  useEffect(() => {
+    if (id) {
       getJobsDetials();
     }
-  },[id])
+  }, [id])
   return (
     <div className=''>
       <div className="w-full bg-blue h-[50vh]  p-5">
-        <BackButton />
+        <BackButton onClick={() => navigate('/seeker/job')} />
         <div className=' flex justify-center'>
           <div className='sm:w-[60%] w-[100%] flex flex-col align-center'>
             <h2 className='text-2xl text-[white]  '>
@@ -122,9 +122,20 @@ const ViewJob = ({notify}) => {
                 </div>
               </div>
               <div className='flex justify-end'>
-                <button onClick={handleSubmit} className="bg-primary text-[black] p-2 px-4 btn-primary rounded-lg">
-                  Apply Now
-                </button>
+                {
+                  job?.application ?
+
+                    <button
+                      onClick={() => navigate(ROUTES.JobSeeker.Exam + '/' + id + '/' + 0)}
+                      className="bg-primary text-[black] p-2 px-4 btn-primary rounded-lg">
+                      Go To Interview
+                    </button>
+                    :
+                    <button onClick={handleSubmit} className="bg-primary text-[black] p-2 px-4 btn-primary rounded-lg">
+                      Apply Now
+                    </button>
+
+                }
               </div>
             </div>
           </div>

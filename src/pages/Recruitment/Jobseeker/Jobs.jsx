@@ -3,6 +3,7 @@ import BackButton from '../../../components/Button/BackButton'
 import Input from '../../../components/Input/Input'
 import JobCard from './JobCard'
 import * as apiProvider from '../../../services/api/recruitment'
+import * as apiProviderJobSeeker from '../../../services/api/jobseeker'
 import { useEffect } from 'react'
 import { useState } from 'react'
 
@@ -10,7 +11,11 @@ const Jobs = () => {
 
     const [jobs, setJobs] = useState([])
 
-    const getJobs = () => {
+    const [appliedJobs, setAppliedJobs] = useState([])
+
+    const getJobs = async( ) => {
+       
+       const [data1, data2] = await Promise.all([
         apiProvider.getJob()
         .then(res => {
             console.log(res)
@@ -18,9 +23,17 @@ const Jobs = () => {
         })
         .catch(err => {
             console.log(err)
+        }),
+        apiProviderJobSeeker.getJobApplications()
+        .then(res=>{
+            setAppliedJobs(res.data)
+            console.log('applied',res);
         })
+        .catch(err=>{
+            console.log(err);
+        })
+         ])
     }
-
 
     useEffect(()=>{
         getJobs()
@@ -48,7 +61,8 @@ const Jobs = () => {
                     jobs?.map((i, key) => {
                         return (
                             <div key={key} className="col-span-1">
-                                <JobCard job={i}/>
+
+                                <JobCard job={i} applied={appliedJobs.map(item => item.jobId)?.includes(i._id)}/>
                             </div>
                         )
                     })

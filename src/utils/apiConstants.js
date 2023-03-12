@@ -43,3 +43,5 @@ export const EvaluateInterviewQuestions = 'jobSeeker/evaluate'
 export const GetMyApplications = 'jobApplication/myApplications'
 export const AllApplications = 'jobApplication/applicant'
 export const updateApplicant = 'jobApplication/applicant'
+
+export const getJobSeekerJob = 'job/jobseeker'

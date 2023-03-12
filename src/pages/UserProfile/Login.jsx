@@ -16,6 +16,8 @@ import { ROUTES } from '../../routes/RouterConfig'
 import * as apiProvider from './../../services/api/jobseeker'
 import * as storageConstants from './../../utils/storageConstants'
 
+import * as commonServices from '../../services/common'
+
 const Login = ({notify}) => {
 
     const navigate = useNavigate()
@@ -38,9 +40,23 @@ const Login = ({notify}) => {
         .then(res=>{
             if(res.isSuccess){
             console.log(res.token);
-            localStorage.setItem(storageConstants.AUTH, res.token)
-            localStorage.setItem(storageConstants.USER_ROLE, JSON.stringify("SEEKER"))
-            localStorage.setItem(storageConstants.USER_ID, res.data._id)
+            commonServices.storeLocalData(
+                storageConstants.LOCAL,
+                storageConstants.AUTH,
+                res.token
+              );
+              commonServices.storeLocalData(
+                storageConstants.LOCAL,
+                storageConstants.USER_ROLE,
+                'SEEKER'
+              );
+              commonServices.storeLocalData(
+                storageConstants.LOCAL,
+                storageConstants.USER_ID,
+                res.data._id
+              );
+            // localStorage.setItem(storageConstants.USER_ROLE, JSON.stringify("SEEKER"))
+            // localStorage.setItem(storageConstants.USER_ID, JSON.stringify(res.data._id))
             navigate(ROUTES.JobSeeker.Job)
             }
         })

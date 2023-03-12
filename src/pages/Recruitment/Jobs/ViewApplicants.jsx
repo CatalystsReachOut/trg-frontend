@@ -107,7 +107,7 @@ const ViewApplicants = ({ notify, enterLoading, exitLoading, loadings }) => {
           }}
           onChange={(value) => {
 
-            updateApplicantInterviewer(job.id, {
+            updateApplicantInterviewer(job._id, {
               jobId: job.jobId,
               jobSeekerId: job.jobSeekerId,
               interviewer: value

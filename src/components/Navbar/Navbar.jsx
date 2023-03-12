@@ -16,8 +16,9 @@ export default function Navbar({ navbarData }) {
 
   const logout = () => {
     sessionStorage.clear();
-    localStorage.clear()
-    navigate("/login")
+    localStorage.clear();
+    navigate("/login");
+    window.location.reload(false)
   }
 
 

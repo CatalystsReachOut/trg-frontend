@@ -2,15 +2,16 @@ import axios from 'axios';
 import { handleResponse, handleError } from './response';
 import * as storageConstants from '../utils/storageConstants';
 import * as apiConstant from './../utils/apiConstants'
+import * as commonServices from './common'
 
 // Define your api url from any source.
 // Pulling from your .env file when on the server or from localhost when locally
 const BASE_URL = apiConstant.BASE_URL;
-const auth = localStorage.getItem(storageConstants.AUTH);
+const auth = JSON.parse(localStorage.getItem('token') || 'null');
 
 const headers = {
   'Accept': 'application/json',
-  'Authorization': `Bearer ${localStorage.getItem(storageConstants.AUTH)}`,
+  'Authorization': `Bearer ${commonServices.fetchLocalData(storageConstants.LOCAL,storageConstants.AUTH)}`,
   'Content-Type': 'application/json',
 };
 

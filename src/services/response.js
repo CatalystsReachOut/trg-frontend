@@ -17,7 +17,7 @@ export function handleError(error) {
         response = [];
     }
     if (typeof response.data === 'undefined' || response.data === null || response.data === '') {
-        response.data = [];
+        response.data.data = [];
     }
     response.data.isSuccess = false;
     if (typeof response.data.message === 'undefined' || response.data.message === null || response.data.message === '') {

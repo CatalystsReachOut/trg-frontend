@@ -515,7 +515,7 @@ const EditJob = ({ notify, propId, isModal }) => {
 
     const InputFileds = {
 
-        ["eligibility"]: <div className="form-child">
+        ["eligibility"]: <div className="form-child-2">
             <TextArea
                 label="Eligibility Criteria"
                 name="eligibility"
@@ -529,7 +529,7 @@ const EditJob = ({ notify, propId, isModal }) => {
 
         ["work-mode"]:
             <>
-                <div className="form-child">
+                <div className="form-child-2">
                     <Select
                         label="Work Shift"
                         name="workShiftId"
@@ -539,7 +539,7 @@ const EditJob = ({ notify, propId, isModal }) => {
                         onChange={handelChangeSelect}
                     />
                 </div>
-                <div className="form-child">
+                <div className="form-child-2">
                     <Select
                         label="Work Type"
                         name="workTypeId"
@@ -549,7 +549,7 @@ const EditJob = ({ notify, propId, isModal }) => {
                         onChange={handelChangeSelect}
                     />
                 </div>
-                <div className="form-child">
+                <div className="form-child-2">
                     <Select
                         label="Work Style"
                         name="workStyleId"
@@ -564,12 +564,11 @@ const EditJob = ({ notify, propId, isModal }) => {
 
         ["pay-range"]: 
         <>
-        <div className="form-child flex flex-col gap-2.5">
+        <div className="form-child-2 flex flex-col gap-2.5">
             <label htmlFor="" className='px-2'>Pay Range</label>
-            <div className='col-span-2 grid grid-cols-2 gap-3 px-2 pt-1'>
-                <div className="col-span-1">
+            <div className='flex justify-between px-2 pt-1'>
                     <input
-                        className='text-sm p-1 px-2 min-w-full  border-[1px] border-[#ccc] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                        className='text-sm p-1 px-2 w-[45%] border-[1px] border-[#ccc] h-[40px] rounded-sm focus:outline-[#F1C40F]'
                         type="number"
                         placeholder='From'
                         value={user?.payRange?.from}
@@ -585,10 +584,8 @@ const EditJob = ({ notify, propId, isModal }) => {
                             }))
                         }}
                     />
-                </div>
-                <div className="col-span-1">
                     <input
-                        className='text-sm p-1 px-2 min-w-full  border-[1px] border-[#ccc] h-[40px] rounded-sm focus:outline-[#F1C40F]'
+                        className='text-sm p-1 px-2 w-[45%] border-[1px] border-[#ccc] h-[40px] rounded-sm focus:outline-[#F1C40F]'
                         type="number"
                         placeholder='To'
                         value={user?.payRange?.to}
@@ -604,11 +601,9 @@ const EditJob = ({ notify, propId, isModal }) => {
                             }))
                         }}
                     />
-                </div>
-
             </div>
         </div>
-        <div className="form-child">
+        <div className="form-child-2">
             <Select
                 label="Currency"
                 onChange={handelChangeSelect}
@@ -624,7 +619,7 @@ const EditJob = ({ notify, propId, isModal }) => {
 
 
 
-        ["comp-mode"]: <div className="form-child">
+        ["comp-mode"]: <div className="form-child-2">
             <Select
                 label="Compensation Mode"
                 onChange={handelChangeSelect}
@@ -635,7 +630,7 @@ const EditJob = ({ notify, propId, isModal }) => {
             />
         </div>,
 
-        ["band"]: <div className="form-child">
+        ["band"]: <div className="form-child-2">
             <Select
                 placeHolder="Enter Hierarchy"
                 onChange={handelChangeSelect}
@@ -647,16 +642,19 @@ const EditJob = ({ notify, propId, isModal }) => {
             />
         </div>,
 
-        ["interview-rounds"]: <div className="form-child">
+        ["interview-rounds"]: <div className="form-child-2">
             <Select
                 placeholder={'Select InterView Rounds'}
                 label={"Interview Round"}
                 name={"interviewRoundId"}
                 disabled={checkDisability()}
                 value={user?.interviewRoundId}
-                onChange={handelChangeSelect}
+                onMultiChange={(e)=>{
+                    console.log(e);
+                }}
                 options={InterViewRoundsOpt}
                 isMulti
+                isMultiFun
             />
         </div>
     }
@@ -750,11 +748,11 @@ const EditJob = ({ notify, propId, isModal }) => {
                     }
 
                     {
-                        userProfile == data?.approver_1?.profileId || userRole == "ADMIN" ?
+                        userProfile == data?.approver_1?.profileId || (userProfile == data?.approver_2?.profileId && !isModal) || (userProfile == data?.approver_3?.profileId && !isModal) || (userProfile == data?.approver_4?.profileId && !isModal ) || userRole == "ADMIN" ?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Reporting Manager </h6>
                                 <div className="form-parent">
-                                    <div className="form-child">
+                                    <div className="form-child-2">
                                         <TextArea
                                             label="Remarks"
                                             name="remarks1"
@@ -783,7 +781,7 @@ const EditJob = ({ notify, propId, isModal }) => {
 
 
                     {
-                        userProfile == data?.approver_2?.profileId || userRole == "ADMIN" ?
+                        userProfile == data?.approver_2?.profileId || (userProfile == data?.approver_3?.profileId && !isModal) || (userProfile == data?.approver_4?.profileId && !isModal) || userRole == "ADMIN" ?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>HR Manager</h6>
 
@@ -793,7 +791,7 @@ const EditJob = ({ notify, propId, isModal }) => {
                                             if (i != 'modify') return (InputFileds[i])
                                         })
                                     }
-                                    <div className="form-child">
+                                    <div className="form-child-2">
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
@@ -818,7 +816,7 @@ const EditJob = ({ notify, propId, isModal }) => {
                     }
 
                     {
-                        userProfile == data?.approver_3?.profileId || userRole == "ADMIN" ?
+                       userProfile == data?.approver_3?.profileId || (userProfile == data?.approver_4?.profileId && !isModal) || userRole == "ADMIN"?
                             <>
                                 <h6 className='mt-6 mb-3 px-2 font-semibold text-xl'>Country Head</h6>
 
@@ -829,7 +827,7 @@ const EditJob = ({ notify, propId, isModal }) => {
                                             if (i != 'modify') return (InputFileds[i])
                                         })
                                     }
-                                    <div className="form-child">
+                                    <div className="form-child-2">
                                         <TextArea
                                             label="Remark"
                                             name="remark2"
@@ -867,7 +865,7 @@ const EditJob = ({ notify, propId, isModal }) => {
                                         })
                                     }
 
-                                    <div className="form-child">
+                                    <div className="form-child-2">
                                         <TextArea
                                             label="Remark"
                                             name="remark2"

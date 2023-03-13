@@ -7,6 +7,7 @@ import Button from '../../../components/Button/Button'
 import Card from '../../../components/Card/Card'
 import Input from '../../../components/Input/Input'
 import Select from '../../../components/Select/Select'
+import Sel from 'react-select'
 import Table from '../../../components/Table/Table'
 import { Sorter } from '../../../helpers/Sorter'
 import * as apiProvider from '../../../services/api/recruitment'
@@ -19,20 +20,22 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
         title: '',
         profileType: '',
         level: '',
-        departmentId:'',
+        departmentId: '',
         reportProfile: null,
-        band:'',
+        band: '',
         approvingAuthority: []
     })
 
-    const [newjobfields,setNewjobfields] = useState([])
-    useEffect(()=>{
+    const [key, setKey] = useState(false)
+
+    const [newjobfields, setNewjobfields] = useState([])
+    useEffect(() => {
         const arr = []
         for (const iterator of jobfields) {
             arr.push(iterator)
         }
         setNewjobfields(arr)
-    },[])
+    }, [])
 
     console.log(newjobfields);
 
@@ -208,24 +211,24 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
 
     const getBasicData = async () => {
         apiProvider.getBands()
-        .then(res=>{
-            if (res.isSuccess) {
-                const arr = res.data.map(data => ({
-                    value: data._id,
-                    label: data.name
-                }))
-                setBands(arr)
-            }
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+            .then(res => {
+                if (res.isSuccess) {
+                    const arr = res.data.map(data => ({
+                        value: data._id,
+                        label: data.name
+                    }))
+                    setBands(arr)
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
 
 
     const handleSubmit = () => {
-        if(!user?.title || !user?.band || !user?.profileType || !user?.departmentId) return notify('error','Mandatory fields are required')
+        if (!user?.title || !user?.band || !user?.profileType || !user?.departmentId) return notify('error', 'Mandatory fields are required')
 
         enterLoading(1)
         return apiProvider.createProfile(user)
@@ -294,7 +297,7 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
             profileType: '',
             level: '',
             reportProfile: '',
-            departmentId:'',
+            departmentId: '',
             approvingAuthority: []
         })
     }
@@ -392,75 +395,103 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                 // }}
 
                                 />
+
                             </div>
                         </div>
                     ))
                 }
 
                 {
-                    user?.approvingAuthority.length<3
-                    ?
-                    <>
-                        <div className='grid grid-cols-2'>
-                            <div className="col-span-1">
-                                <Select
-                                    label=""
-                                    options={profileData}
-                                    name="reportProfile"
-                                    value={reporter}
-                                    onChange={(e) => { setReporter(e.value) }}
-                                    ref={multiRef}
-                                >
-                                </Select>
-                            </div>
-                            <div className="col-span-1">
-                                <Select
-                                    
-                                    label={""}
-                                    placeHolder="Authority"
-                                    isMulti={true}
-                                    value={reportSelected}
-                                    options={jobfields}
-                                    onChange={e => {
-                                        console.log(e);
-                                        const arr = []
-                                        for (const i in e) {
-                                            if (e[i]?.value)
-                                                arr.push(e[i].value)
-                                        }
-                                        setReportSelected(arr)
-                                    }}
-                                // value={reportSelected}
+                    user?.approvingAuthority.length < 3
+                        ?
+                        <>
+                            <div className='grid grid-cols-2'>
+                                <div className="col-span-1">
+                                    <Select
+                                        label=""
+                                        options={[{ value: '', label: "Select Profile" }, ...profileData]}
+                                        name="reportProfile"
+                                        value={reporter || {}}
+                                        onChange={(e) => { setReporter(e.value) }}
+                                        ref={multiRef}
+                                    >
+                                    </Select>
+                                </div>
+                                <div className="col-span-1">
+                                    {/* <Select
 
+                                        label={""}
+                                        placeHolder="Authority"
+                                        isMulti={true}
+                                        isMultiFun
+                                        value={reportSelected}
+                                        options={jobfields}
+                                        onMultiChange={e => {
+                                            const arr = []
+                                            for (const i in e.data) {
+                                                if (e.data[i]?.value)
+                                                    arr.push(e.data[i].value)
+                                            }
+                                            setReportSelected(arr)
+                                            // setKey(prev => !prev)
+                                        }}
+                                    // value={reportSelected}
+
+                                    /> */}
+                                    <div className={`custom-select w-full flex flex-col gap-2.5`}>
+                                        <label className={`text-base px-2`} htmlFor=""></label>
+                                        <Sel
+                                            className={`text-sm px-2 outline-0`}
+                                            options={jobfields}
+                                            // onChange={(p, e) => {
+                                            //     if (isMultiFun) {
+                                            //         onMultiChange({ data: p, name: e.name })
+                                            //     }
+                                            //     else {
+                                            //         onChange({ ...p, name: e.name })
+                                            //     }
+                                            // }}
+                                            onChange={e => {
+                                                console.log(e)
+                                                const arr = []
+                                                for (const i in e) {
+                                                        arr.push(e[i].value)
+                                                }
+                                                setReportSelected(arr)
+                                                // setKey(prev => !prev)
+                                            }}
+
+                                            value={jobfields.filter(s=>reportSelected.find(j=>j==s.value)) || []}
+                                            placeholder={"Authority"}
+                                            isMulti
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='px-2 flex justify-end'>
+                                <Button
+                                    title="Add"
+                                    className="mt-3"
+                                    onClick={async () => {
+                                        if (!reporter || reportSelected.length == 0) return;
+                                        await setUser(prev => ({
+                                            ...prev,
+                                            approvingAuthority: [
+                                                ...user?.approvingAuthority,
+                                                {
+                                                    profile: reporter,
+                                                    tasks: reportSelected
+                                                }
+                                            ]
+                                        }))
+                                        await setReporter('')
+                                        await setReportSelected([])
+                                    }}
                                 />
                             </div>
-                        </div>
-                        <div className='px-2 flex justify-end'>
-                            <Button
-                                title="Add"
-                                className="mt-3"
-                                onClick={async() => {
-                                    if (!reporter || reportSelected.length == 0) return;
-                                    await setUser(prev => ({
-                                        ...prev,
-                                        approvingAuthority: [
-                                            ...user?.approvingAuthority,
-                                            {
-                                                profile: reporter,
-                                                tasks: reportSelected
-                                            }
-                                        ]
-                                    }))
-                                    await setReporter()
-                                    await setReportSelected(null)
-                                    await multiRef.current.select.setValue(null)
-                                    setFlag(prev => !prev)
-                                }}
-                            />
-                        </div>
-                    </>
-                    :
-                    null
+                        </>
+                        :
+                        null
                 }
 
             </Modal>

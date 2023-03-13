@@ -18,7 +18,9 @@ const Select = ({
     placeholder,
     isMulti,
     isSearchable,
-    required
+    required,
+    onMultiChange,
+    isMultiFun
 }) => {
 
 
@@ -30,9 +32,15 @@ const Select = ({
                 className={`text-sm px-2 outline-0 ${selectClassName}`}
                 options={options}
                 onChange={(p, e) => {
-                    onChange({ ...p, name: e.name })
+                    if(isMultiFun){
+                        onMultiChange({data:p, name:e.name})
+                    }
+                    else{
+                        onChange({ ...p, name: e.name })
+                    }
                 }}
-                value={options?.find(s => (s.value == value))}
+                
+                value={isMulti?options?.find(s => (s.value == value)):(options?.find(s => (s.value == value)) || null)}
                 name={name}
                 isDisabled={disabled}
                 placeholder={placeholder}

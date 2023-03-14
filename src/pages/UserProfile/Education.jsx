@@ -16,7 +16,7 @@ const Education = () => {
   const [edu1, setEdu1] = useState();
   const [course1, setCourse1] = useState();
   const changedir = (dir) => {
-    navigate("/registration1");
+    navigate("/new-user/login");
   };
 
 

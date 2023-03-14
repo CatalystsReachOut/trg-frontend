@@ -407,15 +407,19 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                         <>
                             <div className='grid grid-cols-2'>
                                 <div className="col-span-1">
-                                    <Select
-                                        label=""
-                                        options={[{ value: '', label: "Select Profile" }, ...profileData]}
-                                        name="reportProfile"
-                                        value={reporter || {}}
-                                        onChange={(e) => { setReporter(e.value) }}
-                                        ref={multiRef}
-                                    >
-                                    </Select>
+                                    <div className={`custom-select w-full flex flex-col gap-2.5`}>
+                                        <label className={`text-base px-2`} htmlFor=""></label>
+                                        <Sel
+                                            className={`text-sm px-2 outline-0`}
+                                            options={profileData}
+                                            onChange={(p, e) => {
+                                                console.log(p);
+                                                    setReporter(p.value)
+                                            }}
+                                            value={profileData?.find(s => (s.value == reporter)) || null}
+                                            placeholder={""}
+                                        />
+                                    </div>
                                 </div>
                                 <div className="col-span-1">
                                     {/* <Select
@@ -455,13 +459,13 @@ const Profile = ({ notify, enterLoading, exitLoading, loadings }) => {
                                                 console.log(e)
                                                 const arr = []
                                                 for (const i in e) {
-                                                        arr.push(e[i].value)
+                                                    arr.push(e[i].value)
                                                 }
                                                 setReportSelected(arr)
                                                 // setKey(prev => !prev)
                                             }}
 
-                                            value={jobfields.filter(s=>reportSelected.find(j=>j==s.value)) || []}
+                                            value={jobfields.filter(s => reportSelected.find(j => j == s.value)) || []}
                                             placeholder={"Authority"}
                                             isMulti
                                         />

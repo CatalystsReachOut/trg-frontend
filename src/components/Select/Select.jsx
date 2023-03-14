@@ -40,7 +40,7 @@ const Select = ({
                     }
                 }}
                 
-                value={isMulti?options?.find(s => (s.value == value)):(options?.find(s => (s.value == value)) || null)}
+                value={options?.find(s => (s.value == value))}
                 name={name}
                 isDisabled={disabled}
                 placeholder={placeholder}

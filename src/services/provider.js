@@ -7,7 +7,7 @@ import * as commonServices from './common'
 // Define your api url from any source.
 // Pulling from your .env file when on the server or from localhost when locally
 const BASE_URL = apiConstant.BASE_URL;
-const auth = JSON.parse(localStorage.getItem('token')) || 'null';
+const auth = JSON.parse(localStorage.getItem('token')) || localStorage.getItem('token');
 
 const headers = {
   'Accept': 'application/json',
